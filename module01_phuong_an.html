@@ -582,7 +582,7 @@ function buildCard(s,i){
     '<div class="soil-dot" style="background:'+LC[i]+'"></div>'+
     '<div><div class="soil-card-title">Lớp '+(i+1)+' &nbsp;–&nbsp; '+(s.name||'Lớp '+(i+1))+'</div>'+
     '<div class="soil-card-sub">'+(s.sh?'Số hiệu #'+s.sh+' &nbsp;·&nbsp; ':'')+'h = '+(s.h>0?s.h+'m':'∞')+' &nbsp;·&nbsp; '+(isDinh?'Đất dính':'Đất rời')+'</div></div>'+
-    '<span class="soil-card-badge" style="'+gc+'">'+(isGood?'Đất tốt':'Đất yếu')+'</span>'+
+    '<span class="soil-card-badge" id="badge-good-'+i+'" style="background:#f0ede9;color:#aaa">Chưa đánh giá</span>'+
   '</div>';
 
   /* STEP A – SỐ LIỆU TRA ĐƯỢC */
@@ -605,10 +605,10 @@ function buildCard(s,i){
   if(isDinh){
     bTen+='<div class="theory" style="margin:10px 0"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Phân loại đất dính — Bảng 2.2 TCVN</div>'+
       'Tính <b>chỉ số dẻo A = W<sub>L</sub> – W<sub>P</sub></b>. So sánh: A &lt; 7 → Á cát &nbsp;·&nbsp; 7 ≤ A ≤ 17 → Á sét &nbsp;·&nbsp; A &gt; 17 → Sét.</div>';
-    bTen+='<div class="ans-row"><span class="ans-label">📌 Câu 2: Tính chỉ số dẻo A = W<sub>L</sub> – W<sub>P</sub> = '+WL+' – '+WP+' = ?</span>'+
+    bTen+='<div class="ans-row"><span class="ans-label">📌 Câu 2: Tính chỉ số dẻo <b>A = W<sub>L</sub> – W<sub>P</sub></b> (dùng W<sub>L</sub>='+WL+'%, W<sub>P</sub>='+WP+'% từ bảng số liệu) = ?</span>'+
       '<input class="ans-inp" id="qA'+i+'" type="number" step="0.1" placeholder="?" oninput="chkFill(\'qA'+i+'\','+A+',0.15)">'+
       '<span class="ans-unit">%</span><span class="chip" id="ckA'+i+'"></span></div>';
-    bTen+='<div class="mcq-wrap" style="margin-top:10px"><div class="mcq-q">📌 Câu 3: Với A = '+A+'%, tên đất lớp '+(i+1)+' là?</div>'+
+    bTen+='<div class="mcq-wrap" style="margin-top:10px"><div class="mcq-q">📌 Câu 3: Dựa vào A vừa tính, tên đất lớp '+(i+1)+' là? <span style="font-size:.73rem;color:var(--muted)">(A&lt;7→Á cát · 7≤A≤17→Á sét · A&gt;17→Sét)</span></div>'+
       '<div class="mcq-opts g3c">'+mco('ten'+i,0,'Á cát<br><small>(A&lt;7)</small>',q_ten_ans)+mco('ten'+i,1,'Á sét<br><small>(7≤A≤17)</small>',q_ten_ans)+mco('ten'+i,2,'Sét<br><small>(A&gt;17)</small>',q_ten_ans)+'</div></div>';
   } else {
     bTen+='<div class="lookup" style="margin:8px 0"><div class="lookup-lbl"><i class="ti ti-table" style="font-size:12px"></i> Bảng phân loại đất rời (TCVN) — tra theo thành phần hạt</div>'+
@@ -630,12 +630,12 @@ function buildCard(s,i){
     if(A<7) bTT+='<b>Á cát:</b> B&lt;0 Rắn cứng &nbsp;·&nbsp; 0≤B≤1 Dẻo &nbsp;·&nbsp; B&gt;1 Chảy';
     else bTT+='<b>Á sét, Sét:</b> B&lt;0 Rắn cứng &nbsp;·&nbsp; 0–0.25 Nửa cứng &nbsp;·&nbsp; 0.25–0.50 Dẻo cứng &nbsp;·&nbsp; 0.50–0.75 Dẻo mềm &nbsp;·&nbsp; 0.75–1.00 Dẻo chảy &nbsp;·&nbsp; B≥1 Chảy';
     bTT+='</div>';
-    bTT+='<div class="ans-row"><span class="ans-label">📌 Câu 4: Tính độ sệt B = ('+W+' – '+WP+') / '+A+' = ?</span>'+
+    bTT+='<div class="ans-row"><span class="ans-label">📌 Câu 4: Tính độ sệt <b>B = (W – W<sub>P</sub>) / A</b> — dùng W, W<sub>P</sub>, A đã biết = ?</span>'+
       '<input class="ans-inp" id="qB'+i+'" type="number" step="0.001" placeholder="?" oninput="chkFill(\'qB'+i+'\','+B+',0.005)">'+
       '<span class="ans-unit"></span><span class="chip" id="ckB'+i+'"></span></div>';
     var ttOpts=A<7?[['Rắn cứng (B&lt;0)',0],['Dẻo (0≤B≤1)',1],['Chảy (B&gt;1)',2]]:
       [['Rắn cứng (B&lt;0)',0],['Nửa cứng (0–0.25)',1],['Dẻo cứng (0.25–0.5)',2],['Dẻo mềm (0.5–0.75)',3],['Dẻo chảy (0.75–1)',4],['Chảy (B≥1)',5]];
-    bTT+='<div class="mcq-wrap" style="margin-top:10px"><div class="mcq-q">📌 Câu 5: Với B = '+B+', trạng thái đất lớp '+(i+1)+' là?</div>'+
+    bTT+='<div class="mcq-wrap" style="margin-top:10px"><div class="mcq-q">📌 Câu 5: Dựa vào B vừa tính, trạng thái đất lớp '+(i+1)+' là?</div>'+
       '<div class="mcq-opts g2c">'+ttOpts.map(function(o,ci){return mco('tt'+i,ci,o[0],ttIdx);}).join('')+'</div></div>';
   } else {
     var N_=parseFloat(s.spt)||0;
@@ -645,6 +645,27 @@ function buildCard(s,i){
     bTT+='<div class="mcq-wrap"><div class="mcq-q">📌 Câu 4: SPT N = '+N_+' → Trạng thái đất lớp '+(i+1)+' là?</div>'+
       '<div class="mcq-opts g2c">'+rsOpts.map(function(o,ci){return mco('tt'+i,ci,o[0],ttIdx);}).join('')+'</div></div>';
   }
+  // Tiêu chí đất tốt/yếu + MCQ sinh viên tự đánh giá
+  var goodAns_i = isGood ? 0 : 1;
+  bTT += '<div style="margin-top:14px">';
+  bTT += '<div class="theory" style="margin-bottom:8px"><div class="theory-lbl"><i class="ti ti-bulb" style="font-size:12px"></i> Tiêu chí đánh giá đất tốt / yếu</div>';
+  if(isDinh){
+    bTT += '<b>Đất dính</b> — dựa vào độ sệt B:<br>';
+    bTT += '✅ <b>Đất tốt</b>: B &lt; 0.75 (Rắn cứng · Nửa cứng · Dẻo cứng · Dẻo mềm) — đủ cứng, ít biến dạng<br>';
+    bTT += '⚠️ <b>Đất yếu</b>: B ≥ 0.75 (Dẻo chảy · Chảy) — quá mềm, biến dạng lớn, không đủ sức chịu tải';
+    if(A<7) bTT += '<br><span style="font-size:.8rem;color:var(--muted)">Á cát: B≤1 là đất tốt · B&gt;1 là đất yếu</span>';
+  } else {
+    bTT += '<b>Đất rời</b> — dựa vào SPT N:<br>';
+    bTT += '✅ <b>Đất tốt</b>: N ≥ 10 (Chặt vừa · Chặt · Rất chặt) — đủ chặt, sức chịu tải tốt<br>';
+    bTT += '⚠️ <b>Đất yếu</b>: N &lt; 10 (Rất rời · Rời) — hạt lỏng lẻo, dễ lún, không đặt móng trực tiếp';
+  }
+  bTT += '</div>';
+  bTT += '<div class="mcq-wrap"><div class="mcq-q">📌 Câu 6: Theo em, lớp '+(i+1)+' là đất gì?</div>'+
+    '<div class="mcq-opts g2c">'+
+    mco('good'+i, 0, '✅ Đất tốt — đủ điều kiện đặt móng trực tiếp', goodAns_i)+
+    mco('good'+i, 1, '⚠️ Đất yếu — cần xử lý hoặc tránh đặt móng', goodAns_i)+
+    '</div></div>';
+  bTT += '</div>';
   var stepC=mkStep('C','Xác định trạng thái đất lớp '+(i+1),LC[i],'background:#E8F5E9;color:#2E7D32','Tính toán',bTT);
 
   /* STEP D – CHỈ TIÊU DẪN XUẤT */
@@ -659,17 +680,17 @@ function buildCard(s,i){
     '<th style="min-width:120px">Kết quả của bạn</th>'+
     '<th>Đơn vị</th></tr></thead><tbody>'+
     rowD('gk-'+i,'γ<sub>k</sub> — TL riêng khô',
-      'γ/(1+0.01·'+W+') = '+g+'/('+parseFloat(1+0.01*W).toFixed(3)+')',gk,0.05,'kN/m³')+
+      'γ / (1 + 0.01·W)',gk,0.05,'kN/m³')+
     rowD('e-'+i,'e₀ — Hệ số rỗng tự nhiên',
-      del+'×9.81/'+gk+' – 1',e,0.005,'')+
+      'Δ·γ<sub>w</sub> / γ<sub>k</sub> – 1',e,0.005,'')+
     rowD('G-'+i,'G — Độ bão hòa',
-      '0.01×'+W+'×'+del+'/'+e,G,0.02,'')+
+      '0.01·W·Δ / e₀',G,0.02,'')+
     rowD('gbh-'+i,'γ<sub>bh</sub> — TL bão hòa',
-      '('+del+'+'+e+')×9.81/(1+'+e+')',gbh,0.05,'kN/m³')+
+      '(Δ + e₀)·γ<sub>w</sub> / (1+e₀)',gbh,0.05,'kN/m³')+
     rowD('gdn-'+i,'γ<sub>dn</sub> — TL đẩy nổi',
-      '('+del+'–1)×9.81/(1+'+e+')',gdn,0.05,'kN/m³')+
+      '(Δ – 1)·γ<sub>w</sub> / (1+e₀)',gdn,0.05,'kN/m³')+
     rowD('n-'+i,'n — Độ rỗng',
-      e+'/(1+'+e+')×100',n,0.1,'%')+
+      'e₀ / (1+e₀) × 100',n,0.1,'%')+
     '</tbody></table>';
   var stepD=mkStep('D','Tính chỉ tiêu cơ lý dẫn xuất lớp '+(i+1),LC[i],'background:var(--Plt);color:var(--Pdk)','Điền số',bD);
 
@@ -712,6 +733,17 @@ function pickMCQ(grp,ci,correct){
   if(!ok){var ce=document.getElementById(pfx+correct);if(ce)ce.classList.add('ok');}
   ANS['mcq-'+grp]=ok; updateProg();
   toast(ok?'✓ Đúng!':'✗ Xem đáp án đúng được tô xanh');
+  // Cập nhật badge đất tốt/yếu khi trả lời câu 6
+  if(grp.indexOf('good')===0){
+    var layerIdx=parseInt(grp.replace('good',''));
+    var badge=document.getElementById('badge-good-'+layerIdx);
+    if(badge){
+      var isGoodLayer=(correct===0);
+      badge.style.background=isGoodLayer?'#E8F5E9':'#FFEBEE';
+      badge.style.color=isGoodLayer?'#2E7D32':'#C62828';
+      badge.textContent=isGoodLayer?'Đất tốt':'Đất yếu';
+    }
+  }
 }
 
 /* ═══════ FILL CHECK ═══════ */
