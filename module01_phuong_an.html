@@ -152,6 +152,23 @@ select.conc-sel{padding:8px 10px;border:1.5px solid var(--brd);border-radius:7px
 .sec-lbl::after{content:'';flex:1;height:1px;background:var(--brd)}
 /* STICKY NAV */
 .sticky-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);border-top:1px solid var(--brd);padding:9px 20px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(8px);z-index:50}
+.lookup-table-wrap{margin:10px 0;border:1.5px solid var(--brd);border-radius:10px;overflow:hidden}
+.lookup-table-hdr{background:var(--Pdk);color:#fff;padding:8px 14px;display:flex;align-items:center;gap:8px}
+.lookup-table-hdr-left{flex:1}
+.lookup-table-title{font-size:.75rem;font-weight:700;letter-spacing:.3px}
+.lookup-table-ref{font-size:.65rem;opacity:.65;margin-top:1px;font-family:var(--mono)}
+.lookup-table-loc{font-size:.67rem;background:rgba(255,143,0,.25);color:#FFD54F;border:1px solid rgba(255,143,0,.4);padding:2px 8px;border-radius:4px;white-space:nowrap;font-weight:700}
+.lookup-how{background:#FFF8E1;border-bottom:1.5px solid var(--brd);padding:8px 14px;font-size:.78rem;color:#3a2800;line-height:1.6}
+.lookup-how-lbl{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#E65100;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.lookup-tbl{width:100%;border-collapse:collapse;font-size:.78rem}
+.lookup-tbl th{background:#5D4037;color:rgba(255,255,255,.88);padding:.38rem .6rem;font-size:.65rem;font-weight:700;text-align:center;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
+.lookup-tbl th.L{text-align:left;padding-left:.75rem}
+.lookup-tbl td{padding:.32rem .55rem;border-bottom:1px solid rgba(215,204,200,.35);text-align:center;vertical-align:middle;font-family:var(--mono);font-size:.77rem}
+.lookup-tbl td.L{text-align:left;font-family:var(--sans);font-weight:600;font-size:.78rem;padding-left:.75rem}
+.lookup-tbl tr:last-child td{border-bottom:none}
+.lookup-tbl tr.hi td{background:#FFF8E1;font-weight:700;color:#BF360C}
+.lookup-tbl tr.hi td.L{color:#BF360C}
+.lookup-note{background:#EFEBE9;padding:7px 14px;font-size:.73rem;color:var(--muted);border-top:1.5px solid var(--brd);line-height:1.55}
 /* TOAST */
 .toast{position:fixed;bottom:65px;left:50%;transform:translateX(-50%) translateY(16px);background:#333;color:#fff;padding:8px 20px;border-radius:20px;font-size:.82rem;font-weight:600;opacity:0;transition:all .28s;pointer-events:none;z-index:999}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -603,16 +620,46 @@ function buildCard(s,i){
     '<div class="mcq-opts g2c">'+mco('loai'+i,0,'Đất dính — có W<sub>L</sub>, W<sub>P</sub>',q_loai_ans)+mco('loai'+i,1,'Đất rời — không có W<sub>L</sub>, W<sub>P</sub>',q_loai_ans)+'</div></div>';
 
   if(isDinh){
-    bTen+='<div class="theory" style="margin:10px 0"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Phân loại đất dính — Bảng 2.2 TCVN</div>'+
-      'Tính <b>chỉ số dẻo A = W<sub>L</sub> – W<sub>P</sub></b>. So sánh: A &lt; 7 → Á cát &nbsp;·&nbsp; 7 ≤ A ≤ 17 → Á sét &nbsp;·&nbsp; A &gt; 17 → Sét.</div>';
+    // Highlight hàng phù hợp với đất này
+    var hi22 = isDinh ? (A<7?1:A<=17?2:3) : 0;
+    var b22rows = '<table class="lookup-tbl"><thead><tr>'+
+      '<th class="L">Tên đất</th>'+
+      '<th>Chỉ số dẻo A = W<sub>L</sub> – W<sub>P</sub> (%)</th>'+
+      '<th>Đặc điểm</th></tr></thead><tbody>'+
+      '<tr'+(hi22===1?' class="hi"':'')+'><td class="L">Á cát</td><td>A &lt; 7</td><td>Ít dính, gần đất rời</td></tr>'+
+      '<tr'+(hi22===2?' class="hi"':'')+'><td class="L">Á sét</td><td>7 ≤ A ≤ 17</td><td>Dính vừa</td></tr>'+
+      '<tr'+(hi22===3?' class="hi"':'')+'><td class="L">Sét</td><td>A &gt; 17</td><td>Dính cao, co ngót nhiều</td></tr>'+
+      '</tbody></table>';
+    bTen += mkLookupTable(
+      'Bảng phân loại đất dính theo chỉ số dẻo A',
+      'Bảng 2.2 — TCVN 9362:2012 (Tiêu chuẩn thiết kế nền nhà và công trình)',
+      'Trang 7 · Hướng dẫn đồ án 2022 (HD_DANM_PVA)',
+      '① Tính <b>A = W<sub>L</sub> – W<sub>P</sub></b> &nbsp;→&nbsp; ② So sánh A với ngưỡng phân loại &nbsp;→&nbsp; ③ Đọc tên đất ở cột trái. Hàng được tô vàng ứng với lớp đất này.',
+      b22rows,
+      'A là chỉ số dẻo Atterberg. Đơn vị: %. Nếu A < 0 thì đất không phải đất dính (kiểm tra lại số liệu).'
+    );
     bTen+='<div class="ans-row"><span class="ans-label">📌 Câu 2: Tính chỉ số dẻo <b>A = W<sub>L</sub> – W<sub>P</sub></b> (dùng W<sub>L</sub>='+WL+'%, W<sub>P</sub>='+WP+'% từ bảng số liệu) = ?</span>'+
       '<input class="ans-inp" id="qA'+i+'" type="number" step="0.1" placeholder="?" oninput="chkFill(\'qA'+i+'\','+A+',0.15)">'+
       '<span class="ans-unit">%</span><span class="chip" id="ckA'+i+'"></span></div>';
     bTen+='<div class="mcq-wrap" style="margin-top:10px"><div class="mcq-q">📌 Câu 3: Dựa vào A vừa tính, tên đất lớp '+(i+1)+' là? <span style="font-size:.73rem;color:var(--muted)">(A&lt;7→Á cát · 7≤A≤17→Á sét · A&gt;17→Sét)</span></div>'+
       '<div class="mcq-opts g3c">'+mco('ten'+i,0,'Á cát<br><small>(A&lt;7)</small>',q_ten_ans)+mco('ten'+i,1,'Á sét<br><small>(7≤A≤17)</small>',q_ten_ans)+mco('ten'+i,2,'Sét<br><small>(A&gt;17)</small>',q_ten_ans)+'</div></div>';
   } else {
-    bTen+='<div class="lookup" style="margin:8px 0"><div class="lookup-lbl"><i class="ti ti-table" style="font-size:12px"></i> Bảng phân loại đất rời (TCVN) — tra theo thành phần hạt</div>'+
-      'Cát thô: hạt &gt;0.5mm chiếm &gt;50% &nbsp;·&nbsp; Cát vừa: hạt &gt;0.25mm chiếm &gt;50% &nbsp;·&nbsp; Cát nhỏ: hạt &gt;0.10mm chiếm &gt;75%</div>';
+    var hiRoi = phiV<29?0:phiV<32?1:phiV<35?2:3;
+    var roiTblRows = '<table class="lookup-tbl"><thead><tr>'+
+      '<th class="L">Loại cát</th><th>φ (°)</th><th>Thành phần hạt đặc trưng</th><th>q<sub>c</sub> MPa</th></tr></thead><tbody>'+
+      '<tr'+(hiRoi===0?' class="hi"':'')+'><td class="L">Cát nhỏ / Cát bột</td><td>&lt; 29°</td><td>Hạt &gt;0.10mm chiếm &gt;75%</td><td>1–3</td></tr>'+
+      '<tr'+(hiRoi===1?' class="hi"':'')+'><td class="L">Cát vừa</td><td>29–32°</td><td>Hạt &gt;0.25mm chiếm &gt;50%</td><td>3–8</td></tr>'+
+      '<tr'+(hiRoi===2?' class="hi"':'')+'><td class="L">Cát to</td><td>32–35°</td><td>Hạt &gt;0.5mm chiếm &gt;50%</td><td>8–15</td></tr>'+
+      '<tr'+(hiRoi===3?' class="hi"':'')+'><td class="L">Cát thô / Sỏi</td><td>≥ 35°</td><td>Hạt &gt;2mm chiếm &gt;50%</td><td>&gt;15</td></tr>'+
+      '</tbody></table>';
+    bTen += mkLookupTable(
+      'Bảng phân loại đất rời (cát) theo φ và thành phần hạt',
+      'Bảng 3.2 — TCVN 9362:2012',
+      'Trang 9 · Hướng dẫn đồ án 2022',
+      '① Xác định thành phần hạt từ thí nghiệm rây &nbsp;→&nbsp; ② Hoặc dùng φ từ bảng tra ĐHXD &nbsp;→&nbsp; ③ Đọc tên loại cát. Hàng vàng ứng với lớp đất này.',
+      roiTblRows,
+      'Phân loại chính xác nhất dựa vào đường cong phân bố hạt (thí nghiệm rây). φ chỉ dùng để ước lượng nhanh khi không có số liệu hạt.'
+    );
     var phiV=parseFloat(s.phi)||30;
     var roiOpts=['Cát nhỏ / Cát bột (φ&lt;29°)','Cát vừa (29°≤φ&lt;32°)','Cát to (32°≤φ&lt;35°)','Cát thô / Sỏi (φ≥35°)'];
     var roiAns=phiV<29?0:phiV<32?1:phiV<35?2:3;
@@ -626,10 +673,36 @@ function buildCard(s,i){
   if(isDinh){
     bTT+='<div class="fml-box"><div class="fml-title">Công thức độ sệt B — Bảng 2.4 TCVN</div>'+
       '<div class="frow"><em>B</em> = (W – W<sub>P</sub>) / (W<sub>L</sub> – W<sub>P</sub>) = (W – W<sub>P</sub>) / A</div></div>';
-    bTT+='<div class="lookup" style="margin:8px 0"><div class="lookup-lbl"><i class="ti ti-table" style="font-size:12px"></i> Bảng tra trạng thái đất dính theo B</div>';
-    if(A<7) bTT+='<b>Á cát:</b> B&lt;0 Rắn cứng &nbsp;·&nbsp; 0≤B≤1 Dẻo &nbsp;·&nbsp; B&gt;1 Chảy';
-    else bTT+='<b>Á sét, Sét:</b> B&lt;0 Rắn cứng &nbsp;·&nbsp; 0–0.25 Nửa cứng &nbsp;·&nbsp; 0.25–0.50 Dẻo cứng &nbsp;·&nbsp; 0.50–0.75 Dẻo mềm &nbsp;·&nbsp; 0.75–1.00 Dẻo chảy &nbsp;·&nbsp; B≥1 Chảy';
-    bTT+='</div>';
+    // Build bảng 2.4 với highlight theo B
+    var b24rows;
+    if(A<7){
+      var hiAC = B<0?0:B<=1?1:2;
+      b24rows = '<table class="lookup-tbl"><thead><tr>'+
+        '<th class="L">Trạng thái (Á cát)</th><th>Điều kiện độ sệt B</th><th>Đánh giá</th></tr></thead><tbody>'+
+        '<tr'+(hiAC===0?' class="hi"':'')+'><td class="L">Rắn cứng</td><td>B &lt; 0</td><td>Tốt</td></tr>'+
+        '<tr'+(hiAC===1?' class="hi"':'')+'><td class="L">Dẻo</td><td>0 ≤ B ≤ 1</td><td>Tốt→Yếu</td></tr>'+
+        '<tr'+(hiAC===2?' class="hi"':'')+'><td class="L">Chảy</td><td>B &gt; 1</td><td>Yếu</td></tr>'+
+        '</tbody></table>';
+    } else {
+      var hiAS = B<0?0:B<0.25?1:B<0.5?2:B<0.75?3:B<1?4:5;
+      b24rows = '<table class="lookup-tbl"><thead><tr>'+
+        '<th class="L">Trạng thái (Á sét, Sét)</th><th>Điều kiện B</th><th>Đánh giá</th></tr></thead><tbody>'+
+        '<tr'+(hiAS===0?' class="hi"':'')+'><td class="L">Rắn cứng</td><td>B &lt; 0</td><td>✅ Tốt</td></tr>'+
+        '<tr'+(hiAS===1?' class="hi"':'')+'><td class="L">Nửa cứng</td><td>0.00 ≤ B &lt; 0.25</td><td>✅ Tốt</td></tr>'+
+        '<tr'+(hiAS===2?' class="hi"':'')+'><td class="L">Dẻo cứng</td><td>0.25 ≤ B &lt; 0.50</td><td>✅ Tốt</td></tr>'+
+        '<tr'+(hiAS===3?' class="hi"':'')+'><td class="L">Dẻo mềm</td><td>0.50 ≤ B &lt; 0.75</td><td>✅ Tốt</td></tr>'+
+        '<tr'+(hiAS===4?' class="hi"':'')+'><td class="L">Dẻo chảy</td><td>0.75 ≤ B &lt; 1.00</td><td>⚠️ Yếu</td></tr>'+
+        '<tr'+(hiAS===5?' class="hi"':'')+'><td class="L">Chảy</td><td>B ≥ 1.00</td><td>⚠️ Yếu</td></tr>'+
+        '</tbody></table>';
+    }
+    bTT += mkLookupTable(
+      'Bảng phân loại trạng thái đất dính theo độ sệt B',
+      'Bảng 2.4 — TCVN 9362:2012',
+      'Trang 8 · Hướng dẫn đồ án 2022',
+      '① Tính <b>B = (W – W<sub>P</sub>) / A</b> &nbsp;→&nbsp; ② Chọn bảng phù hợp (Á cát hoặc Á sét/Sét) &nbsp;→&nbsp; ③ So sánh B với ngưỡng &nbsp;→&nbsp; ④ Đọc tên trạng thái. Hàng vàng = lớp đất này.',
+      b24rows,
+      'B là độ sệt (consistency index). B âm = đất cứng hơn giới hạn dẻo. Đất tốt khi B < 0.75 (Á sét/Sét) hoặc B ≤ 1 (Á cát).'
+    );
     bTT+='<div class="ans-row"><span class="ans-label">📌 Câu 4: Tính độ sệt <b>B = (W – W<sub>P</sub>) / A</b> — dùng W, W<sub>P</sub>, A đã biết = ?</span>'+
       '<input class="ans-inp" id="qB'+i+'" type="number" step="0.001" placeholder="?" oninput="chkFill(\'qB'+i+'\','+B+',0.005)">'+
       '<span class="ans-unit"></span><span class="chip" id="ckB'+i+'"></span></div>';
@@ -639,8 +712,23 @@ function buildCard(s,i){
       '<div class="mcq-opts g2c">'+ttOpts.map(function(o,ci){return mco('tt'+i,ci,o[0],ttIdx);}).join('')+'</div></div>';
   } else {
     var N_=parseFloat(s.spt)||0;
-    bTT+='<div class="lookup" style="margin:8px 0"><div class="lookup-lbl"><i class="ti ti-table" style="font-size:12px"></i> Bảng tra trạng thái đất rời theo SPT — Bảng 3.1</div>'+
-      'N=0–4: Rất rời &nbsp;·&nbsp; 4–10: Rời &nbsp;·&nbsp; 10–30: Chặt vừa &nbsp;·&nbsp; 30–50: Chặt &nbsp;·&nbsp; ≥50: Rất chặt</div>';
+    var hiSPT = N_<4?0:N_<10?1:N_<30?2:N_<50?3:4;
+    var sptRows = '<table class="lookup-tbl"><thead><tr>'+
+      '<th class="L">Trạng thái</th><th>SPT (N búa)</th><th>Đánh giá</th><th>φ thường gặp</th></tr></thead><tbody>'+
+      '<tr'+(hiSPT===0?' class="hi"':'')+'><td class="L">Rất rời</td><td>N &lt; 4</td><td>⚠️ Yếu</td><td>&lt; 28°</td></tr>'+
+      '<tr'+(hiSPT===1?' class="hi"':'')+'><td class="L">Rời</td><td>4 ≤ N &lt; 10</td><td>⚠️ Yếu</td><td>28–30°</td></tr>'+
+      '<tr'+(hiSPT===2?' class="hi"':'')+'><td class="L">Chặt vừa</td><td>10 ≤ N &lt; 30</td><td>✅ Tốt</td><td>30–35°</td></tr>'+
+      '<tr'+(hiSPT===3?' class="hi"':'')+'><td class="L">Chặt</td><td>30 ≤ N &lt; 50</td><td>✅ Tốt</td><td>35–40°</td></tr>'+
+      '<tr'+(hiSPT===4?' class="hi"':'')+'><td class="L">Rất chặt</td><td>N ≥ 50</td><td>✅ Tốt</td><td>&gt; 40°</td></tr>'+
+      '</tbody></table>';
+    bTT += mkLookupTable(
+      'Bảng phân loại trạng thái đất rời theo SPT',
+      'Bảng 3.1 — TCVN 9351:2012 (Phương pháp xuyên tiêu chuẩn)',
+      'Trang 15 · Hướng dẫn đồ án 2022',
+      '① Đọc giá trị <b>SPT N</b> từ bảng số liệu địa chất &nbsp;→&nbsp; ② Tìm hàng có khoảng N phù hợp &nbsp;→&nbsp; ③ Đọc tên trạng thái. Hàng vàng = lớp đất này.',
+      sptRows,
+      'SPT N là số búa đóng thí nghiệm xuyên tiêu chuẩn (búa/30cm). Đất tốt khi N ≥ 10. Đất rất rời (N<4) không được đặt móng trực tiếp.'
+    );
     var rsOpts=[['Rất rời (N&lt;4)',0],['Rời (4–10)',1],['Chặt vừa (10–30)',2],['Chặt (30–50)',3],['Rất chặt (≥50)',4]];
     bTT+='<div class="mcq-wrap"><div class="mcq-q">📌 Câu 4: SPT N = '+N_+' → Trạng thái đất lớp '+(i+1)+' là?</div>'+
       '<div class="mcq-opts g2c">'+rsOpts.map(function(o,ci){return mco('tt'+i,ci,o[0],ttIdx);}).join('')+'</div></div>';
@@ -699,6 +787,32 @@ function buildCard(s,i){
 }
 
 /* ─── helpers để build step & table ─── */
+/* ═══════ LOOKUP TABLE COMPONENT ═══════
+   Tạo khối bảng tra chuẩn: header + nguồn + hướng dẫn + bảng HTML + ghi chú
+   Params:
+     title    : tên bảng tra
+     ref      : ký hiệu bảng (VD "Bảng 2.2 TCVN 9362:2012")
+     location : vị trí trong tài liệu (VD "Trang 12 – Hướng dẫn đồ án")
+     howto    : HTML hướng dẫn cách tra
+     tableHtml: nội dung <table class="lookup-tbl">...</table>
+     note     : ghi chú dưới bảng
+     hiRow    : index hàng cần highlight (0-based, -1 = không highlight)
+══════════════════════════════════════════════════════ */
+function mkLookupTable(title, ref, location, howto, tableHtml, note){
+  return '<div class="lookup-table-wrap">'+
+    '<div class="lookup-table-hdr">'+
+      '<div class="lookup-table-hdr-left">'+
+        '<div class="lookup-table-title"><i class="ti ti-table" style="font-size:13px;vertical-align:-2px;margin-right:5px"></i>'+title+'</div>'+
+        '<div class="lookup-table-ref">'+ref+'</div>'+
+      '</div>'+
+      '<span class="lookup-table-loc"><i class="ti ti-book-2" style="font-size:11px;vertical-align:-1px"></i> '+location+'</span>'+
+    '</div>'+
+    '<div class="lookup-how"><div class="lookup-how-lbl"><i class="ti ti-hand-finger" style="font-size:12px"></i> Cách tra bảng</div>'+howto+'</div>'+
+    tableHtml+
+    (note?'<div class="lookup-note"><b>Ghi chú:</b> '+note+'</div>':'')+
+  '</div>';
+}
+
 function mkStep(label,title,color,tagStyle,tagTxt,content){
   return '<div class="step"><div class="step-hd" onclick="togS(this)">'+
     '<div class="snb" style="background:'+color+'">'+label+'</div>'+
