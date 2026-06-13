@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P2·M01 – Phương Án Móng Băng</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{--P:#2E7D32;--Pdk:#1B5E20;--Plt:#E8F5E9;--Pmd:#388E3C;--A:#FF8F00;--Alt:#FFF8E1;--Adk:#E65100;--G:#2E7D32;--Glt:#E8F5E9;--Gdk:#1B5E20;--R:#C62828;--Rlt:#FFEBEE;--B:#1565C0;--Blt:#E3F2FD;--sand:#D7CCC8;--bg:#F1F8E9;--sur:#fff;--brd:#C8E6C9;--muted:#558B2F;--text:#1C0A00;--sans:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;--r:12px;--sh:0 2px 12px rgba(46,125,50,.08);--shmd:0 4px 24px rgba(46,125,50,.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:var(--sans);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
+.hdr{background:var(--Pdk);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(27,94,32,.4)}
+.hdr-in{max-width:960px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px;height:54px}
+.back-btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff;padding:5px 12px;border-radius:7px;font-size:.76rem;font-weight:600;font-family:var(--sans);display:flex;align-items:center;gap:5px;text-decoration:none;transition:all .14s}
+.back-btn:hover{background:rgba(255,255,255,.24)}
+.hdr-title{flex:1}.hdr-title h1{font-size:.93rem;font-weight:700}.hdr-title p{font-size:.68rem;opacity:.7;margin-top:1px}
+.pb{font-family:var(--mono);font-size:.74rem;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:4px 12px;border-radius:20px}
+.tabs-bar{background:var(--Pdk);border-bottom:1px solid rgba(0,0,0,.12)}.tabs-in{max-width:960px;margin:0 auto;display:flex;gap:1px;padding:4px 14px;overflow-x:auto;scrollbar-width:none}
+.tab{padding:5px 13px;border-radius:6px;font-size:.74rem;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;border:none;background:transparent;font-family:var(--sans);white-space:nowrap;display:flex;align-items:center;gap:4px}
+.tab:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85)}.tab.on{background:var(--A);color:#fff}
+.tn{font-family:var(--mono);font-size:.6rem;background:rgba(255,255,255,.18);padding:1px 5px;border-radius:3px}
+main{max-width:960px;margin:0 auto;padding:20px 16px 90px}
+.prog-wrap{margin-bottom:16px}.prog-top{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;color:var(--muted);margin-bottom:4px}
+.prog-track{height:6px;background:var(--brd);border-radius:10px;overflow:hidden}.prog-fill{height:100%;background:linear-gradient(90deg,var(--G),var(--A));border-radius:10px;transition:width .4s}
+.card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
+.card-hd{background:var(--P);color:#fff;padding:11px 18px;display:flex;align-items:center;gap:9px}
+.card-hd i{font-size:18px;opacity:.9}.card-hd h2{font-size:.9rem;font-weight:700}.card-hd p{font-size:.72rem;opacity:.72;margin-top:1px}
+.cbadge{margin-left:auto;font-family:var(--mono);font-size:.63rem;font-weight:700;padding:3px 9px;border-radius:5px;background:rgba(255,255,255,.18);letter-spacing:1px;text-transform:uppercase}
+.card-body{padding:16px 18px}
+.step{border:1.5px solid var(--brd);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.step-hd{padding:9px 14px;display:flex;align-items:center;gap:9px;background:#f8fdf8;border-bottom:1.5px solid var(--brd);cursor:pointer;user-select:none}
+.step-hd:hover{background:var(--Plt)}.snb{width:26px;height:26px;border-radius:50%;color:#fff;font-size:.74rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);background:var(--P)}
+.step-hd h3{font-size:.85rem;font-weight:700;flex:1}
+.stag{font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+.chev{font-size:14px;color:#ccc;transition:transform .2s}.step-body{padding:14px 16px}.step-body.hide{display:none}
+.theory{background:var(--Blt);border-left:4px solid var(--B);border-radius:0 7px 7px 0;padding:10px 14px;margin-bottom:10px;font-size:.82rem;color:#0d2a52;line-height:1.65}
+.theory-lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--B);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.earth-box{background:var(--Plt);border-left:4px solid var(--Pmd);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:var(--Pdk);margin-bottom:12px;line-height:1.6}
+.warn-box{background:var(--Alt);border-left:4px solid var(--A);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:#3a2800;margin-bottom:12px;line-height:1.6}
+.info-box{background:var(--Blt);border-left:4px solid var(--B);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:#0d2a52;margin-bottom:12px;line-height:1.6}
+.succ-box{background:var(--Glt);border-left:4px solid var(--G);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:#1a3a1a;margin:8px 0}
+.err-box{background:var(--Rlt);border-left:4px solid var(--R);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:#6a1010;margin:8px 0}
+.fml-box{background:#f5fdf5;border:1px solid var(--brd);border-radius:8px;padding:10px 14px;margin:8px 0;font-family:var(--mono);font-size:.81rem;line-height:1.9}
+.ftitle{font-family:var(--sans);font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:4px}
+.frow{color:#1a3a1a}.frow em{color:var(--B);font-style:normal;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.fg{display:flex;flex-direction:column;gap:4px}.fl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.fi{display:flex;gap:6px;align-items:center}.fi input,.fi select{flex:1}.ut{font-size:.75rem;color:var(--muted);white-space:nowrap;font-family:var(--mono)}
+input[type=number],input[type=text],select{padding:7px 10px;border:1.5px solid var(--brd);border-radius:7px;font-family:var(--sans);font-size:.85rem;background:#f8fdf8;color:var(--text);outline:none;transition:border-color .18s;width:100%}
+input:focus,select:focus{border-color:var(--P);box-shadow:0 0 0 3px rgba(46,125,50,.12);background:#fff}
+input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-family:var(--mono)}
+.ans-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(200,230,201,.4)}
+.ans-row:last-child{border-bottom:none}.ans-label{flex:1;font-size:.83rem;line-height:1.5}
+.ans-inp{width:110px!important;padding:6px 9px;border:2px solid var(--brd);border-radius:7px;font-family:var(--mono);font-size:.87rem;text-align:right;background:#f8fdf8;flex-shrink:0}
+.ans-inp:focus{border-color:var(--P);background:#fff}.ans-inp.ok{border-color:var(--G)!important;background:var(--Glt)!important}.ans-inp.no{border-color:var(--R)!important;background:var(--Rlt)!important}
+.ans-unit{font-family:var(--mono);font-size:.75rem;color:var(--muted);width:52px;flex-shrink:0}
+.chip{font-size:.71rem;font-weight:700;padding:2px 9px;border-radius:10px;min-width:28px;text-align:center;flex-shrink:0}.chip.ok{background:var(--Glt);color:var(--Gdk)}.chip.no{background:var(--Rlt);color:var(--R)}
+.mcq-wrap{margin:10px 0}.mcq-q{font-size:.85rem;font-weight:600;margin-bottom:8px;line-height:1.5}
+.mcq-opts{display:grid;gap:7px}.g2c{grid-template-columns:1fr 1fr}
+.mcq-opt{border:2px solid var(--brd);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:.81rem;display:flex;align-items:center;gap:8px;transition:all .15s;background:#f8fdf8;line-height:1.4}
+.mcq-opt:hover{border-color:var(--Pmd);background:var(--Plt)}.mcq-opt.ok{border-color:var(--G)!important;background:var(--Glt)!important}.mcq-opt.no{border-color:var(--R)!important;background:var(--Rlt)!important}
+.mkey{width:22px;height:22px;border-radius:50%;background:var(--P);color:#fff;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono)}
+.sec-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--brd)}
+.btn{border:none;cursor:pointer;font-family:var(--sans);font-weight:700;border-radius:7px;transition:all .16s;display:inline-flex;align-items:center;gap:5px;font-size:.84rem;padding:9px 18px}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}.btn:active{transform:translateY(0)}
+.btn-p{background:var(--P);color:#fff}.btn-a{background:var(--A);color:#fff}.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--brd);padding:8px 14px}.btn-ghost:hover{background:var(--Plt)}
+.btn-sm{padding:5px 11px!important;font-size:.74rem!important}
+/* Lookup table */
+.lookup-table-wrap{margin:10px 0;border:1.5px solid var(--brd);border-radius:10px;overflow:hidden}
+.lookup-table-hdr{background:#1B5E20;color:#fff;padding:8px 14px;display:flex;align-items:center;gap:8px}
+.lookup-table-hdr-left{flex:1}.lookup-table-title{font-size:.75rem;font-weight:700}
+.lookup-table-ref{font-size:.64rem;opacity:.65;margin-top:1px;font-family:var(--mono)}
+.lookup-table-loc{font-size:.66rem;background:rgba(255,143,0,.25);color:#FFD54F;border:1px solid rgba(255,143,0,.4);padding:2px 8px;border-radius:4px;font-weight:700;white-space:nowrap}
+.lookup-how{background:#FFF8E1;border-bottom:1.5px solid var(--brd);padding:8px 14px;font-size:.77rem;color:#3a2800;line-height:1.6}
+.lookup-how-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#E65100;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.lookup-tbl{width:100%;border-collapse:collapse;font-size:.77rem}
+.lookup-tbl th{background:#2E7D32;color:rgba(255,255,255,.9);padding:.38rem .55rem;font-size:.63rem;font-weight:700;text-align:center;text-transform:uppercase;white-space:nowrap}
+.lookup-tbl th.L{text-align:left;padding-left:.7rem}
+.lookup-tbl td{padding:.3rem .5rem;border-bottom:1px solid rgba(200,230,201,.4);text-align:center;vertical-align:middle;font-family:var(--mono);font-size:.76rem}
+.lookup-tbl td.L{text-align:left;font-family:var(--sans);font-weight:600;font-size:.77rem;padding-left:.7rem}
+.lookup-tbl tr:last-child td{border-bottom:none}.lookup-tbl tr.hi td{background:#FFF8E1;font-weight:700;color:#BF360C}
+.lookup-note{background:var(--Plt);padding:7px 14px;font-size:.72rem;color:var(--muted);border-top:1.5px solid var(--brd);line-height:1.5}
+/* Schema */
+.schema{background:#f5fdf5;border:1px solid var(--brd);border-radius:8px;padding:10px;margin:10px 0;display:flex;justify-content:center;align-items:center}
+.schema-cap{text-align:center;font-size:.73rem;font-weight:700;color:var(--muted);margin-top:4px}
+/* Soil rows */
+.soil-row{border-bottom:1.5px solid var(--brd);padding:10px 16px;position:relative;transition:background .12s}
+.soil-row:hover{background:#f5fdf5}
+.soil-row-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.soil-name-inp{flex:1;min-width:0;padding:5px 8px;border:1.5px solid transparent;border-radius:5px;font-size:.84rem;font-weight:600;background:transparent;font-family:var(--sans);transition:all .15s}
+.soil-name-inp:hover{border-color:var(--brd);background:#f8fdf8}
+.soil-name-inp:focus{border-color:var(--P);background:#fff;outline:none}
+.soil-fields{display:grid;grid-template-columns:repeat(11,minmax(64px,1fr));gap:5px}
+.sf{display:flex;flex-direction:column;gap:2px}.sf-l{font-size:.59rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.si{width:100%;padding:6px 5px;border:1.5px solid transparent;border-radius:5px;font-size:.79rem;background:#eef7ee;text-align:center;font-family:var(--mono);transition:all .15s}
+.si:hover{border-color:var(--brd);background:#f8fdf8}.si:focus{border-color:var(--P);background:#fff;outline:none}
+.sh-grp{display:flex;gap:3px;align-items:center}.sh-grp input{width:40px;text-align:center;font-family:var(--mono);padding:5px 4px;font-size:.77rem}
+.btn-tra{background:var(--Plt);color:var(--Pdk);border:1.5px solid #C8E6C9;padding:5px 9px;font-size:.7rem;border-radius:5px;cursor:pointer;font-family:var(--sans);font-weight:700;transition:all .14s;white-space:nowrap;line-height:1}
+.btn-tra:hover{background:var(--P);color:#fff;border-color:var(--P)}
+.ldot{width:10px;height:10px;border-radius:2px;display:inline-block;flex-shrink:0;margin-right:3px;vertical-align:middle}
+.rmv{background:none;border:none;cursor:pointer;color:#ccc;padding:4px 6px;border-radius:4px;font-size:15px;transition:all .15s;line-height:1}
+.rmv:hover{color:var(--R);background:var(--Rlt)}
+.add-row{width:100%;border:none;background:none;padding:.6rem;font-size:.79rem;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;border-top:1.5px dashed #C8E6C9;font-family:var(--sans);font-weight:600;transition:all .15s}
+.add-row:hover{background:var(--Plt);color:var(--Pdk)}
+.stbl-wrap{border-top:1px solid var(--brd)}
+/* Tru dia chat */
+.tru-outer{display:flex;gap:8px;overflow:hidden}
+.tru-svg-wrap{flex-shrink:0;overflow:hidden;border-radius:4px}
+.trl{display:flex;align-items:flex-start;gap:6px;margin-bottom:6px}
+.trl-b{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+.trl-n{font-size:.79rem;font-weight:600}.trl-s{font-size:.7rem;color:var(--muted)}
+.viz-panel{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--sh);position:sticky;top:72px;overflow:hidden}
+.viz-hd{background:var(--Pdk);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px}
+.viz-hd span{font-size:.82rem;font-weight:700}.viz-body{padding:12px 14px}
+.two-pane{display:grid;grid-template-columns:1fr 280px;gap:16px;align-items:start}
+.abar{display:flex;gap:8px;align-items:center;padding-top:12px;border-top:1px solid var(--brd);flex-wrap:wrap}
+.save-ok{font-size:.79rem;color:var(--G);font-weight:700;margin-left:auto}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:#333;color:#fff;padding:8px 20px;border-radius:20px;font-size:.81rem;font-weight:600;opacity:0;transition:all .28s;pointer-events:none;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<header class="hdr">
+  <div class="hdr-in">
+    <a href="../index.html" class="back-btn"><i class="ti ti-arrow-left"></i> Trang chủ</a>
+    <div class="hdr-title">
+      <h1>Phần 2 · Module 01 – Phương Án Móng Băng</h1>
+      <p>Khai báo tải trọng · Phân tích địa chất · Chọn chiều sâu đặt móng · Đồ án Nền Móng – TS. Phạm Việt Anh</p>
+    </div>
+    <div class="pb" id="hdr-prog">0 / 0</div>
+  </div>
+</header>
+<div class="tabs-bar"><div class="tabs-in">
+  <button class="tab on" onclick="goto('s-soluieu')"><span class="tn">B·01</span> Số liệu & Địa chất</button>
+  <button class="tab" onclick="goto('s-diachi')"><span class="tn">B·02</span> Phân tích địa chất</button>
+  <button class="tab" onclick="goto('s-phuongan')"><span class="tn">B·03</span> Phương án & hm</button>
+</div></div>
+
+<main>
+<div class="prog-wrap">
+  <div class="prog-top"><span>Tiến độ Module B01</span><span id="prog-text">0 / 0</span></div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<div class="two-pane">
+<div>
+
+<!-- ══ SỐ LIỆU ══ -->
+<div class="card" id="s-soluieu">
+  <div class="card-hd" style="background:var(--Pdk)"><i class="ti ti-file-description"></i>
+    <div><h2>A · Số Liệu Đề Bài — Móng Băng</h2><p>Tải trọng T/m dài · Địa chất dùng chung từ Phần 1</p></div>
+    <span class="cbadge">Bước 1</span>
+  </div>
+  <div class="card-body">
+    <div class="info-box"><i class="ti ti-database" style="font-size:12px;vertical-align:-2px"></i>
+      <b>Địa chất dùng chung từ Phần 1.</b> Nếu đã nhập ở Phần 1 (Móng Nông), hệ thống sẽ tự tải lại. Tải trọng móng băng nhập riêng bên dưới.
+      <button class="btn-sm btn-ghost" onclick="loadGeoFromP1()" style="margin-left:8px;font-size:.72rem;padding:3px 10px">↓ Tải lại địa chất P1</button>
+    </div>
+
+    <!-- Tải trọng móng băng -->
+    <div class="sec-lbl">Tải trọng móng băng (T/m dài)</div>
+    <div class="warn-box"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-2px"></i>
+      Móng băng nhận tải trọng <b>phân bố trên 1m dài tường</b>: N₀ (T/m), M₀ (Tm/m), Q₀ (T/m). Đây là tải trọng tại chân tường, chân cột hàng.
+    </div>
+    <div class="g3" style="margin-bottom:12px">
+      <div class="fg"><div class="fl">N₀<sup>tt</sup> — Lực dọc TT</div><div class="fi"><input type="number" id="N0tt_b" placeholder="40.2" oninput="updStats()"><span class="ut">T/m</span></div></div>
+      <div class="fg"><div class="fl">M₀<sup>tt</sup> — Momen TT</div><div class="fi"><input type="number" id="M0tt_b" placeholder="4.0"><span class="ut">Tm/m</span></div></div>
+      <div class="fg"><div class="fl">Q₀<sup>tt</sup> — Lực ngang TT</div><div class="fi"><input type="number" id="Q0tt_b" placeholder="2.0"><span class="ut">T/m</span></div></div>
+    </div>
+    <div class="g3" style="margin-bottom:10px">
+      <div class="fg"><div class="fl">N₀<sup>tc</sup> — Lực dọc TC</div><div class="fi"><input type="number" id="N0tc_b" placeholder="34.96" oninput="updStats()"><span class="ut">T/m</span></div></div>
+      <div class="fg"><div class="fl">M₀<sup>tc</sup> — Momen TC</div><div class="fi"><input type="number" id="M0tc_b" placeholder="3.48"><span class="ut">Tm/m</span></div></div>
+      <div class="fg"><div class="fl">Q₀<sup>tc</sup> — Lực ngang TC</div><div class="fi"><input type="number" id="Q0tc_b" placeholder="1.74"><span class="ut">T/m</span></div></div>
+    </div>
+    <div class="g3" style="margin-bottom:10px">
+      <div class="fg"><div class="fl">Hệ số vượt tải n = N<sup>tt</sup>/N<sup>tc</sup></div><div class="fi"><input type="number" id="n-vuot" readonly style="background:var(--Plt)"><span class="ut">–</span></div></div>
+      <div class="fg"><div class="fl">Bề rộng tường b<sub>t</sub></div><div class="fi"><input type="number" id="bt_b" placeholder="25"><span class="ut">cm</span></div></div>
+      <div class="fg"><div class="fl">MNN từ mặt đất</div><div class="fi"><input type="number" id="mnn_b" placeholder="4.9" oninput="updStats()"><span class="ut">m</span></div></div>
+    </div>
+
+    <!-- Địa chất -->
+    <div class="sec-lbl">Số liệu địa chất (dùng chung với Phần 1)</div>
+    <div class="warn-box" style="font-size:.78rem"><i class="ti ti-alert-triangle" style="font-size:12px;vertical-align:-2px"></i>
+      <b>Đất dính (SH 1–72):</b> có W_L, W_P, bảng nén e-p &nbsp;·&nbsp; <b>Đất rời (SH 73–112):</b> thành phần hạt, φ, SPT, q_c. h=0 nghĩa là lớp cuối (vô tận).
+    </div>
+    <div class="stbl-wrap" id="stbody_b"></div>
+    <button class="add-row" onclick="addSoilB()"><i class="ti ti-plus"></i> Thêm lớp đất</button>
+
+    <div class="abar">
+      <button class="btn btn-p" onclick="saveB01()"><i class="ti ti-device-floppy"></i> Lưu số liệu</button>
+      <button class="btn btn-a btn-sm" onclick="loadEx176B()"><i class="ti ti-file-description"></i> Đề 176</button>
+      <span class="save-ok" id="saveok_b"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PHÂN TÍCH ĐỊA CHẤT ══ -->
+<div class="card" id="s-diachi">
+  <div class="card-hd" style="background:var(--Pdk)"><i class="ti ti-layers"></i>
+    <div><h2>B · Phân Tích Địa Chất</h2><p>Giống Phần 1 — xác định tên đất, trạng thái, đất tốt/yếu</p></div>
+    <span class="cbadge">Bước 2</span>
+  </div>
+  <div class="card-body">
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-2px"></i>
+      Phân tích địa chất móng băng <b>giống hệt móng đơn</b>: xác định A, B, trạng thái, đất tốt/yếu. Tham khảo Phần 1 · Module 01 nếu cần. Điền kết quả bên dưới.
+    </div>
+    <div id="geo-analysis-wrap">
+      <div class="warn-box">Nhập số liệu địa chất ở mục A rồi bấm "Lưu số liệu" để phân tích.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PHƯƠNG ÁN ══ -->
+<div class="card" id="s-phuongan">
+  <div class="card-hd" style="background:var(--Pdk)"><i class="ti ti-map-pin"></i>
+    <div><h2>C · Chọn Phương Án & Chiều Sâu Đặt Móng</h2><p>Phân tích trụ địa chất · Chọn h<sub>m</sub> cho móng băng</p></div>
+    <span class="cbadge">Bước 3</span>
+  </div>
+  <div class="card-body">
+    <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Nguyên tắc chọn phương án móng băng</div>
+      Móng băng thường đặt vào <b>lớp đất tốt đầu tiên</b> gặp từ trên xuống.<br>
+      Điều kiện: h<sub>m</sub> ≥ 0.5m (tránh ảnh hưởng mặt đất), thường 1.5–2.5m với nhà dân dụng.<br>
+      <b>Phân tích giống móng đơn:</b> đất tốt (B&lt;0.5 hoặc N>10) → móng nông nền tự nhiên. Đất lớp 1 yếu mỏng ≤ 2m → đệm cát.
+    </div>
+
+    <!-- SVG móng băng minh họa -->
+    <div class="schema">
+      <svg viewBox="0 0 400 200" width="390" height="190">
+        <defs><marker id="arrB" markerWidth="6" markerHeight="6" refX="3" refY="6" orient="auto"><path d="M0,0 L6,0 L3,6Z" fill="#2E7D32"/></marker></defs>
+        <!-- Đất -->
+        <rect x="0" y="80" width="400" height="120" fill="rgba(46,125,50,.12)"/>
+        <rect x="0" y="140" width="400" height="60" fill="rgba(27,94,32,.18)"/>
+        <line x1="0" y1="80" x2="400" y2="80" stroke="rgba(255,255,255,.5)" stroke-width="1" stroke-dasharray="5,3"/>
+        <line x1="0" y1="140" x2="400" y2="140" stroke="rgba(255,255,255,.3)" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="6" y="115" font-size="8" fill="rgba(46,125,50,.8)" font-family="Plus Jakarta Sans">Lớp 1</text>
+        <text x="6" y="165" font-size="8" fill="rgba(27,94,32,.9)" font-family="Plus Jakarta Sans">Lớp 2</text>
+        <!-- Tường hàng cột (3 cột) -->
+        <rect x="55" y="15" width="18" height="65" fill="rgba(46,125,50,.3)" stroke="rgba(46,125,50,.6)" stroke-width="1" rx="1"/>
+        <rect x="191" y="15" width="18" height="65" fill="rgba(46,125,50,.3)" stroke="rgba(46,125,50,.6)" stroke-width="1" rx="1"/>
+        <rect x="327" y="15" width="18" height="65" fill="rgba(46,125,50,.3)" stroke="rgba(46,125,50,.6)" stroke-width="1" rx="1"/>
+        <!-- Móng băng liên tục -->
+        <rect x="20" y="80" width="360" height="14" fill="rgba(46,125,50,.35)" stroke="rgba(46,125,50,.6)" stroke-width="1.2" rx="1"/>
+        <rect x="20" y="94" width="360" height="32" fill="rgba(46,125,50,.45)" stroke="rgba(46,125,50,.7)" stroke-width="1.5" rx="1"/>
+        <!-- Cốt thép dọc -->
+        <line x1="25" y1="118" x2="375" y2="118" stroke="rgba(255,143,0,.8)" stroke-width="2"/>
+        <line x1="25" y1="111" x2="375" y2="111" stroke="rgba(255,143,0,.5)" stroke-width="1.2"/>
+        <!-- Cốt thép ngang (stirrups gợi ý) -->
+        <line x1="80" y1="96" x2="80" y2="124" stroke="rgba(255,143,0,.4)" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="160" y1="96" x2="160" y2="124" stroke="rgba(255,143,0,.4)" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="240" y1="96" x2="240" y2="124" stroke="rgba(255,143,0,.4)" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="320" y1="96" x2="320" y2="124" stroke="rgba(255,143,0,.4)" stroke-width="1" stroke-dasharray="2,2"/>
+        <!-- Tải phân bố -->
+        <line x1="20" y1="5" x2="380" y2="5" stroke="rgba(255,143,0,.8)" stroke-width="1"/>
+        <line x1="40" y1="5" x2="40" y2="13" stroke="rgba(255,143,0,.8)" stroke-width="1.2" marker-end="url(#arrB)"/>
+        <line x1="100" y1="5" x2="100" y2="13" stroke="rgba(255,143,0,.8)" stroke-width="1.2" marker-end="url(#arrB)"/>
+        <line x1="200" y1="5" x2="200" y2="13" stroke="rgba(255,143,0,.8)" stroke-width="1.2" marker-end="url(#arrB)"/>
+        <line x1="300" y1="5" x2="300" y2="13" stroke="rgba(255,143,0,.8)" stroke-width="1.2" marker-end="url(#arrB)"/>
+        <line x1="360" y1="5" x2="360" y2="13" stroke="rgba(255,143,0,.8)" stroke-width="1.2" marker-end="url(#arrB)"/>
+        <text x="200" y="3" text-anchor="middle" font-size="8.5" fill="rgba(255,143,0,.9)" font-weight="700" font-family="Plus Jakarta Sans">N₀ (T/m) · M₀ (Tm/m) · Q₀ (T/m)</text>
+        <!-- hm dimension -->
+        <line x1="388" y1="80" x2="388" y2="126" stroke="#1565C0" stroke-width="1.2"/>
+        <line x1="382" y1="80" x2="394" y2="80" stroke="#1565C0" stroke-width="1"/>
+        <line x1="382" y1="126" x2="394" y2="126" stroke="#1565C0" stroke-width="1"/>
+        <text x="398" y="106" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans" transform="rotate(90,398,106)">hm</text>
+        <!-- b dimension -->
+        <line x1="20" y1="135" x2="380" y2="135" stroke="#795548" stroke-width="0.8" stroke-dasharray="2,2"/>
+        <text x="200" y="148" text-anchor="middle" font-size="7.5" fill="#795548" font-family="Plus Jakarta Sans">b (bề rộng đáy móng băng)</text>
+        <!-- Mặt đất -->
+        <text x="3" y="78" font-size="7.5" fill="rgba(255,255,255,.6)" font-family="Plus Jakarta Sans" font-weight="600">MĐ</text>
+      </svg>
+    </div>
+    <div class="schema-cap">Sơ đồ móng băng — tải trọng phân bố trên 1m dài</div>
+
+    <!-- Nhận xét trụ địa chất -->
+    <div class="step" style="margin-top:14px">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">1</div><h3>Nhận xét trụ địa chất & Phân tích phương án</h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">Bắt buộc</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="earth-box">Dựa vào trụ địa chất bên phải, nhận xét và điền kết quả phân tích.</div>
+        <div class="ans-row"><span class="ans-label">📌 Lớp đất tốt đầu tiên (từ trên xuống) nằm ở lớp nào?</span>
+          <input class="ans-inp" id="lop-tot" type="text" placeholder="VD: Lớp 2" style="width:130px!important"><span class="chip" id="ck-lop-tot"></span></div>
+        <div class="mcq-wrap"><div class="mcq-q">📌 Đề xuất phương án móng băng:</div>
+          <div class="mcq-opts g2c">
+            <div class="mcq-opt" id="mco-pa-0" onclick="pickMCQ('pa',0,0)"><span class="mkey">A</span><span>Móng băng trên nền <b>tự nhiên</b> — lớp đất 1 đủ tốt hoặc mỏng đặt xuống lớp tốt</span></div>
+            <div class="mcq-opt" id="mco-pa-1" onclick="pickMCQ('pa',1,1)"><span class="mkey">B</span><span>Móng băng trên <b>đệm cát</b> — lớp 1 yếu mỏng ≤ 2m, thay bằng đệm cát</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chọn hm -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">2</div><h3>Chọn chiều sâu đặt móng h<sub>m</sub></h3>
+        <span class="stag" style="background:var(--Glt);color:var(--Gdk)">Tính toán</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="fml-box">
+          <div class="ftitle">Điều kiện chọn hm — Móng băng</div>
+          <div class="frow">h<sub>m</sub> ≥ max(0.5m, h<sub>lớp yếu</sub>) &nbsp;→&nbsp; Làm tròn lên bội số 0.1m</div>
+          <div class="frow">Thường: h<sub>m</sub> = 1.5–2.5m (nhà dân dụng), ≥ 2m khi có tải trọng lớn</div>
+        </div>
+        <div class="ans-row"><span class="ans-label">📌 Chọn h<sub>m</sub> cho móng băng</span>
+          <input class="ans-inp" id="hm_b" type="number" step="0.1" placeholder="VD: 1.8" oninput="chkHmB()">
+          <span class="ans-unit">m</span><span class="chip" id="ck-hm_b"></span></div>
+        <div id="hm-verdict"></div>
+      </div>
+    </div>
+
+    <div class="abar">
+      <button class="btn btn-p" onclick="saveB01()"><i class="ti ti-device-floppy"></i> Lưu tiến độ</button>
+      <button class="btn btn-a" onclick="goNext()"><i class="ti ti-arrow-right"></i> B·02 Kiểm tra nền →</button>
+      <a href="../index.html" class="btn btn-ghost"><i class="ti ti-home"></i> Trang chủ</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- end left -->
+
+<!-- RIGHT: TRỤ ĐỊA CHẤT -->
+<div>
+  <div class="viz-panel">
+    <div class="viz-hd"><i class="ti ti-eye" style="font-size:15px"></i><span>Sơ đồ trực quan</span></div>
+    <div class="viz-body">
+      <div class="tru-outer">
+        <div class="tru-svg-wrap"><svg id="tsvg_b" width="72" height="20"></svg></div>
+        <div id="tinfo_b" style="flex:1;min-width:0;overflow:hidden"></div>
+      </div>
+    </div>
+    <div style="padding:10px 14px;border-top:1px solid var(--brd);background:var(--bg)">
+      <div style="font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Số liệu tải trọng băng</div>
+      <div style="font-size:.8rem;line-height:1.8" id="load-viz">–</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end two-pane -->
+</main>
+
+<script>
+var ANS={};var SD_B=[];var LC=['#8D6E63','#A1887F','#795548','#6D4C41','#5D4037'];
+var SOIL_DB={};
+
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
+function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function goto(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function togS(hd){var b=hd.nextElementSibling;b.classList.toggle('hide');var c=hd.querySelector('.chev');if(c)c.style.transform=b.classList.contains('hide')?'rotate(-90deg)':'';}
+function pickMCQ(grp,ci,correct){
+  document.querySelectorAll('[id^="mco-'+grp+'-"]').forEach(function(el){el.classList.remove('ok','no');});
+  var ok=(ci===correct);var el=document.getElementById('mco-'+grp+'-'+ci);if(el)el.classList.add(ok?'ok':'no');
+  if(!ok){var ce=document.getElementById('mco-'+grp+'-'+correct);if(ce)ce.classList.add('ok');}
+  ANS['mcq-'+grp]=ok;updateProg();toast(ok?'✓ Đúng!':'✗ Xem đáp án xanh');
+}
+function updateProg(){
+  var total=0,done=0;Object.keys(ANS).forEach(function(k){if(ANS[k]!==null&&ANS[k]!==undefined){total++;if(ANS[k]===true)done++;}});
+  var pct=total?Math.round(done/total*100):0;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-text').textContent=done+' / '+total+' ('+pct+'%)';
+  document.getElementById('hdr-prog').textContent=done+' / '+total;
+}
+
+/* ── SOIL TABLE ── */
+function addSoilB(){SD_B.push({name:'Lớp '+(SD_B.length+1),sh:'',h:'',g:'',W:'',WL:'',WP:'',del:'',c:'',phi:'',E0:'',spt:'',qc:''});renderTableB();}
+function rmSoilB(i){SD_B.splice(i,1);renderTableB();upVizB();}
+function renderTableB(){
+  var html='';
+  SD_B.forEach(function(s,i){
+    html+='<div class="soil-row" style="border-left:3px solid '+LC[i%5]+'">';
+    html+='<div class="soil-row-top">';
+    html+='<span class="ldot" style="background:'+LC[i%5]+'"></span>';
+    html+='<input class="soil-name-inp" type="text" value="'+s.name+'" onchange="SD_B['+i+'].name=this.value;upVizB()">';
+    html+='<div class="sh-grp"><input type="number" id="shb'+i+'" value="'+(s.sh||'')+'" placeholder="SH" onkeydown="if(event.key===\'Enter\')lookupSoilB('+i+')"><button class="btn-tra" onclick="lookupSoilB('+i+')">Tra</button></div>';
+    html+='<button class="rmv" onclick="rmSoilB('+i+')" title="Xóa"><i class="ti ti-x"></i></button>';
+    html+='</div>';
+    html+='<div class="soil-fields">';
+    var fields=[['h (m)','h',s.h],['γ kN/m³','g',s.g],['W %','W',s.W],['W_L','WL',s.WL],['W_P','WP',s.WP],['Δ','del',s.del],['c kPa','c',s.c],['φ °','phi',s.phi],['E₀ MPa','E0',s.E0],['SPT','spt',s.spt],['qc MPa','qc',s.qc]];
+    fields.forEach(function(p){
+      var val=(p[2]===''||p[2]===null||p[2]===undefined)?'':p[2];
+      html+='<div class="sf"><div class="sf-l">'+p[0]+'</div><input class="si" type="number" value="'+val+'" placeholder="–" onchange="SD_B['+i+'].'+p[1]+'=this.value===\'\'?\'\':parseFloat(this.value);upVizB()"></div>';
+    });
+    html+='</div></div>';
+  });
+  document.getElementById('stbody_b').innerHTML=html;
+}
+
+/* ── LOOKUP ── */
+var SOIL_DATA_B={};
+function lookupSoilB(i){
+  var sh=parseInt(document.getElementById('shb'+i).value)||0;
+  if(!sh)return;
+  // Reuse same CSDL as phan1 (112 soil types)
+  var d=SOIL_DATA_B[sh];
+  if(d){
+    ['g','WL','WP','del','c','phi','E0'].forEach(function(f){if(d[f]!==undefined)SD_B[i][f]=d[f];});
+    SD_B[i].sh=sh;
+    renderTableB();upVizB();
+    toast('✓ Tra xong số hiệu '+sh);
+  } else {
+    toast('Số hiệu '+sh+' không có trong CSDL — nhập tay');
+  }
+}
+
+/* ── STATS UPDATE ── */
+function updStats(){
+  var N0tt=gv('N0tt_b'),N0tc=gv('N0tc_b');
+  var n=N0tc?+(N0tt/N0tc).toFixed(2):0;
+  var el=document.getElementById('n-vuot');if(el)el.value=n||'';
+  // Update load viz
+  var lv=document.getElementById('load-viz');
+  if(lv) lv.innerHTML=
+    '<b>N₀<sup>tt</sup></b> = '+（gv('N0tt_b')||'–')+' T/m<br>'+
+    '<b>M₀<sup>tt</sup></b> = '+(gv('M0tt_b')||'–')+' Tm/m<br>'+
+    '<b>Q₀<sup>tt</sup></b> = '+(gv('Q0tt_b')||'–')+' T/m<br>'+
+    '<b>N₀<sup>tc</sup></b> = '+(gv('N0tc_b')||'–')+' T/m<br>'+
+    '<b>MNN</b> = '+(gv('mnn_b')||'–')+' m';
+}
+
+/* ── VIZ TRỤ ĐỊA CHẤT ── */
+function upVizB(){
+  var mnn=gv('mnn_b')||4.9;
+  var svg=document.getElementById('tsvg_b'),info=document.getElementById('tinfo_b');
+  if(!svg||!SD_B.length){if(info)info.innerHTML='<div style="font-size:.75rem;color:#bbb">Chưa có lớp đất</div>';return;}
+  var totalH=0;SD_B.forEach(function(s){totalH+=(parseFloat(s.h)||3);});
+  var svgH=Math.min(Math.max(totalH*20,80),280);
+  svg.setAttribute('viewBox','0 0 72 '+svgH);svg.setAttribute('height',svgH);
+  var SCALE=svgH/totalH,acc=0,svgHTML='';
+  var infoHTML='';
+  SD_B.forEach(function(s,i){
+    var h=(parseFloat(s.h)||3);var y=acc*SCALE;var ph=h*SCALE;
+    var col=LC[i%5];
+    svgHTML+='<rect x="4" y="'+y+'" width="60" height="'+ph+'" fill="'+col+'" opacity="0.7" rx="1"/>';
+    if(mnn*SCALE>0&&mnn*SCALE<svgH){svgHTML+='<line x1="0" y1="'+(mnn*SCALE)+'" x2="72" y2="'+(mnn*SCALE)+'" stroke="#1565C0" stroke-width="1.5" stroke-dasharray="3,2"/>';}
+    var isDinh=s.WL!==''&&!isNaN(parseFloat(s.WL));
+    var tt=isDinh?getTTDinh(s):getTTRoi(s);
+    infoHTML+='<div class="trl"><span class="trl-b" style="background:'+col+';color:#fff">'+（h>0?h+'m':'∞')+'</span><div><div class="trl-n">'+s.name+'</div><div class="trl-s">'+(tt||'Chưa xác định')+'</div></div></div>';
+    acc+=h;
+  });
+  svg.innerHTML=svgHTML;info.innerHTML=infoHTML;
+}
+function getTTDinh(s){var WL=parseFloat(s.WL)||0,WP=parseFloat(s.WP)||0,W=parseFloat(s.W)||0;if(!WL&&!WP)return '';var A=WL-WP;if(A<=0)return '';var B=(W-WP)/A;if(A<7)return 'Á cát · B='+B.toFixed(2);if(A<=17)return 'Á sét · B='+B.toFixed(2);return 'Sét · B='+B.toFixed(2);}
+function getTTRoi(s){var N=parseFloat(s.spt)||0;if(!N)return '';return N<4?'Rất rời (N='+N+')':N<10?'Rời (N='+N+')':N<30?'Chặt vừa (N='+N+')':N<50?'Chặt (N='+N+')':'Rất chặt (N='+N+')';}
+
+/* ── LOAD GEO FROM P1 ── */
+function loadGeoFromP1(){
+  try{
+    var p1=JSON.parse(localStorage.getItem('nmong_p1')||'{}');
+    if(p1.soils&&p1.soils.length>0){
+      SD_B=p1.soils.map(function(s){return Object.assign({},s);});
+      renderTableB();upVizB();
+      toast('✓ Đã tải '+SD_B.length+' lớp đất từ Phần 1');
+    } else {
+      toast('Phần 1 chưa có địa chất — nhập tay');
+    }
+  }catch(e){toast('Lỗi đọc dữ liệu P1');}
+}
+
+/* ── CHK HM ── */
+function chkHmB(){
+  var hm=gv('hm_b');
+  var chip=document.getElementById('ck-hm_b');
+  var verdict=document.getElementById('hm-verdict');
+  var ok=hm>=0.5&&hm<=3.5;
+  if(chip){chip.className='chip '+(ok?'ok':'no');chip.textContent=ok?'✓':'✗';}
+  if(verdict)verdict.innerHTML=hm?'<div class="'+(ok?'succ-box':'err-box')+'"><b>'+(ok?'✓ Hợp lý:':'✗ Cần xem lại:')+'</b> h<sub>m</sub> = '+hm+'m '+(ok?'— đặt móng vào lớp tốt':'— thường 1.5–2.5m')+'</div>':'';
+  ANS['hm_b']=ok&&hm>0;updateProg();
+}
+
+/* ── SAVE ── */
+function saveB01(){
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong_p2')||'{}');
+    d.m01_done=true;d.m01_time=new Date().toLocaleString('vi-VN');
+    d.N0tt_b=gv('N0tt_b');d.M0tt_b=gv('M0tt_b');d.Q0tt_b=gv('Q0tt_b');
+    d.N0tc_b=gv('N0tc_b');d.M0tc_b=gv('M0tc_b');d.Q0tc_b=gv('Q0tc_b');
+    d.bt_b=gv('bt_b');d.mnn_b=gv('mnn_b');d.hm_b=gv('hm_b');
+    d.soils=SD_B;
+    localStorage.setItem('nmong_p2',JSON.stringify(d));
+    var ok=document.getElementById('saveok_b');if(ok){ok.textContent='✓ Đã lưu';setTimeout(function(){ok.textContent='';},2000);}
+    toast('✓ Đã lưu tiến độ P2·M01');
+  }catch(e){toast('Lỗi lưu: '+e);}
+}
+
+/* ── LOAD EX 176 BANG ── */
+function loadEx176B(){
+  document.getElementById('N0tt_b').value=40.2;
+  document.getElementById('M0tt_b').value=4.0;
+  document.getElementById('Q0tt_b').value=2.0;
+  document.getElementById('N0tc_b').value=34.96;
+  document.getElementById('M0tc_b').value=3.48;
+  document.getElementById('Q0tc_b').value=1.74;
+  document.getElementById('bt_b').value=25;
+  document.getElementById('mnn_b').value=4.9;
+  // Địa chất cùng đề 176 như móng đơn
+  loadGeoFromP1();
+  if(SD_B.length===0){
+    SD_B=[
+      {name:'Á cát, dẻo mềm (Lớp 25)',sh:25,h:1.8,g:17.8,W:32.6,WL:35.1,WP:28.7,del:2.65,c:1.2,phi:12,E0:5.52,spt:8,qc:1.38},
+      {name:'Cát vừa, chặt vừa (Lớp 94)',sh:94,h:2.6,g:19.3,W:'',WL:'',WP:'',del:2.64,c:0,phi:34,E0:51,spt:26,qc:8.5},
+      {name:'Sét, cứng (Lớp 70)',sh:70,h:0,g:19.4,W:28,WL:50,WP:31,del:2.72,c:4,phi:19.25,E0:10.32,spt:23,qc:5.16}
+    ];
+    renderTableB();
+  }
+  updStats();upVizB();
+  document.getElementById('hm_b').value=1.8;chkHmB();
+  toast('✓ Đã load đề 176 — Móng Băng');
+}
+
+/* ── NAVIGATE ── */
+function goNext(){saveB01();window.location.href='module02_bang_nen.html';}
+
+/* ── INIT ── */
+window.onload=function(){
+  // Load từ localStorage p2
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong_p2')||'{}');
+    if(d.N0tt_b) document.getElementById('N0tt_b').value=d.N0tt_b;
+    if(d.M0tt_b) document.getElementById('M0tt_b').value=d.M0tt_b;
+    if(d.Q0tt_b) document.getElementById('Q0tt_b').value=d.Q0tt_b;
+    if(d.N0tc_b) document.getElementById('N0tc_b').value=d.N0tc_b;
+    if(d.M0tc_b) document.getElementById('M0tc_b').value=d.M0tc_b;
+    if(d.Q0tc_b) document.getElementById('Q0tc_b').value=d.Q0tc_b;
+    if(d.bt_b) document.getElementById('bt_b').value=d.bt_b;
+    if(d.mnn_b) document.getElementById('mnn_b').value=d.mnn_b;
+    if(d.hm_b) {document.getElementById('hm_b').value=d.hm_b;chkHmB();}
+    if(d.soils&&d.soils.length>0){SD_B=d.soils;renderTableB();upVizB();toast('✓ Đã khôi phục tiến độ P2·M01');}
+    else{loadGeoFromP1();}
+  }catch(e){}
+  updStats();
+  ANS['hm_b']=null;ANS['mcq-pa']=null;updateProg();
+};
+</script>
+</body>
+</html>
