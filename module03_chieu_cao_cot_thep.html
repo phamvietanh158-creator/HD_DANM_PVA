@@ -100,6 +100,27 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
 .sticky-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);border-top:1px solid var(--brd);padding:9px 20px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(8px);z-index:50}
 .toast{position:fixed;bottom:65px;left:50%;transform:translateX(-50%) translateY(16px);background:#333;color:#fff;padding:8px 20px;border-radius:20px;font-size:.82rem;font-weight:600;opacity:0;transition:all .28s;pointer-events:none;z-index:999}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.lookup-table-wrap{margin:10px 0;border:1.5px solid var(--brd);border-radius:10px;overflow:hidden}
+.lookup-table-hdr{background:var(--Pdk);color:#fff;padding:8px 14px;display:flex;align-items:center;gap:8px}
+.lookup-table-hdr-left{flex:1}
+.lookup-table-title{font-size:.75rem;font-weight:700}
+.lookup-table-ref{font-size:.65rem;opacity:.65;margin-top:1px;font-family:var(--mono)}
+.lookup-table-loc{font-size:.67rem;background:rgba(255,143,0,.25);color:#FFD54F;border:1px solid rgba(255,143,0,.4);padding:2px 8px;border-radius:4px;font-weight:700;white-space:nowrap}
+.lookup-how{background:#FFF8E1;border-bottom:1.5px solid var(--brd);padding:8px 14px;font-size:.78rem;color:#3a2800;line-height:1.6}
+.lookup-how-lbl{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#E65100;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.lookup-tbl{width:100%;border-collapse:collapse;font-size:.78rem}
+.lookup-tbl th{background:#5D4037;color:rgba(255,255,255,.88);padding:.38rem .6rem;font-size:.65rem;font-weight:700;text-align:center;text-transform:uppercase;white-space:nowrap}
+.lookup-tbl th.L{text-align:left;padding-left:.75rem}
+.lookup-tbl td{padding:.32rem .55rem;border-bottom:1px solid rgba(215,204,200,.35);text-align:center;vertical-align:middle;font-family:var(--mono);font-size:.77rem}
+.lookup-tbl td.L{text-align:left;font-family:var(--sans);font-weight:600;font-size:.78rem;padding-left:.75rem}
+.lookup-tbl tr:last-child td{border-bottom:none}
+.lookup-tbl tr.hi td{background:#FFF8E1;font-weight:700;color:#BF360C}
+.lookup-note{background:#EFEBE9;padding:7px 14px;font-size:.73rem;color:var(--muted);border-top:1.5px solid var(--brd);line-height:1.55}
+/* SCHEMA LABELS */
+.schema-cap{text-align:center;font-size:.74rem;font-weight:700;color:var(--muted);margin-top:4px;font-family:var(--sans)}
+.schema-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+
 /* result box */
 .r-box{border:2px solid var(--brd);border-radius:10px;padding:14px 16px;margin-top:12px;background:#faf8f6}
 .r-box.ok-box{border-color:var(--G);background:var(--Glt)}
@@ -181,22 +202,36 @@ textarea.conc-inp:focus{border-color:var(--P)}
     </div>
 
     <!-- BẢNG TRA VẬT LIỆU -->
-    <div class="lookup"><div class="lookup-lbl"><i class="ti ti-table" style="font-size:12px"></i> Bảng cường độ bê tông và thép (TCVN 5574:2018)</div>
-      <table class="tbl" style="margin:4px 0">
-        <thead><tr><th>Mác BT</th><th>R_b (MPa)</th><th>R_bt (MPa)</th><th>E_b (MPa)</th></tr></thead>
+    <div class="lookup-table-wrap">
+      <div class="lookup-table-hdr">
+        <div class="lookup-table-hdr-left">
+          <div class="lookup-table-title"><i class="ti ti-table" style="font-size:13px;vertical-align:-2px;margin-right:5px"></i>Bảng cường độ bê tông và cốt thép — TCVN 5574:2018</div>
+          <div class="lookup-table-ref">Bảng vật liệu · TCVN 5574:2018 (Kết cấu BTCT — Tiêu chuẩn thiết kế)</div>
+        </div>
+        <span class="lookup-table-loc"><i class="ti ti-book-2" style="font-size:11px"></i> Bảng 6.1 & 6.7 · TCVN 5574:2018</span>
+      </div>
+      <div class="lookup-how">
+        <div class="lookup-how-lbl"><i class="ti ti-hand-finger" style="font-size:12px"></i> Cách sử dụng</div>
+        ① Chọn mác bê tông (tối thiểu B20 cho móng) → Đọc <b>R_bt</b> (kéo uốn, dùng kiểm tra nén thủng) &nbsp;→&nbsp;
+        ② Chọn loại thép → Đọc <b>R_s</b> (cường độ tính toán thép, dùng tính F<sub>a</sub>) &nbsp;→&nbsp;
+        ③ Đổi đơn vị: R_bt (MPa) × 1000 = kPa khi tính P<sub>cđt</sub>
+      </div>
+      <table class="lookup-tbl" id="vl-bt-tbl">
+        <thead><tr><th class="L">Mác BT</th><th>R_b (MPa)</th><th>R_bt (MPa)</th><th>R_bt (kPa)</th><th>E_b (MPa)</th><th>Ghi chú</th></tr></thead>
         <tbody>
-          <tr><td>B20</td><td class="sym">11.5</td><td class="sym">0.90</td><td class="sym">27000</td></tr>
-          <tr><td>B25</td><td class="sym">14.5</td><td class="sym">1.05</td><td class="sym">30000</td></tr>
-          <tr><td>B30</td><td class="sym">17.0</td><td class="sym">1.20</td><td class="sym">32500</td></tr>
+          <tr><td class="L">B20</td><td>11.5</td><td>0.90</td><td>900</td><td>27 000</td><td>Tối thiểu cho móng</td></tr>
+          <tr class="hi"><td class="L">B25</td><td>14.5</td><td>1.05</td><td>1 050</td><td>30 000</td><td>Phổ biến trong đồ án</td></tr>
+          <tr><td class="L">B30</td><td>17.0</td><td>1.20</td><td>1 200</td><td>32 500</td><td>Móng lớn / cọc</td></tr>
         </tbody>
       </table>
-      <table class="tbl" style="margin:4px 0">
-        <thead><tr><th>Loại thép</th><th>R_s (MPa)</th><th>R_sc (MPa)</th><th>E_s (MPa)</th></tr></thead>
+      <table class="lookup-tbl" style="border-top:1.5px solid var(--brd)">
+        <thead><tr><th class="L">Loại thép</th><th>R_s (MPa)</th><th>R_s (kN/m²)</th><th>E_s (MPa)</th><th>Ký hiệu TC</th></tr></thead>
         <tbody>
-          <tr><td>AII (CB300-T)</td><td class="sym">280</td><td class="sym">280</td><td class="sym">200000</td></tr>
-          <tr><td>AIII (CB400-V)</td><td class="sym">365</td><td class="sym">365</td><td class="sym">200000</td></tr>
+          <tr><td class="L">AII (CB300-T)</td><td>280</td><td>280 000</td><td>200 000</td><td>φ, thép gai nhỏ</td></tr>
+          <tr class="hi"><td class="L">AIII (CB400-V)</td><td>365</td><td>365 000</td><td>200 000</td><td>φ, thép gai cao cường</td></tr>
         </tbody>
       </table>
+      <div class="lookup-note">R_bt dùng cho kiểm tra nén thủng: P<sub>cđt</sub> = R_bt(kPa) × b<sub>tb</sub>(m) × h₀(m). Cần đổi MPa → kPa (×1000).</div>
     </div>
 
     <div class="sec-lbl"><i class="ti ti-ruler-2" style="font-size:14px"></i> C. Chọn sơ bộ chiều cao móng</div>
@@ -235,10 +270,12 @@ textarea.conc-inp:focus{border-color:var(--P)}
       <div class="step-hd" onclick="togS(this)"><div class="snb">LT</div><h3>Lý thuyết nén thủng — Tiết diện nghiêng 45°</h3>
         <span class="stag" style="background:var(--Blt);color:var(--B)">Đọc trước</span><i class="ti ti-chevron-down chev"></i></div>
       <div class="step-body">
-        <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Cơ chế nén thủng — Công thức 1-21 đến 1-27</div>
-          Khi áp lực đất đẩy lên từ dưới lớn hơn khả năng chịu kéo của bê tông, phá hoại xảy ra trên mặt nghiêng 45° xuất phát từ chân cột.<br>
-          <b>Điều kiện:</b> P<sub>đt</sub> &lt; P<sub>cđt</sub> &nbsp;(Công thức 1-21)<br>
-          <b>Điều kiện kinh tế:</b> P<sub>cđt</sub> vượt P<sub>đt</sub> không quá 20%
+        <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Cơ chế nén thủng — §1.4.2 PDF hướng dẫn · Công thức 1-21 đến 1-27</div>
+          Khi áp lực đất từ dưới đẩy lên lớn hơn khả năng chịu kéo của bê tông, phá hoại xảy ra trên <b>mặt nghiêng 45°</b> từ chân cột.<br>
+          <b>Điều kiện:</b> P<sub>đt</sub> &lt; P<sub>cđt</sub> &nbsp;·&nbsp; <b>Kinh tế:</b> (P<sub>cđt</sub> – P<sub>đt</sub>) / P<sub>cđt</sub> ≤ 20%<br><br>
+          <b>TH1 — Tải trọng đúng tâm</b> (M₀=0): Phá hoại 2 phương, tháp thủng là hình chóp cụt. Kiểm tra: P<sub>đt</sub> = p₀<sup>tt</sup> × F<sub>ngoài tháp</sub><br>
+          <b>TH2 — Tải trọng lệch tâm</b> (M₀≠0, phổ biến trong đồ án): Phá hoại <b>1 phương</b> về phía p₀<sub>max</sub>.<br>
+          Kiểm tra: Nếu <b>b_c + 2h₀ &gt; b</b> → TH2 (phá hoại 1 phương theo chiều l). Ngược lại → TH1 (2 phương).
         </div>
         <div class="fml-box">
           <div class="ftitle">Xác định lực đâm thủng P_đt (Công thức 1-22 đến 1-26)</div>
@@ -254,48 +291,187 @@ textarea.conc-inp:focus{border-color:var(--P)}
           <div class="frow"><em>P<sub>cđt</sub></em> = R<sub>bt</sub> × b<sub>tb</sub> × h₀</div>
           <div style="font-size:.76rem;color:var(--muted);margin-top:3px">R<sub>bt</sub> lấy đơn vị kN/m² · b<sub>tb</sub>, h₀ tính bằng m</div>
         </div>
-        <!-- SVG minh họa tháp thủng -->
-        <div class="schema">
-          <svg viewBox="0 0 400 260" width="400" height="260" style="max-width:100%">
-            <!-- Đất nền -->
-            <rect x="0" y="200" width="400" height="60" fill="#D7CCC8" opacity="0.5" rx="0"/>
-            <line x1="0" y1="200" x2="400" y2="200" stroke="#795548" stroke-width="1.5" stroke-dasharray="4,3"/>
-            <text x="8" y="196" font-size="9" fill="#795548" font-family="Plus Jakarta Sans" font-weight="600">Mặt đất (đáy móng)</text>
-            <!-- Móng -->
-            <rect x="60" y="160" width="280" height="40" fill="#8D6E63" rx="3"/>
-            <text x="200" y="184" text-anchor="middle" font-size="10" fill="#fff" font-family="Plus Jakarta Sans" font-weight="700">ĐÁY MÓNG b × l</text>
+        <!-- SƠ ĐỒ 2 cột: tổng thể + tháp thủng -->
+        <div class="schema-2col">
+
+          <!-- Sơ đồ 1: Mặt cắt tổng thể N, M, Q -->
+          <div>
+            <div class="schema">
+              <svg viewBox="0 0 220 300" width="210" height="290" style="max-width:100%">
+                <defs>
+                  <marker id="arr3a" markerWidth="6" markerHeight="6" refX="3" refY="6" orient="auto"><path d="M0,0 L6,0 L3,6Z" fill="#5D4037"/></marker>
+                  <marker id="arr3b" markerWidth="6" markerHeight="6" refX="3" refY="0" orient="auto"><path d="M0,6 L6,6 L3,0Z" fill="#C62828"/></marker>
+                  <marker id="arr3c" markerWidth="7" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L7,3.5Z" fill="#FF8F00"/></marker>
+                </defs>
+                <!-- Đất nền -->
+                <rect x="0" y="205" width="220" height="50" fill="#EFEBE9"/>
+                <line x1="0" y1="205" x2="220" y2="205" stroke="#795548" stroke-width="1" stroke-dasharray="4,3"/>
+                <!-- Hatch đất -->
+                <line x1="10" y1="210" x2="20" y2="220" stroke="#A1887F" stroke-width="1"/>
+                <line x1="35" y1="210" x2="45" y2="220" stroke="#A1887F" stroke-width="1"/>
+                <line x1="60" y1="210" x2="70" y2="220" stroke="#A1887F" stroke-width="1"/>
+                <line x1="85" y1="210" x2="95" y2="220" stroke="#A1887F" stroke-width="1"/>
+                <line x1="110" y1="210" x2="120" y2="220" stroke="#A1887F" stroke-width="1"/>
+                <line x1="135" y1="210" x2="145" y2="220" stroke="#A1887F" stroke-width="1"/>
+                <line x1="160" y1="210" x2="170" y2="220" stroke="#A1887F" stroke-width="1"/>
+                <line x1="185" y1="210" x2="195" y2="220" stroke="#A1887F" stroke-width="1"/>
+                <!-- Móng hình thang -->
+                <polygon points="35,175 185,175 205,205 15,205" fill="#8D6E63" stroke="#5D4037" stroke-width="1.2"/>
+                <!-- Đáy móng label -->
+                <text x="110" y="198" text-anchor="middle" font-size="8" fill="#fff" font-weight="700" font-family="Plus Jakarta Sans">b × l</text>
+                <!-- Cột -->
+                <rect x="85" y="30" width="50" height="145" fill="#BCAAA4" stroke="#795548" stroke-width="1.2" rx="2"/>
+                <!-- Rebar trong cột -->
+                <line x1="92" y1="32" x2="92" y2="173" stroke="#FF8F00" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="128" y1="32" x2="128" y2="173" stroke="#FF8F00" stroke-width="1" stroke-dasharray="3,3"/>
+                <!-- N0 lực dọc -->
+                <line x1="110" y1="5" x2="110" y2="25" stroke="#5D4037" stroke-width="2.5" marker-end="url(#arr3a)"/>
+                <text x="118" y="16" font-size="9" fill="#5D4037" font-weight="700" font-family="Plus Jakarta Sans">N₀ᵗᵗ</text>
+                <!-- M0 momen -->
+                <path d="M 68,45 A 18,18 0 1 0 68,81" fill="none" stroke="#FF8F00" stroke-width="2" marker-end="url(#arr3c)"/>
+                <text x="34" y="60" font-size="9" fill="#FF8F00" font-weight="700" font-family="Plus Jakarta Sans">M₀ᵗᵗ</text>
+                <!-- Q0 lực ngang -->
+                <line x1="140" y1="100" x2="162" y2="100" stroke="#FF8F00" stroke-width="2" marker-end="url(#arr3c)"/>
+                <text x="165" y="104" font-size="9" fill="#FF8F00" font-weight="700" font-family="Plus Jakarta Sans">Q₀ᵗᵗ</text>
+                <!-- hm dimension -->
+                <line x1="16" y1="175" x2="16" y2="205" stroke="#1565C0" stroke-width="1"/>
+                <line x1="10" y1="175" x2="22" y2="175" stroke="#1565C0" stroke-width="1"/>
+                <line x1="10" y1="205" x2="22" y2="205" stroke="#1565C0" stroke-width="1"/>
+                <text x="6" y="192" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans" transform="rotate(-90,6,192)">hₘ</text>
+                <!-- Mặt đất label -->
+                <text x="4" y="203" font-size="7.5" fill="#795548" font-family="Plus Jakarta Sans" font-weight="600">MĐ</text>
+                <!-- p0max p0min biểu đồ áp lực -->
+                <rect x="205" y="175" width="12" height="30" fill="#C62828" opacity="0.8" rx="1"/>
+                <rect x="0" y="183" width="7" height="22" fill="#C62828" opacity="0.5" rx="1"/>
+                <text x="212" y="173" font-size="7" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">p₀max</text>
+                <text x="0" y="181" font-size="7" fill="#C62828" font-family="Plus Jakarta Sans">p₀min</text>
+                <!-- Cột label -->
+                <text x="110" y="95" text-anchor="middle" font-size="8" fill="#5D4037" font-family="Plus Jakarta Sans" font-weight="700">b_c×l_c</text>
+                <!-- h label bên trong móng -->
+                <line x1="210" y1="175" x2="210" y2="205" stroke="#2E7D32" stroke-width="1"/>
+                <text x="214" y="192" font-size="7.5" fill="#2E7D32" font-weight="700" font-family="Plus Jakarta Sans">h</text>
+              </svg>
+            </div>
+            <div class="schema-cap">Sơ đồ tải trọng & kích thước tổng thể</div>
+          </div>
+
+          <!-- Sơ đồ 2: Mặt cắt chi tiết tháp thủng TH2 (lệch tâm) -->
+          <div>
+            <div class="schema">
+              <svg viewBox="0 0 220 300" width="210" height="290" style="max-width:100%">
+                <defs>
+                  <marker id="arr4" markerWidth="6" markerHeight="6" refX="3" refY="6" orient="auto"><path d="M0,0 L6,0 L3,6Z" fill="#C62828"/></marker>
+                  <marker id="arr4b" markerWidth="6" markerHeight="6" refX="3" refY="0" orient="auto"><path d="M0,6 L6,6 L3,0Z" fill="#FF8F00"/></marker>
+                </defs>
+                <!-- Đáy móng (mặt cắt ngang) -->
+                <rect x="10" y="120" width="200" height="30" fill="#8D6E63" rx="2"/>
+                <!-- h0 zone -->
+                <rect x="10" y="120" width="200" height="30" fill="none" stroke="#5D4037" stroke-width="1"/>
+                <!-- Vị trí cốt thép -->
+                <line x1="10" y1="143" x2="210" y2="143" stroke="#FF8F00" stroke-width="2" stroke-dasharray="3,2"/>
+                <text x="213" y="147" font-size="7.5" fill="#FF8F00" font-weight="700" font-family="Plus Jakarta Sans">thép</text>
+                <!-- Cột (chân cột) -->
+                <rect x="80" y="40" width="60" height="80" fill="#BCAAA4" stroke="#795548" stroke-width="1.2" rx="2"/>
+                <text x="110" y="83" text-anchor="middle" font-size="8" fill="#5D4037" font-weight="700" font-family="Plus Jakarta Sans">cột</text>
+                <text x="110" y="94" text-anchor="middle" font-size="7.5" fill="#795548" font-family="Plus Jakarta Sans">b_c × l_c</text>
+                <!-- Tháp thủng 45° bên trái -->
+                <line x1="80" y1="120" x2="10" y2="150" stroke="#C62828" stroke-width="2" stroke-dasharray="5,3"/>
+                <!-- Tháp thủng 45° bên phải -->
+                <line x1="140" y1="120" x2="210" y2="150" stroke="#C62828" stroke-width="2" stroke-dasharray="5,3"/>
+                <!-- Nhãn 45° -->
+                <text x="28" y="145" font-size="9" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">45°</text>
+                <text x="172" y="145" font-size="9" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">45°</text>
+                <!-- btb span -->
+                <line x1="10" y1="108" x2="210" y2="108" stroke="#1565C0" stroke-width="1.2"/>
+                <line x1="10" y1="104" x2="10" y2="112" stroke="#1565C0" stroke-width="1"/>
+                <line x1="210" y1="104" x2="210" y2="112" stroke="#1565C0" stroke-width="1"/>
+                <text x="110" y="106" text-anchor="middle" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">b_tb = b_c + h₀</text>
+                <!-- h0 label -->
+                <line x1="4" y1="120" x2="4" y2="150" stroke="#2E7D32" stroke-width="1"/>
+                <line x1="0" y1="120" x2="8" y2="120" stroke="#2E7D32" stroke-width="1"/>
+                <line x1="0" y1="150" x2="8" y2="150" stroke="#2E7D32" stroke-width="1"/>
+                <text x="0" y="137" font-size="7.5" fill="#2E7D32" font-weight="700" font-family="Plus Jakarta Sans" transform="rotate(-90,0,137)">h₀</text>
+                <!-- ldt label bên phải -->
+                <line x1="140" y1="165" x2="210" y2="165" stroke="#FF8F00" stroke-width="1.5"/>
+                <line x1="140" y1="161" x2="140" y2="169" stroke="#FF8F00" stroke-width="1"/>
+                <line x1="210" y1="161" x2="210" y2="169" stroke="#FF8F00" stroke-width="1"/>
+                <text x="175" y="178" text-anchor="middle" font-size="8" fill="#FF8F00" font-weight="700" font-family="Plus Jakarta Sans">l_đt</text>
+                <!-- Áp lực nền p0max (bên phải), p0min (bên trái) -->
+                <!-- Biểu đồ hình thang áp lực -->
+                <rect x="140" y="150" width="70" height="25" fill="#C62828" opacity="0.25" rx="0"/>
+                <rect x="10" y="154" width="70" height="17" fill="#C62828" opacity="0.15" rx="0"/>
+                <text x="175" y="163" text-anchor="middle" font-size="7" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">p₀max</text>
+                <text x="45" y="163" text-anchor="middle" font-size="7" fill="#C62828" font-family="Plus Jakarta Sans">p₀min</text>
+                <!-- Mũi tên phản lực -->
+                <line x1="165" y1="195" x2="165" y2="178" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr4)"/>
+                <line x1="185" y1="195" x2="185" y2="178" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr4)"/>
+                <!-- P_đt label -->
+                <text x="175" y="210" text-anchor="middle" font-size="8" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">P_đt = p_đttb × b × l_đt</text>
+                <!-- P_cđt label -->
+                <text x="110" y="248" text-anchor="middle" font-size="7.5" fill="#2E7D32" font-weight="700" font-family="Plus Jakarta Sans">P_cđt = R_bt × b_tb × h₀</text>
+                <!-- Ranh giới tháp thủng (mặt phẳng phá hoại) -->
+                <line x1="10" y1="150" x2="210" y2="150" stroke="#C62828" stroke-width="1.5" stroke-dasharray="2,2"/>
+                <text x="110" y="235" text-anchor="middle" font-size="7.5" fill="#795548" font-family="Plus Jakarta Sans">Mặt phẳng phá hoại</text>
+              </svg>
+            </div>
+            <div class="schema-cap">Sơ đồ tháp thủng TH2 — lệch tâm (b_c + 2h₀ &gt; b)</div>
+          </div>
+        </div>
+
+        <!-- Sơ đồ ngàm cốt thép (full width) -->
+        <div class="schema" style="margin-top:8px">
+          <svg viewBox="0 0 440 200" width="440" height="200" style="max-width:100%">
+            <defs>
+              <marker id="arr5" markerWidth="6" markerHeight="6" refX="3" refY="6" orient="auto"><path d="M0,0 L6,0 L3,6Z" fill="#C62828"/></marker>
+              <marker id="arr5b" markerWidth="6" markerHeight="6" refX="3" refY="0" orient="auto"><path d="M0,6 L6,6 L3,0Z" fill="#C62828"/></marker>
+            </defs>
+            <!-- Đáy móng -->
+            <rect x="20" y="70" width="400" height="40" fill="#8D6E63" rx="2"/>
+            <!-- Cốt thép -->
+            <line x1="20" y1="100" x2="420" y2="100" stroke="#FF8F00" stroke-width="2.5"/>
+            <text x="425" y="104" font-size="8" fill="#FF8F00" font-weight="700" font-family="Plus Jakarta Sans">Fa</text>
             <!-- Cột -->
-            <rect x="165" y="30" width="70" height="130" fill="#BCAAA4" stroke="#795548" stroke-width="1" rx="2"/>
-            <text x="200" y="100" text-anchor="middle" font-size="9" fill="#5D4037" font-family="Plus Jakarta Sans" font-weight="700">CỘT</text>
-            <text x="200" y="112" text-anchor="middle" font-size="8" fill="#795548" font-family="Plus Jakarta Sans">b_c × l_c</text>
-            <!-- Tháp thủng 45° -->
-            <line x1="165" y1="160" x2="60" y2="200" stroke="#C62828" stroke-width="2.5" stroke-dasharray="5,3"/>
-            <line x1="235" y1="160" x2="340" y2="200" stroke="#C62828" stroke-width="2.5" stroke-dasharray="5,3"/>
-            <text x="90" y="190" font-size="9" fill="#C62828" font-weight="700">45°</text>
-            <text x="300" y="190" font-size="9" fill="#C62828" font-weight="700">45°</text>
-            <!-- P_đt khu vực -->
-            <rect x="60" y="200" width="105" height="25" fill="#C62828" opacity="0.2" rx="0"/>
-            <rect x="235" y="200" width="105" height="25" fill="#C62828" opacity="0.2" rx="0"/>
-            <!-- Mũi tên áp lực đất -->
-            <line x1="80" y1="220" x2="80" y2="205" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr)"/>
-            <line x1="120" y1="220" x2="120" y2="205" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr)"/>
-            <line x1="280" y1="220" x2="280" y2="205" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr)"/>
-            <line x1="320" y1="220" x2="320" y2="205" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr)"/>
-            <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="6" orient="auto"><path d="M0,0 L6,0 L3,6Z" fill="#C62828"/></marker></defs>
-            <!-- Labels -->
-            <text x="110" y="250" text-anchor="middle" font-size="9" fill="#C62828" font-weight="700">P_đt (lực đâm thủng)</text>
-            <text x="290" y="250" text-anchor="middle" font-size="9" fill="#C62828" font-weight="700">P_đt</text>
-            <!-- h0 label -->
-            <line x1="240" y1="160" x2="240" y2="200" stroke="#1565C0" stroke-width="1" stroke-dasharray="2,2"/>
-            <text x="244" y="184" font-size="9" fill="#1565C0" font-weight="700">h₀</text>
-            <!-- btb label -->
-            <line x1="160" y1="145" x2="340" y2="145" stroke="#1565C0" stroke-width="1"/>
-            <text x="250" y="142" font-size="9" fill="#1565C0" font-weight="600">b_tb = b_c + h₀</text>
-            <!-- ldt label -->
-            <line x1="235" y1="215" x2="340" y2="215" stroke="#FF8F00" stroke-width="1.5"/>
-            <text x="288" y="228" text-anchor="middle" font-size="9" fill="#FF8F00" font-weight="700">l_đt</text>
+            <rect x="175" y="20" width="90" height="50" fill="#BCAAA4" stroke="#795548" stroke-width="1.2" rx="2"/>
+            <text x="220" y="47" text-anchor="middle" font-size="8.5" fill="#5D4037" font-weight="700" font-family="Plus Jakarta Sans">Cột</text>
+            <!-- Tiết diện ngàm 1-1 bên phải -->
+            <line x1="265" y1="15" x2="265" y2="115" stroke="#1565C0" stroke-width="2" stroke-dasharray="4,3"/>
+            <text x="268" y="13" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">1</text>
+            <text x="268" y="120" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">1</text>
+            <!-- Tiết diện ngàm 2-2 bên trái -->
+            <line x1="175" y1="15" x2="175" y2="115" stroke="#2E7D32" stroke-width="2" stroke-dasharray="4,3"/>
+            <text x="163" y="13" font-size="8" fill="#2E7D32" font-weight="700" font-family="Plus Jakarta Sans">2</text>
+            <text x="163" y="120" font-size="8" fill="#2E7D32" font-weight="700" font-family="Plus Jakarta Sans">2</text>
+            <!-- Biểu đồ áp lực nền (hình thang) -->
+            <polygon points="20,130 420,130 420,160 20,145" fill="#C62828" opacity="0.2"/>
+            <line x1="20" y1="130" x2="420" y2="130" stroke="#C62828" stroke-width="1"/>
+            <!-- Mũi tên áp lực -->
+            <line x1="60" y1="168" x2="60" y2="133" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr5)"/>
+            <line x1="130" y1="167" x2="130" y2="132" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr5)"/>
+            <line x1="330" y1="163" x2="330" y2="131" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr5)"/>
+            <line x1="390" y1="162" x2="390" y2="131" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr5)"/>
+            <!-- Nhãn p0max, p0min, p0ng -->
+            <text x="420" y="155" font-size="7.5" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">p₀max</text>
+            <text x="2" y="143" font-size="7.5" fill="#C62828" font-family="Plus Jakarta Sans">p₀min</text>
+            <text x="266" y="143" font-size="7.5" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">p₀ng</text>
+            <!-- lng dimension -->
+            <line x1="265" y1="178" x2="420" y2="178" stroke="#1565C0" stroke-width="1.2"/>
+            <line x1="265" y1="174" x2="265" y2="182" stroke="#1565C0" stroke-width="1"/>
+            <line x1="420" y1="174" x2="420" y2="182" stroke="#1565C0" stroke-width="1"/>
+            <text x="343" y="192" text-anchor="middle" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">l_ng = ½(l - l_c)</text>
+            <!-- bng dimension -->
+            <line x1="20" y1="178" x2="175" y2="178" stroke="#2E7D32" stroke-width="1.2"/>
+            <line x1="20" y1="174" x2="20" y2="182" stroke="#2E7D32" stroke-width="1"/>
+            <line x1="175" y1="174" x2="175" y2="182" stroke="#2E7D32" stroke-width="1"/>
+            <text x="98" y="192" text-anchor="middle" font-size="8" fill="#2E7D32" font-weight="700" font-family="Plus Jakarta Sans">b_ng = ½(l - b_c)</text>
+            <!-- Nhãn M_ng -->
+            <text x="343" y="58" text-anchor="middle" font-size="8.5" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">M_ng-l tại 1-1</text>
+            <text x="98" y="58" text-anchor="middle" font-size="8.5" fill="#2E7D32" font-weight="700" font-family="Plus Jakarta Sans">M_ng-b tại 2-2</text>
+            <!-- b, l labels -->
+            <line x1="20" y1="64" x2="420" y2="64" stroke="#795548" stroke-width="0.8" stroke-dasharray="2,2"/>
+            <text x="220" y="62" text-anchor="middle" font-size="7.5" fill="#795548" font-family="Plus Jakarta Sans">l (chiều dài móng)</text>
           </svg>
         </div>
+        <div class="schema-cap">Sơ đồ ngàm tính cốt thép — Tiết diện 1-1 (phương l) và 2-2 (phương b)</div>
       </div>
     </div>
 
@@ -527,9 +703,13 @@ textarea.conc-inp:focus{border-color:var(--P)}
 
     <div id="final-verdict" style="margin-top:10px"></div>
 
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-g" onclick="toast('Đã lưu kết quả Module 03!')"><i class="ti ti-device-floppy"></i> Lưu kết quả</button>
-      <button class="btn btn-B" onclick="goto04()"><i class="ti ti-arrow-right"></i> Module 04: Kết luận & Bản vẽ</button>
+    <div class="info-box" style="margin-top:12px"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px"></i>
+      <b>Bước tiếp theo:</b> Hoàn thành bản vẽ Phần 1 (Module 04) &nbsp;·&nbsp; Hoặc nếu móng nông không đạt → <b>chuyển sang thiết kế Móng Cọc (Module 05)</b>.
+    </div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-g" onclick="saveM03()"><i class="ti ti-device-floppy"></i> Lưu tiến độ</button>
+      <button class="btn btn-B" onclick="goMod04()"><i class="ti ti-arrow-right"></i> Module 04: Bản vẽ & Kết luận →</button>
+      <button class="btn" style="background:#7B1FA2;color:#fff" onclick="goMongCoc()"><i class="ti ti-layers-intersect"></i> Chuyển sang Móng Cọc (M05) →</button>
       <a href="module02_kiem_tra_nen.html" class="btn btn-ghost"><i class="ti ti-arrow-left"></i> Về Module 02</a>
     </div>
   </div>
@@ -557,7 +737,32 @@ function toast(m){var t=document.getElementById('toast');t.textContent=m;t.class
 function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
 function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 function goto(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
-function goto04(){window.location.href='module04_ban_ve.html';}
+function goMod04(){
+  saveM03();
+  window.location.href='module04_ban_ve.html';
+}
+function goMongCoc(){
+  saveM03();
+  if(!confirm('Chuyển sang thiết kế Móng Cọc (Module 05)? Dữ liệu Phần 1 sẽ được lưu lại.')) return;
+  window.location.href='module05_thiet_ke_coc.html';
+}
+function saveM03(){
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong')||'{}');
+    d.m03_saved=true;
+    d.m03_time=new Date().toLocaleString('vi-VN');
+    d.m03_h=gv('h-final')||gv('h-mob');
+    d.m03_h0=gv('h0-final')||gv('h0');
+    d.m03_abv=gv('abv');
+    d.m03_mac_bt=document.getElementById('mac-bt').value;
+    d.m03_mac_thep=document.getElementById('mac-thep').value;
+    d.m03_thep_l=document.getElementById('kl-thep-l').value;
+    d.m03_thep_b=document.getElementById('kl-thep-b').value;
+    d.m03_Pdt=gv('Pdt');d.m03_Pcdt=gv('Pcdt');
+    localStorage.setItem('nmong',JSON.stringify(d));
+    toast('✓ Đã lưu tiến độ Module 03');
+  }catch(e){toast('Lỗi lưu: '+e);}
+}
 function togS(hd){var b=hd.nextElementSibling;b.classList.toggle('hide');var c=hd.querySelector('.chev');if(c)c.style.transform=b.classList.contains('hide')?'rotate(-90deg)':'';}
 function pickMCQ(grp,ci,correct){
   document.querySelectorAll('[id^="mco-'+grp+'-"]').forEach(function(el){el.classList.remove('ok','no');});
@@ -747,10 +952,19 @@ window.onload=function(){
     var d=JSON.parse(raw);
     if(d.N0tt)document.getElementById('N0tt').value=d.N0tt;
     if(d.M0tt)document.getElementById('M0tt').value=d.M0tt;
-    if(d.hm_sb)document.getElementById('hm').value=d.hm_sb;
+    if(d.hm_sb||d.hm)document.getElementById('hm').value=d.hm_sb||d.hm;
     if(d.bc)document.getElementById('bc').value=d.bc;
     if(d.lc)document.getElementById('lc').value=d.lc;
-    toast('Đã tải số liệu từ index');
+    // Load b, l từ module02
+    if(d.m02_b)document.getElementById('b').value=d.m02_b;
+    if(d.m02_l)document.getElementById('l').value=d.m02_l;
+    // Load Q0tt nếu có
+    if(d.Q0tt){var qEl=document.getElementById('Q0tt');if(!qEl){/* Q0tt không có field riêng */};}
+    // Load từ m03 nếu đã lưu
+    if(d.m03_h){document.getElementById('h-mob').value=d.m03_h;updH0();}
+    if(d.m03_mac_bt){document.getElementById('mac-bt').value=d.m03_mac_bt;updVL();}
+    if(d.m03_mac_thep){document.getElementById('mac-thep').value=d.m03_mac_thep;updVL();}
+    toast('Đã tải số liệu từ Module 01–02');
   }catch(e){}
   // init ANS keys for progress
   ['Mtday','p0tb','p0max','p0min','ldt','p0dt','pdttb','Pdt','btb','Pcdt','nt-econ','lng','p0ng','Mng_l','Fal','bng','pngb','Mng_b','Fab'].forEach(function(k){ANS[k]=null;});
