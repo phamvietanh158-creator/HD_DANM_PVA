@@ -369,7 +369,7 @@ select.conc-sel{padding:8px 10px;border:1.5px solid var(--brd);border-radius:7px
 
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-g" onclick="showResult()"><i class="ti ti-chart-bar"></i> Xem kết quả Module 01</button>
-      <button class="btn btn-B" onclick="toast('Module 02 đang phát triển!')"><i class="ti ti-arrow-right"></i> Module 02: Kiểm tra đáy móng</button>
+      <button class="btn btn-B" onclick="goModule02()"><i class="ti ti-arrow-right"></i> Module 02: Kiểm tra đáy móng →</button>
       <a href="nen_mong_index.html" class="btn btn-ghost"><i class="ti ti-home"></i> Về trang chủ</a>
     </div>
   </div>
@@ -582,11 +582,12 @@ function buildCard(s,i){
              [['Rắn cứng (B<0)',0],['Nửa cứng (0–0.25)',1],['Dẻo cứng (0.25–0.5)',2],['Dẻo mềm (0.5–0.75)',3],['Dẻo chảy (0.75–1)',4],['Chảy (B≥1)',5]];
     if(A<7) ttIdx=B<0?0:B<=1?1:2; else ttIdx=B<0?0:B<0.25?1:B<0.5?2:B<0.75?3:B<1?4:5;
     ttDat=bs[ttIdx][0].split(' ')[0]+(bs[ttIdx][0].split(' ')[1]?' '+bs[ttIdx][0].split(' ')[1]:'');
-    isGood=B>=0&&B<0.75;
+    // Đất tốt: Rắn cứng (B<0), Nửa cứng (0–0.25), Dẻo cứng (0.25–0.5)
+    isGood = (A<7) ? (B<=1) : (B<0.5);
   } else {
     var N_=parseFloat(s.spt)||0;
     var rs=[['Rất rời',0],['Rời',1],['Chặt vừa',2],['Chặt',3],['Rất chặt',4]];
-    ttIdx=N_<4?0:N_<10?1:N_<30?2:N_<50?3:4; ttDat=rs[ttIdx][0]; isGood=N_>=10;
+    ttIdx=N_<4?0:N_<10?1:N_<30?2:N_<50?3:4; ttDat=rs[ttIdx][0]; isGood=N_>8;
   }
   var gc=isGood?'background:#E8F5E9;color:#2E7D32':'background:#FFEBEE;color:#C62828';
 
@@ -738,14 +739,18 @@ function buildCard(s,i){
   bTT += '<div style="margin-top:14px">';
   bTT += '<div class="theory" style="margin-bottom:8px"><div class="theory-lbl"><i class="ti ti-bulb" style="font-size:12px"></i> Tiêu chí đánh giá đất tốt / yếu</div>';
   if(isDinh){
-    bTT += '<b>Đất dính</b> — dựa vào độ sệt B:<br>';
-    bTT += '✅ <b>Đất tốt</b>: B &lt; 0.75 (Rắn cứng · Nửa cứng · Dẻo cứng · Dẻo mềm) — đủ cứng, ít biến dạng<br>';
-    bTT += '⚠️ <b>Đất yếu</b>: B ≥ 0.75 (Dẻo chảy · Chảy) — quá mềm, biến dạng lớn, không đủ sức chịu tải';
-    if(A<7) bTT += '<br><span style="font-size:.8rem;color:var(--muted)">Á cát: B≤1 là đất tốt · B&gt;1 là đất yếu</span>';
+    bTT += '<b>Đất dính</b> — dựa vào độ sệt B và loại đất:<br>';
+    if(A<7){
+      bTT += '✅ <b>Đất tốt (Á cát)</b>: B ≤ 1 (Rắn cứng · Dẻo) — đủ khả năng chịu tải<br>';
+      bTT += '⚠️ <b>Đất yếu (Á cát)</b>: B &gt; 1 (Chảy) — mất ổn định';
+    } else {
+      bTT += '✅ <b>Đất tốt (Á sét/Sét)</b>: B &lt; 0.5 (Rắn cứng · Nửa cứng · Dẻo cứng) — đủ cứng, biến dạng nhỏ<br>';
+      bTT += '⚠️ <b>Đất yếu (Á sét/Sét)</b>: B ≥ 0.5 (Dẻo mềm · Dẻo chảy · Chảy) — mềm, lún lớn';
+    }
   } else {
     bTT += '<b>Đất rời</b> — dựa vào SPT N:<br>';
-    bTT += '✅ <b>Đất tốt</b>: N ≥ 10 (Chặt vừa · Chặt · Rất chặt) — đủ chặt, sức chịu tải tốt<br>';
-    bTT += '⚠️ <b>Đất yếu</b>: N &lt; 10 (Rất rời · Rời) — hạt lỏng lẻo, dễ lún, không đặt móng trực tiếp';
+    bTT += '✅ <b>Đất tốt</b>: N &gt; 10 (Chặt vừa · Chặt · Rất chặt) — đủ chặt, sức chịu tải tốt<br>';
+    bTT += '⚠️ <b>Đất yếu</b>: N ≤ 10 (Rất rời · Rời) — hạt lỏng lẻo, dễ lún, không đặt móng trực tiếp';
   }
   bTT += '</div>';
   bTT += '<div class="mcq-wrap"><div class="mcq-q">📌 Câu 6: Theo em, lớp '+(i+1)+' là đất gì?</div>'+
@@ -907,8 +912,11 @@ function renderTongHop(){
     var A=isDinh?WL-WP:0, B=isDinh?(W-WP)/A:null;
     var ten=isDinh?(A<7?'Á cát':A<=17?'Á sét':'Sét'):'Cát/Sỏi';
     var tt='',good=true;
-    if(isDinh){if(B<0)tt='Rắn cứng';else if(B<0.25)tt='Nửa cứng';else if(B<0.5)tt='Dẻo cứng';else if(B<0.75)tt='Dẻo mềm';else if(B<1)tt='Dẻo chảy';else tt='Chảy';if(A<7&&B>=0&&B<=1)tt='Dẻo';good=B>=0&&B<0.75;}
-    else{var N=parseFloat(s.spt)||0;tt=N<4?'Rất rời':N<10?'Rời':N<30?'Chặt vừa':N<50?'Chặt':'Rất chặt';good=N>=10;}
+    if(isDinh){
+      if(A<7){tt=B<0?'Rắn cứng':B<=1?'Dẻo':'Chảy';good=(B<=1);}
+      else{if(B<0)tt='Rắn cứng';else if(B<0.25)tt='Nửa cứng';else if(B<0.5)tt='Dẻo cứng';else if(B<0.75)tt='Dẻo mềm';else if(B<1)tt='Dẻo chảy';else tt='Chảy';good=(B<0.5);}
+    }
+    else{var N=parseFloat(s.spt)||0;tt=N<4?'Rất rời':N<10?'Rời':N<30?'Chặt vừa':N<50?'Chặt':'Rất chặt';good=N>10;}
     var gc=good?'background:#E8F5E9;color:#2E7D32':'background:#FFEBEE;color:#C62828';
     html+='<tr><td class="L"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:'+LC[i]+';margin-right:5px;vertical-align:middle"></span><b>'+(s.name||'Lớp '+(i+1))+'</b></td>'+
       '<td class="sym">'+(s.h>0?s.h:'∞')+'</td>'+
@@ -961,6 +969,45 @@ function loadDemo(){
   document.getElementById('sh2').value=70; document.getElementById('h2').value=0; document.getElementById('nm2').value='Sét, cứng';
   traLop(0); traLop(1); traLop(2);
   toast('Đã tải ví dụ đề 176 · N₀tc=697kN');
+}
+
+/* ═══════ NAVIGATE MODULE 02 ═══════ */
+function goModule02(){
+  // Thu thập kết quả module01 để truyền sang
+  var total=0,done=0;
+  Object.keys(ANS).forEach(function(k){if(ANS[k]!==undefined){total++;if(ANS[k])done++;}});
+  var pct=total?Math.round(done/total*100):0;
+  // Lưu dữ liệu + kết quả phân tích sang localStorage
+  try{
+    var d=getM01Data();
+    d.m01_done=true;
+    d.m01_pct=pct;
+    // Lưu kết quả từng lớp (tên, trạng thái, tốt/yếu, hm)
+    d.m01_soils=SOILS.map(function(s,i){
+      if(!s||!s.g) return null;
+      var isDinh=s.isDinh||(s.WL!==''&&!isNaN(parseFloat(s.WL)));
+      var W=parseFloat(s.W)||0,WL=parseFloat(s.WL)||0,WP=parseFloat(s.WP)||0;
+      var del=parseFloat(s.del)||2.68, g=parseFloat(s.g)||18;
+      var A=isDinh?WL-WP:0, B=isDinh?(W-WP)/A:null;
+      var gk=g/(1+0.01*W), e0=del*9.81/gk-1;
+      var gbh=(del+e0)*9.81/(1+e0), gdn=(del-1)*9.81/(1+e0);
+      var isGood=isDinh?((A<7)?(B<=1):(B<0.5)):(parseFloat(s.spt)>10);
+      return {name:s.name||'Lớp '+(i+1),h:s.h,isDinh:isDinh,
+              gk:+gk.toFixed(3),e0:+e0.toFixed(4),gbh:+gbh.toFixed(3),gdn:+gdn.toFixed(3),
+              phi:s.phi,c:s.c,E0:s.E0,isGood:isGood,g:s.g,W:s.W,del:s.del};
+    });
+    d.hm=parseFloat(document.getElementById('hm-final').value)||0;
+    d.lop_dat=parseInt(document.getElementById('lop-dat').value)||2;
+    localStorage.setItem('nmong', JSON.stringify(d));
+  }catch(e){}
+  if(pct<50){
+    if(!confirm('Bạn mới hoàn thành '+pct+'% module 01. Vẫn tiếp tục sang Module 02?')) return;
+  }
+  window.location.href='module02_kiem_tra_nen.html';
+}
+
+function getM01Data(){
+  try{var raw=localStorage.getItem('nmong');return raw?JSON.parse(raw):{};}catch(e){return {};}
 }
 
 /* ═══════ INIT ═══════ */
