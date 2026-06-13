@@ -224,7 +224,16 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
   </div>
 </header>
 
-<div class="tabs-bar"><div class="tabs-in" id="modtabs"></div></div>
+<div class="tabs-bar"><div class="tabs-in" id="modtabs">
+    <button class="tab active" onclick="scrollTo(0,0)"><span class="tab-num">SL</span> Số liệu đề bài</button>
+    <button class="tab" style="border-left:2px solid rgba(255,255,255,.2);margin-left:6px;padding-left:10px" onclick="navigateMod('module01_phuong_an.html')"><span class="tab-num" style="background:var(--P)">P1</span> M01 Phương án</button>
+    <button class="tab" onclick="navigateMod('module02_kiem_tra_nen.html')"><span class="tab-num" style="background:var(--P)">P1</span> M02 Kiểm tra nền</button>
+    <button class="tab" onclick="navigateMod('module03_chieu_cao_cot_thep.html')"><span class="tab-num" style="background:var(--P)">P1</span> M03 Chiều cao & Thép</button>
+    <button class="tab" onclick="navigateMod('module04_ban_ve.html')"><span class="tab-num" style="background:var(--P)">P1</span> M04 Bản vẽ</button>
+    <button class="tab" style="border-left:2px solid rgba(255,255,255,.2);margin-left:6px;padding-left:10px" onclick="navigateMod('module05_thiet_ke_coc.html')"><span class="tab-num" style="background:#7B1FA2">P3</span> M05 Thiết kế cọc</button>
+    <button class="tab" onclick="navigateMod('module06_kiem_tra_coc.html')"><span class="tab-num" style="background:#7B1FA2">P3</span> M06 Kiểm tra cọc</button>
+    <button class="tab" onclick="navigateMod('module07_dai_coc.html')"><span class="tab-num" style="background:#7B1FA2">P3</span> M07 Đài cọc</button>
+  </div></div>
 
 <main>
 <div class="hero">
@@ -235,8 +244,8 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
       <div class="hero-desc">Nhập số liệu đề bài, tự tính tay rồi điền kết quả vào ô — hệ thống kiểm tra ngay. Hoàn thành từng module theo thứ tự để mở khóa bước tiếp theo.</div>
       <div class="hero-steps">
         <div class="hstep"><div class="hstep-n">1</div><div class="hstep-txt"><strong>Nhập số liệu</strong><span>Tải trọng + địa chất</span></div></div>
-        <div class="hstep"><div class="hstep-n">2</div><div class="hstep-txt"><strong>Tính từng module</strong><span>6 bước · Phần 1 móng đơn</span></div></div>
-        <div class="hstep"><div class="hstep-n">3</div><div class="hstep-txt"><strong>Xuất bản vẽ</strong><span>Tổng hợp & kết luận</span></div></div>
+        <div class="hstep"><div class="hstep-n" style="background:var(--P)">P1</div><div class="hstep-txt"><strong>Móng nông</strong><span>M01→M04 · 4 bước</span></div></div>
+        <div class="hstep"><div class="hstep-n" style="background:#7B1FA2">P3</div><div class="hstep-txt"><strong>Móng cọc</strong><span>M05→M07 · 3 bước</span></div></div>
       </div>
     </div>
     <div class="hero-illustration" style="flex-shrink:0;width:180px;display:flex;flex-direction:column;align-items:center;justify-content:center">
@@ -360,12 +369,63 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
 </div>
 
 <div class="card">
-  <div class="card-hd"><i class="ti ti-route"></i><div><h2>C &nbsp;·&nbsp; Quy Trình Tính Toán</h2><p>Hoàn thành từng module theo thứ tự · lưu số liệu để mở khóa</p></div><span class="card-badge">6 Module</span></div>
+  <div class="card-hd"><i class="ti ti-route"></i><div><h2>C &nbsp;·&nbsp; Chọn Phần Thực Hành</h2><p>Hai phần độc lập — số liệu đề bài dùng chung · vào thẳng phần cần làm</p></div><span class="card-badge">Tự chọn</span></div>
   <div class="card-body">
-    <div class="flow-grid" id="flowgrid"></div>
-    <div class="abar">
-      <button class="btn btn-p" onclick="goStart()"><i class="ti ti-player-play"></i> Lưu & Bắt đầu</button>
 
+    <!-- PHẦN CHỌN: 2 cột lớn -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+
+      <!-- PHẦN 1: MÓNG NÔNG -->
+      <div style="border:2px solid var(--P);border-radius:var(--r);overflow:hidden">
+        <div style="background:var(--P);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px">
+          <div style="width:28px;height:28px;background:rgba(255,255,255,.18);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;font-family:var(--mono)">P1</div>
+          <div>
+            <div style="font-size:.88rem;font-weight:700">Phần 1 — Móng Nông</div>
+            <div style="font-size:.68rem;opacity:.7">Móng đơn dưới cột · Nền tự nhiên</div>
+          </div>
+          <div id="p1-status" style="margin-left:auto;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(255,255,255,.15)">Chưa bắt đầu</div>
+        </div>
+        <div style="padding:12px 14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px" id="p1-modules">
+            <!-- render by JS -->
+          </div>
+          <div style="border-top:1px solid var(--brd);padding-top:10px;display:flex;gap:7px;flex-wrap:wrap">
+            <button class="btn btn-p" style="font-size:.78rem;padding:7px 13px" onclick="goP1Start()"><i class="ti ti-player-play"></i> Vào Phần 1</button>
+            <button class="btn btn-g" style="font-size:.78rem;padding:7px 13px;background:transparent;color:var(--muted);border:1.5px solid var(--brd)" onclick="goP1Direct('module01_phuong_an.html')"><i class="ti ti-arrow-right"></i> Thẳng M01</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHẦN 3: MÓNG CỌC -->
+      <div style="border:2px solid #7B1FA2;border-radius:var(--r);overflow:hidden">
+        <div style="background:#7B1FA2;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px">
+          <div style="width:28px;height:28px;background:rgba(255,255,255,.18);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;font-family:var(--mono)">P3</div>
+          <div>
+            <div style="font-size:.88rem;font-weight:700">Phần 3 — Móng Cọc</div>
+            <div style="font-size:.68rem;opacity:.7">Cọc ép/đóng BTCT · 4 phương pháp SCT</div>
+          </div>
+          <div id="p3-status" style="margin-left:auto;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(255,255,255,.15)">Chưa bắt đầu</div>
+        </div>
+        <div style="padding:12px 14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px" id="p3-modules">
+            <!-- render by JS -->
+          </div>
+          <div style="border-top:1px solid var(--brd);padding-top:10px;display:flex;gap:7px;flex-wrap:wrap">
+            <button class="btn" style="font-size:.78rem;padding:7px 13px;background:#7B1FA2;color:#fff" onclick="goP3Start()"><i class="ti ti-player-play"></i> Vào Phần 3</button>
+            <button class="btn btn-g" style="font-size:.78rem;padding:7px 13px;background:transparent;color:var(--muted);border:1.5px solid var(--brd)" onclick="goP3Direct('module05_thiet_ke_coc.html')"><i class="ti ti-arrow-right"></i> Thẳng M05</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gợi ý quy trình -->
+    <div style="background:var(--Alt);border-left:4px solid var(--A);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:#3a2800;line-height:1.7">
+      <b>Gợi ý:</b> Số liệu địa chất và tải trọng nhập ở đây sẽ <b>tự động điền</b> vào cả Phần 1 và Phần 3. &nbsp;
+      Bạn có thể làm 1 phần hoặc cả 2 theo thứ tự bất kỳ — không cần làm xong Phần 1 mới làm được Phần 3.
+    </div>
+
+    <div class="abar" style="margin-top:10px">
+      <button class="btn btn-p" onclick="goStart()"><i class="ti ti-device-floppy"></i> Lưu số liệu</button>
       <button class="btn btn-g" onclick="load176()"><i class="ti ti-file-description"></i> Đề 176</button>
       <span class="save-ok" id="saveok"></span>
     </div>
@@ -509,27 +569,75 @@ function drawDet(){
   });
   document.getElementById('detbody').innerHTML=html;
 }
-var MODS=[
-  {id:'m01',file:'module01_phuong_an.html',ico:'ti-map-pin',bg:'#EFEBE9',ic:'#5D4037',bc:'#5D4037',n:'01',nm:'Phương án móng',sb:'Phân tích địa chất · chọn hₘ',tag:'Sẵn sàng',ok:true},
-  {id:'m02',file:'module02_kiem_tra_nen.html',ico:'ti-chart-bar',bg:'#F1F8E9',ic:'#33691E',bc:'#33691E',n:'02',nm:'Kiểm tra đáy móng',sb:'Sức chịu tải Terzaghi · TTGH1',tag:'Sau bước 01',ok:false},
-  {id:'m03',file:'module02_kiem_tra_nen.html',ico:'ti-trending-down',bg:'#FFF8E1',ic:'#FF8F00',bc:'#FF8F00',n:'03',nm:'Kiểm tra lún',sb:'Cộng lún từng lớp · TTGH2',tag:'Sau bước 02',ok:false},
-  {id:'m04',file:'module03_chieu_cao_cot_thep.html',ico:'ti-ruler-2',bg:'#FBE9E7',ic:'#BF360C',bc:'#BF360C',n:'04',nm:'Chiều cao móng',sb:'Nén thủng · tiết diện nghiêng',tag:'Sau bước 03',ok:false},
-  {id:'m05',file:'module03_chieu_cao_cot_thep.html',ico:'ti-git-merge',bg:'#EDE7F6',ic:'#4527A0',bc:'#4527A0',n:'05',nm:'Cốt thép móng',sb:'Tính momen · bố trí thép',tag:'Sau bước 04',ok:false},
-  {id:'m06',file:'module04_ban_ve.html',ico:'ti-layout-2',bg:'#E3F2FD',ic:'#0D47A1',bc:'#0D47A1',n:'06',nm:'Tổng hợp & bản vẽ',sb:'Kết luận thiết kế · xuất bản vẽ',tag:'Cuối cùng',ok:false},
+// Phần 1 — Móng nông
+var MODS_P1=[
+  {id:'m01',file:'module01_phuong_an.html',ico:'ti-map-pin',ic:'#5D4037',n:'M01',nm:'Phương án móng',sb:'Phân tích địa chất · chọn hₘ'},
+  {id:'m02',file:'module02_kiem_tra_nen.html',ico:'ti-chart-bar',ic:'#33691E',n:'M02',nm:'Kiểm tra đáy móng',sb:'TTGH1 Terzaghi · TTGH2 Lún'},
+  {id:'m03',file:'module03_chieu_cao_cot_thep.html',ico:'ti-ruler-2',ic:'#BF360C',n:'M03',nm:'Chiều cao & Cốt thép',sb:'Nén thủng · Tính Fa'},
+  {id:'m04',file:'module04_ban_ve.html',ico:'ti-layout-2',ic:'#0D47A1',n:'M04',nm:'Tổng hợp & Bản vẽ',sb:'Kết luận · Bản vẽ thi công'},
 ];
+// Phần 3 — Móng cọc
+var MODS_P3=[
+  {id:'m05',file:'module05_thiet_ke_coc.html',ico:'ti-layers-intersect',ic:'#7B1FA2',n:'M05',nm:'Thiết kế cọc',sb:'SCT 4 phương pháp · bố trí'},
+  {id:'m06',file:'module06_kiem_tra_coc.html',ico:'ti-shield-check',ic:'#1565C0',n:'M06',nm:'Kiểm tra cọc',sb:'SD · TC · Nhóm cọc'},
+  {id:'m07',file:'module07_dai_coc.html',ico:'ti-grid-4x4',ic:'#2E7D32',n:'M07',nm:'Đài cọc & Kết luận',sb:'Nén thủng đài · Cốt thép đài'},
+];
+// Legacy (vẫn giữ cho openMod cũ)
+var MODS=MODS_P1.concat(MODS_P3);
 function renderMods(){
-  var fg=document.getElementById('flowgrid'),tabs=document.getElementById('modtabs');
-  var fh='',th='';
-  MODS.forEach(function(m){
-    fh+='<div class="fstep'+(m.ok?' ready':' locked')+'" style="border-color:'+(m.ok?m.bc:'#D7CCC8')+'" onclick="'+(m.ok?"openMod('"+m.id+"')":'')+'">'+
-    '<div class="fstep-bar" style="background:'+(m.ok?m.bc:'#D7CCC8')+'"></div>'+
-    '<div class="ficon" style="background:'+m.bg+'"><i class="ti '+m.ico+'" style="color:'+m.ic+';font-size:18px"></i></div>'+
-    '<div class="fnum">MODULE '+m.n+'</div><div class="fname">'+m.nm+'</div><div class="fsub">'+m.sb+'</div>'+
-    '<span class="ftag" style="'+(m.ok?'background:'+m.bg+';color:'+m.ic:'background:#f5f5f5;color:#bbb')+'">'+m.tag+'</span></div>';
-    th+='<button class="tab'+(m.ok?'':' locked')+'" onclick="'+(m.ok?"openMod('"+m.id+"')":'')+'"><span class="tab-num">'+m.n+'</span>'+m.nm+'</button>';
-  });
-  fg.innerHTML=fh;tabs.innerHTML=th;
+  renderPart('p1-modules', MODS_P1, '#5D4037');
+  renderPart('p3-modules', MODS_P3, '#7B1FA2');
+  // Status badges
+  var p1done = loadP1Progress();
+  var p3done = loadP3Progress();
+  var s1=document.getElementById('p1-status');
+  var s3=document.getElementById('p3-status');
+  if(s1) s1.textContent = p1done>0 ? 'Đang làm (M0'+p1done+')' : 'Chưa bắt đầu';
+  if(s3) s3.textContent = p3done>0 ? 'Đang làm (M0'+(4+p3done)+')' : 'Chưa bắt đầu';
 }
+function loadP1Progress(){
+  try{var d=JSON.parse(localStorage.getItem('nmong')||'{}');
+    if(d.m03_saved) return 4;
+    if(d.m02_saved) return 3;
+    if(d.m01_done) return 2;
+    return 0;
+  }catch(e){return 0;}
+}
+function loadP3Progress(){
+  try{var d=JSON.parse(localStorage.getItem('nmong')||'{}');
+    if(d.m07_saved) return 3;
+    if(d.m06_saved) return 2;
+    if(d.m05_saved) return 1;
+    return 0;
+  }catch(e){return 0;}
+}
+function renderPart(containerId, mods, color){
+  var el=document.getElementById(containerId);if(!el)return;
+  var html='';
+  mods.forEach(function(m){
+    html+='<div onclick="navigateMod(''+m.file+'')" style="'+
+      'border:1.5px solid #D7CCC8;border-radius:8px;padding:9px 10px;background:#faf8f6;'+
+      'cursor:pointer;transition:all .16s;position:relative;overflow:hidden" '+
+      'onmouseover="this.style.borderColor=''+color+'';this.style.background='#fdf9f7'" '+
+      'onmouseout="this.style.borderColor='#D7CCC8';this.style.background='#faf8f6'">';
+    html+='<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+color+'"></div>';
+    html+='<div style="font-size:.63rem;font-weight:700;color:#bbb;font-family:var(--mono);margin-bottom:2px">'+m.n+'</div>';
+    html+='<div style="font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:2px">'+m.nm+'</div>';
+    html+='<div style="font-size:.7rem;color:var(--muted);line-height:1.3">'+m.sb+'</div>';
+    html+='<div style="font-size:.63rem;font-weight:700;color:'+color+';margin-top:5px">→ Vào module</div>';
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+function navigateMod(file){
+  try{localStorage.setItem('nmong',JSON.stringify(getData()));}catch(e){}
+  window.location.href=file;
+}
+function goP1Start(){navigateMod('module01_phuong_an.html');}
+function goP3Start(){navigateMod('module05_thiet_ke_coc.html');}
+function goP1Direct(f){navigateMod(f);}
+function goP3Direct(f){navigateMod(f);}
+
 function openMod(id){
   var m=MODS.find(function(x){return x.id===id;});if(!m)return;
   document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',MODS[i]&&MODS[i].id===id);});
