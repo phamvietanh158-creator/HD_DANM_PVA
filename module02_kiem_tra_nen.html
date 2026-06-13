@@ -155,6 +155,30 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
 .size-row:last-child{border-bottom:none}
 .size-lbl{color:var(--muted)}
 .size-val{font-family:var(--mono);font-weight:600;color:var(--text)}
+.lookup-table-wrap{margin:10px 0;border:1.5px solid var(--brd);border-radius:10px;overflow:hidden}
+.lookup-table-hdr{background:var(--Pdk);color:#fff;padding:8px 14px;display:flex;align-items:center;gap:8px}
+.lookup-table-hdr-left{flex:1}
+.lookup-table-title{font-size:.75rem;font-weight:700;letter-spacing:.3px}
+.lookup-table-ref{font-size:.65rem;opacity:.65;margin-top:1px;font-family:var(--mono)}
+.lookup-table-loc{font-size:.67rem;background:rgba(255,143,0,.25);color:#FFD54F;border:1px solid rgba(255,143,0,.4);padding:2px 8px;border-radius:4px;white-space:nowrap;font-weight:700}
+.lookup-how{background:#FFF8E1;border-bottom:1.5px solid var(--brd);padding:8px 14px;font-size:.78rem;color:#3a2800;line-height:1.6}
+.lookup-how-lbl{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#E65100;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.lookup-tbl{width:100%;border-collapse:collapse;font-size:.78rem}
+.lookup-tbl th{background:#5D4037;color:rgba(255,255,255,.88);padding:.38rem .6rem;font-size:.65rem;font-weight:700;text-align:center;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
+.lookup-tbl th.L{text-align:left;padding-left:.75rem}
+.lookup-tbl td{padding:.32rem .55rem;border-bottom:1px solid rgba(215,204,200,.35);text-align:center;vertical-align:middle;font-family:var(--mono);font-size:.77rem}
+.lookup-tbl td.L{text-align:left;font-family:var(--sans);font-weight:600;font-size:.78rem;padding-left:.75rem}
+.lookup-tbl tr:last-child td{border-bottom:none}
+.lookup-tbl tr.hi td{background:#FFF8E1;font-weight:700;color:#BF360C}
+.lookup-note{background:#EFEBE9;padding:7px 14px;font-size:.73rem;color:var(--muted);border-top:1.5px solid var(--brd);line-height:1.55}
+/* ĐỆM CÁT CARD */
+.dem-cat-card{background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:2px solid var(--A);border-radius:var(--r);padding:14px 16px;margin:12px 0}
+.dem-cat-title{font-size:.88rem;font-weight:700;color:#3a2800;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+/* SAVE BANNER */
+.save-banner{background:var(--Glt);border:1.5px solid var(--G);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.save-banner-txt{flex:1;font-size:.8rem;color:#1a3a1a}
+.save-banner-time{font-size:.7rem;color:var(--G);font-family:var(--mono)}
+
 </style>
 </head>
 <body>
@@ -175,11 +199,21 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
     <button class="tab on" onclick="goto('s-soluieu')"><span class="tn">2.1</span> Chọn sơ bộ b×l</button>
     <button class="tab" onclick="goto('s-ttgh1')"><span class="tn">2.2</span> TTGH1 – Sức chịu tải</button>
     <button class="tab" onclick="goto('s-ttgh2')"><span class="tn">2.3</span> TTGH2 – Kiểm tra lún</button>
+    <button class="tab" onclick="goto('s-demcat')"><span class="tn">2.x</span> Đệm cát (nếu có)</button>
     <button class="tab" onclick="goto('s-ketluan')"><span class="tn">2.4</span> Kết luận</button>
   </div>
 </div>
 
 <main>
+<!-- SAVE/RESTORE BANNER -->
+<div class="save-banner" id="save-banner" style="display:none">
+  <i class="ti ti-device-floppy" style="font-size:18px;color:var(--G)"></i>
+  <div class="save-banner-txt">
+    <b>Tiến độ đã lưu</b> — Bạn có thể đóng trình duyệt và quay lại bất cứ lúc nào.
+    <div class="save-banner-time" id="save-time"></div>
+  </div>
+  <button class="btn btn-ghost btn-sm" onclick="saveProgress()"><i class="ti ti-refresh"></i> Lưu lại</button>
+</div>
 <div class="prog-wrap">
   <div class="prog-top"><span>Tiến độ Module 02</span><span id="prog-text">0 / 0</span></div>
   <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
@@ -244,20 +278,29 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
       <div class="fg"><div class="fl">F sơ bộ = N₀<sup>tc</sup>/(R₀−γ̄·h<sub>m</sub>)</div><div class="fi"><input type="number" id="Fsb" readonly><span class="ut">m²</span></div></div>
     </div>
     <p style="font-size:.82rem;font-weight:600;margin-bottom:8px">Nhập 3 kích thước đáy móng cần kiểm tra:</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
-      <div style="border:1.5px solid var(--B);border-radius:8px;padding:10px;background:var(--Blt)">
-        <div style="font-size:.76rem;font-weight:700;color:var(--B);margin-bottom:6px">Phương án b×l — PA1</div>
-        <div class="fi" style="margin-bottom:6px"><input type="number" id="b1" placeholder="1.4" oninput="updateSizes()"><span class="ut">×</span><input type="number" id="l1" placeholder="2.1" oninput="updateSizes()"><span class="ut">m</span></div>
+    <div class="theory" style="margin-bottom:10px">
+      <div class="theory-lbl"><i class="ti ti-bulb" style="font-size:12px"></i> Quy trình chọn b×l theo PDF hướng dẫn</div>
+      Chọn <b>1 cặp b×l</b> → Kiểm tra TTGH1 → Nếu không thỏa: điều chỉnh b×l → Bấm "Kiểm tra" lại.<br>
+      <b>Thường gặp:</b> Nếu p<sub>tb</sub> &gt; [P] → tăng b×l. Nếu kinh tế &gt; 10% → giảm b×l. Nếu p<sub>max</sub> &gt; 1.2[P] → tăng l (giảm lệch tâm).
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:end">
+      <div class="fg">
+        <div class="fl">Chọn b — bề rộng đáy móng</div>
+        <div class="fi"><input type="number" id="b1" placeholder="VD: 1.0" step="0.1" oninput="updateSizes()"><span class="ut">m</span></div>
       </div>
-      <div style="border:1.5px solid var(--A);border-radius:8px;padding:10px;background:var(--Alt)">
-        <div style="font-size:.76rem;font-weight:700;color:var(--Adk);margin-bottom:6px">Phương án b×l — PA2</div>
-        <div class="fi" style="margin-bottom:6px"><input type="number" id="b2" placeholder="1.6" oninput="updateSizes()"><span class="ut">×</span><input type="number" id="l2" placeholder="2.4" oninput="updateSizes()"><span class="ut">m</span></div>
+      <div class="fg">
+        <div class="fl">Chọn l — chiều dài đáy móng</div>
+        <div class="fi"><input type="number" id="l1" placeholder="VD: 1.4" step="0.1" oninput="updateSizes()"><span class="ut">m</span></div>
       </div>
-      <div style="border:1.5px solid var(--G);border-radius:8px;padding:10px;background:var(--Glt)">
-        <div style="font-size:.76rem;font-weight:700;color:var(--Gdk);margin-bottom:6px">Phương án b×l — PA3</div>
-        <div class="fi" style="margin-bottom:6px"><input type="number" id="b3" placeholder="1.8" oninput="updateSizes()"><span class="ut">×</span><input type="number" id="l3" placeholder="2.7" oninput="updateSizes()"><span class="ut">m</span></div>
+      <div class="fg">
+        <div class="fl">Tỉ lệ l/b</div>
+        <div class="fi"><input type="number" id="lb_ratio" value="1.4" step="0.1" readonly style="background:var(--Plt);font-family:var(--mono)" id="lb-display"><span class="ut">–</span></div>
       </div>
     </div>
+    <div class="info-box" style="margin-bottom:4px"><i class="ti ti-refresh" style="font-size:13px;vertical-align:-2px"></i>
+      Nếu không thỏa mãn → điều chỉnh b, l bên trên rồi bấm <b>"Kiểm tra TTGH1"</b> lại. Lịch sử các lần thử sẽ hiện bên dưới.
+    </div>
+    <input type="hidden" id="b2" value=""><input type="hidden" id="l2" value=""><input type="hidden" id="b3" value=""><input type="hidden" id="l3" value="">
 
     <button class="btn btn-p" onclick="buildTTGH1()"><i class="ti ti-arrow-right"></i> Xác nhận & Bắt đầu kiểm tra TTGH1</button>
   </div>
@@ -310,13 +353,28 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
             </tbody>
           </table>
         </div>
-        <div class="lookup" style="margin-top:8px"><div class="lookup-lbl"><i class="ti ti-table" style="font-size:12px"></i> Bảng hệ số sức chịu tải Terzaghi (N<sub>γ</sub>, N<sub>q</sub>, N<sub>c</sub>) — tra theo φ</div>
-          <div style="overflow:auto;max-height:180px">
+        <div class="lookup-table-wrap" style="margin-top:10px">
+          <div class="lookup-table-hdr">
+            <div class="lookup-table-hdr-left">
+              <div class="lookup-table-title"><i class="ti ti-table" style="font-size:13px;vertical-align:-2px;margin-right:5px"></i>Bảng hệ số sức chịu tải Terzaghi — N<sub>γ</sub>, N<sub>q</sub>, N<sub>c</sub> theo φ</div>
+              <div class="lookup-table-ref">Bảng 1-1 · Hướng dẫn đồ án 2022 (HD_DANM_PVA)</div>
+            </div>
+            <span class="lookup-table-loc"><i class="ti ti-book-2" style="font-size:11px;vertical-align:-1px"></i> Trang 18 · Bảng tra đi kèm</span>
+          </div>
+          <div class="lookup-how">
+            <div class="lookup-how-lbl"><i class="ti ti-hand-finger" style="font-size:12px"></i> Cách tra bảng</div>
+            ① Xác định <b>φ (góc ma sát trong)</b> của lớp đất đặt móng &nbsp;→&nbsp;
+            ② Tìm hàng φ tương ứng (hàng vàng = φ của bài) &nbsp;→&nbsp;
+            ③ Đọc N<sub>γ</sub>, N<sub>q</sub>, N<sub>c</sub> &nbsp;→&nbsp;
+            ④ Nếu φ lẻ: nội suy tuyến tính giữa 2 hàng liền kề
+          </div>
+          <div style="overflow:auto;max-height:200px">
           <table class="terz-tbl" id="terz-table">
             <thead><tr><th>φ°</th><th>N<sub>γ</sub></th><th>N<sub>q</sub></th><th>N<sub>c</sub></th><th>φ°</th><th>N<sub>γ</sub></th><th>N<sub>q</sub></th><th>N<sub>c</sub></th></tr></thead>
             <tbody id="terz-body"></tbody>
           </table>
           </div>
+          <div class="lookup-note">Hàng được tô vàng = φ gần nhất với lớp đất đang xét. Hệ thống nội suy tự động khi φ không nguyên. Fs = 2.0 áp dụng thống nhất toàn đồ án.</div>
         </div>
       </div>
     </div>
@@ -324,6 +382,64 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
     <!-- TÍNH TOÁN 3 KÍCH THƯỚC -->
     <div id="ttgh1-sizes-container">
       <div class="warn-box" id="ttgh1-placeholder">Hoàn thành Bước 2.1 và bấm <b>"Xác nhận"</b> để các bước tính toán xuất hiện.</div>
+    </div>
+
+    <!-- KIỂM TRA ỨNG SUẤT LỚP 2 -->
+    <div class="step" id="lop2-check-wrap" style="display:none">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb" style="background:#7B1FA2">2</div>
+        <h3>Kiểm tra ứng suất tại đỉnh lớp đất thứ 2 (nếu cần)</h3>
+        <span class="stag" style="background:#F3E5F5;color:#7B1FA2">Bổ sung · tham khảo PDF §1.3.3</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Khi nào cần kiểm tra lớp 2?</div>
+          Khi lớp đất đặt móng (lớp 1) <b>mỏng</b> và lớp 2 bên dưới <b>yếu hơn</b> → cần đảm bảo ứng suất truyền xuống lớp 2 vẫn ≤ sức chịu tải của lớp 2.<br>
+          Áp dụng cả khi <b>có đệm cát</b>: kiểm tra ứng suất tại đáy đệm cát truyền xuống lớp đất thiên nhiên bên dưới.
+        </div>
+        <div class="fml-box">
+          <div class="ftitle">Công thức phân bố ứng suất theo độ sâu — tại đỉnh lớp 2</div>
+          <div class="frow">σ<sub>z</sub> = k₀(l/b, z/b) × p<sub>gl</sub></div>
+          <div class="frow"><b>Điều kiện:</b> σ<sub>z</sub> + σ<sub>bt</sub>(z) ≤ [P]<sub>lớp 2</sub></div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:4px">z: khoảng cách từ đáy móng đến đỉnh lớp 2 · k₀ tra bảng theo z/b và l/b</div>
+        </div>
+
+        <!-- Bảng k0 hướng dẫn cách tra -->
+        <div class="lookup-table-wrap" style="margin:10px 0">
+          <div class="lookup-table-hdr">
+            <div class="lookup-table-hdr-left">
+              <div class="lookup-table-title"><i class="ti ti-table" style="font-size:13px;vertical-align:-2px;margin-right:5px"></i>Bảng k₀ — Tra hệ số ứng suất tại đỉnh lớp 2</div>
+              <div class="lookup-table-ref">Bảng 1-3 · TCVN 9362:2012 — dùng để tra k₀ tại độ sâu z = h₁ (chiều dày lớp 1)</div>
+            </div>
+            <span class="lookup-table-loc"><i class="ti ti-book-2" style="font-size:11px"></i> Trang 22 · HD đồ án 2022</span>
+          </div>
+          <div class="lookup-how">
+            <div class="lookup-how-lbl"><i class="ti ti-hand-finger" style="font-size:12px"></i> Cách tra k₀ tại đỉnh lớp 2</div>
+            ① Tính <b>l/b</b> của móng đã chọn → chọn cột gần nhất &nbsp;→&nbsp;
+            ② Tính <b>z/b = (h<sub>m</sub> đến đỉnh lớp 2) / b</b> → thường z = h₁ – h<sub>m</sub> nếu móng nằm trong lớp 1, hoặc z = 0 nếu đáy móng ở ranh giới &nbsp;→&nbsp;
+            ③ Đọc k₀ ở giao điểm → nội suy tuyến tính nếu cần &nbsp;→&nbsp;
+            ④ σ<sub>gl</sub>(z) = k₀ × p<sub>gl</sub>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="tbl" id="k0-lop2-table">
+              <thead><tr><th>z/b</th><th>l/b=1.0</th><th>l/b=1.2</th><th>l/b=1.4</th><th>l/b=1.6</th><th>l/b=1.8</th><th>l/b=2.0</th><th>l/b=3.0</th><th>l/b=∞</th></tr></thead>
+              <tbody id="k0-lop2-body"></tbody>
+            </table>
+          </div>
+          <div class="lookup-note">Hàng vàng = z/b gần nhất với đỉnh lớp 2 của bài. Nếu z/b &gt; 4.0 thì k₀ rất nhỏ, thường không cần kiểm tra lớp 2.</div>
+        </div>
+
+        <div class="earth-box"><i class="ti ti-pencil" style="font-size:12px;vertical-align:-2px"></i>
+          Tự tính rồi điền. <b>z</b> = khoảng cách từ đáy móng đến đỉnh lớp 2.
+        </div>
+        <div id="lop2-calc-hint" class="fml-box" style="margin-bottom:10px">Hoàn thành TTGH1 để xem công thức thay số tại đây.</div>
+        <div class="ans-row"><span class="ans-label">📌 z/b tại đỉnh lớp 2</span><input class="ans-inp" id="zb-lop2" type="number" step="0.01" placeholder="?" oninput="calcLop2Check()"><span class="ans-unit">–</span><span class="chip" id="chip-zb-lop2"></span></div>
+        <div class="ans-row"><span class="ans-label">📌 k₀ tra bảng tại z/b này</span><input class="ans-inp" id="k0-lop2" type="number" step="0.001" placeholder="?" oninput="calcLop2Check()"><span class="ans-unit">–</span><span class="chip" id="chip-k0-lop2"></span></div>
+        <div class="ans-row"><span class="ans-label">📌 σ<sub>gl</sub>(z) = k₀ × p<sub>gl</sub></span><input class="ans-inp" id="sgl-lop2" type="number" step="0.1" placeholder="?" oninput="calcLop2Check()"><span class="ans-unit">kPa</span><span class="chip" id="chip-sgl-lop2"></span></div>
+        <div class="ans-row"><span class="ans-label">📌 σ<sub>bt</sub>(z) = ứng suất bản thân tại z</span><input class="ans-inp" id="sbt-lop2" type="number" step="0.1" placeholder="?"><span class="ans-unit">kPa</span></div>
+        <div class="ans-row"><span class="ans-label">📌 [P]<sub>lớp 2</sub> — SCT lớp 2 (tính theo Terzaghi)</span><input class="ans-inp" id="P-lop2" type="number" step="0.1" placeholder="?" oninput="calcLop2Check()"><span class="ans-unit">kPa</span></div>
+        <div id="lop2-verdict" style="margin-top:10px"></div>
+      </div>
     </div>
 
     <!-- BẢNG TỔNG HỢP TTGH1 -->
@@ -385,14 +501,29 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
           <div class="frow"><b>B6.</b> Đất dính: <em>S<sub>i</sub></em> = (e<sub>0i</sub>–e<sub>1i</sub>)/(1+e<sub>0i</sub>)·h<sub>i</sub> &nbsp;(tra biểu đồ e-p)</div>
           <div class="frow"><b>B7.</b> Tổng lún: <em>S</em> = ΣS<sub>i</sub></div>
         </div>
-        <div class="lookup"><div class="lookup-lbl"><i class="ti ti-table" style="font-size:12px"></i> Bảng k₀ — Hệ số truyền ứng suất theo độ sâu (l/b = 1.0 đến 3.0)</div>
-          <div style="font-size:.78rem;margin-bottom:6px">Tra k₀ theo <b>z/b</b> (tỷ số độ sâu/bề rộng) và <b>l/b</b> (tỷ lệ kích thước đáy móng)</div>
+        <div class="lookup-table-wrap" style="margin-top:10px">
+          <div class="lookup-table-hdr">
+            <div class="lookup-table-hdr-left">
+              <div class="lookup-table-title"><i class="ti ti-table" style="font-size:13px;vertical-align:-2px;margin-right:5px"></i>Bảng k₀ — Hệ số phân bố ứng suất theo độ sâu</div>
+              <div class="lookup-table-ref">Bảng 1-3 · TCVN 9362:2012 · Hướng dẫn đồ án 2022</div>
+            </div>
+            <span class="lookup-table-loc"><i class="ti ti-book-2" style="font-size:11px;vertical-align:-1px"></i> Trang 22 · Bảng tra đi kèm</span>
+          </div>
+          <div class="lookup-how">
+            <div class="lookup-how-lbl"><i class="ti ti-hand-finger" style="font-size:12px"></i> Cách tra bảng</div>
+            ① Tính <b>l/b</b> (tỷ lệ kích thước đáy móng — chọn cột gần nhất) &nbsp;→&nbsp;
+            ② Tính <b>z/b</b> tại giữa mỗi lớp phân tố &nbsp;→&nbsp;
+            ③ Đọc k₀ ở giao cột l/b và hàng z/b &nbsp;→&nbsp;
+            ④ Nội suy tuyến tính nếu z/b hoặc l/b không có sẵn &nbsp;→&nbsp;
+            ⑤ σ<sub>gl</sub> = k₀ × p<sub>gl</sub>
+          </div>
           <div style="overflow-x:auto">
           <table class="tbl" id="k0-table">
             <thead><tr><th>z/b</th><th>l/b=1.0</th><th>l/b=1.2</th><th>l/b=1.4</th><th>l/b=1.6</th><th>l/b=1.8</th><th>l/b=2.0</th><th>l/b=3.0</th><th>l/b=∞</th></tr></thead>
             <tbody id="k0-body"></tbody>
           </table>
           </div>
+          <div class="lookup-note">k₀ = 1.0 tại z=0 (ngay đáy móng). Giảm dần theo chiều sâu. Điểm tắt lún khi σ<sub>gl</sub> ≤ 0.1·σ<sub>bt</sub> tại cùng độ sâu (tức k₀·p<sub>gl</sub> ≤ 0.1·σ<sub>bt</sub>).</div>
         </div>
       </div>
     </div>
@@ -472,6 +603,138 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
   </div>
 </div>
 
+<!-- ══════════════════ 2.x ĐỆM CÁT ══════════════════ -->
+<div class="card" id="s-demcat">
+  <div class="card-hd" style="background:#795548"><i class="ti ti-layers-subtract"></i>
+    <div><h2>2.x · Móng Nông Trên Nền Đệm Cát (nếu chọn PA đệm cát)</h2>
+    <p>Chỉ áp dụng khi lớp đất yếu mỏng &lt; 3m · Thay lớp đất yếu bằng đệm cát đầm chặt</p></div>
+    <span class="cbadge">Tuỳ chọn</span>
+  </div>
+  <div class="card-body">
+    <div class="warn-box"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px"></i>
+      <b>Bỏ qua card này nếu không chọn phương án đệm cát ở Module 01.</b><br>
+      Đệm cát áp dụng khi: lớp đất yếu dày ≤ 3m, lớp đất tốt bên dưới đủ sức chịu tải.
+    </div>
+
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">LT</div><h3>Nguyên lý & Công thức đệm cát</h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">Đọc trước</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Nguyên lý đệm cát</div>
+          Thay lớp đất yếu bằng <b>đệm cát đầm chặt</b> (φ=30–35°, γ≈18 kN/m³). Tải trọng từ móng truyền qua đệm cát theo <b>góc phân tán 30°</b>, rồi truyền vào lớp đất thiên nhiên bên dưới.<br>
+          <b>Điều kiện:</b> Áp lực tại đáy đệm cát ≤ Sức chịu tải của lớp đất thiên nhiên bên dưới.
+        </div>
+        <div class="fml-box">
+          <div class="ftitle">Công thức tính đệm cát — Góc phân tán α = 30°</div>
+          <div class="frow"><em>b' = b + 2·h<sub>đ</sub>·tan30°</em> &nbsp;·&nbsp; <em>l' = l + 2·h<sub>đ</sub>·tan30°</em></div>
+          <div class="frow"><em>p<sub>đáy đệm</sub></em> = N₀<sup>tc</sup>/(b'·l') + γ̄<sub>đệm</sub>·h<sub>đ</sub> + γ̄·h<sub>m</sub></div>
+          <div class="frow"><em>Điều kiện:</em> p<sub>đáy đệm</sub> ≤ [P]<sub>đất thiên nhiên</sub></div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:4px">
+            h<sub>đ</sub>: chiều dày đệm cát &nbsp;·&nbsp; tan30° ≈ 0.577 &nbsp;·&nbsp; [P] tính cho lớp đất thiên nhiên bên dưới đệm
+          </div>
+        </div>
+        <div class="lookup"><div class="lookup-lbl"><i class="ti ti-bulb" style="font-size:12px"></i> Chọn chiều dày đệm cát h<sub>đ</sub></div>
+          h<sub>đ</sub> thường = chiều dày lớp đất yếu cần thay (làm tròn lên 0.5m). Tối thiểu 0.5m, tối đa 3.0m. Nếu > 3m thì xét phương án cọc.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">A</div><h3>Nhập thông số đệm cát</h3>
+        <span class="stag" style="background:var(--Alt);color:var(--Adk)">Nhập số liệu</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="g3" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">Chiều dày đệm cát h<sub>đ</sub></div><div class="fi"><input type="number" id="hd" placeholder="VD: 1.8" oninput="calcDemCat()"><span class="ut">m</span></div></div>
+          <div class="fg"><div class="fl">γ đệm cát</div><div class="fi"><input type="number" id="g-dem" value="18.5" oninput="calcDemCat()"><span class="ut">kN/m³</span></div></div>
+          <div class="fg"><div class="fl">b×l móng (đã chọn)</div><div class="fi"><input type="number" id="b-dem" placeholder="b" oninput="calcDemCat()" style="width:60px"><span style="margin:0 4px">×</span><input type="number" id="l-dem" placeholder="l" oninput="calcDemCat()" style="width:60px"><span class="ut">m</span></div></div>
+        </div>
+        <div class="g2" style="margin-bottom:12px">
+          <div class="fg"><div class="fl">φ lớp đất thiên nhiên dưới đệm</div><div class="fi"><input type="number" id="phi-tn" placeholder="VD: 34" oninput="calcDemCat()"><span class="ut">°</span></div></div>
+          <div class="fg"><div class="fl">c lớp đất thiên nhiên dưới đệm</div><div class="fi"><input type="number" id="c-tn" placeholder="VD: 0" oninput="calcDemCat()"><span class="ut">kPa</span></div></div>
+        </div>
+        <div id="dem-cat-result"></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">B</div><h3>Tính kích thước quy đổi b'×l' tại đáy đệm</h3>
+        <span class="stag" style="background:var(--Glt);color:var(--Gdk)">Tính tay · Điền số</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <!-- Bảng tra góc phân tán -->
+        <div class="lookup-table-wrap" style="margin-bottom:12px">
+          <div class="lookup-table-hdr">
+            <div class="lookup-table-hdr-left">
+              <div class="lookup-table-title"><i class="ti ti-table" style="font-size:13px;vertical-align:-2px;margin-right:5px"></i>Góc phân tán tải trọng qua đệm cát α</div>
+              <div class="lookup-table-ref">Bảng đệm cát · Hướng dẫn đồ án 2022 · §1.3.3</div>
+            </div>
+            <span class="lookup-table-loc"><i class="ti ti-book-2" style="font-size:11px"></i> Trang 25 · HD đồ án</span>
+          </div>
+          <div class="lookup-how">
+            <div class="lookup-how-lbl"><i class="ti ti-hand-finger" style="font-size:12px"></i> Cách dùng</div>
+            Đệm cát thường dùng <b>α = 30°</b> → tan30° = 0.577. Tải trọng phân tán ra 2 phía theo góc α từ mép đáy móng.
+          </div>
+          <table class="lookup-tbl">
+            <thead><tr><th class="L">Vật liệu đệm</th><th>Góc phân tán α</th><th>tan α</th><th>Ghi chú</th></tr></thead>
+            <tbody>
+              <tr class="hi"><td class="L">Cát đầm chặt (tiêu chuẩn)</td><td>30°</td><td>0.577</td><td>Dùng phổ biến trong đồ án</td></tr>
+              <tr><td class="L">Cát lẫn sỏi</td><td>35°</td><td>0.700</td><td>Phân tán tốt hơn</td></tr>
+              <tr><td class="L">Đất cát đầm (E₀ thấp)</td><td>25°</td><td>0.466</td><td>Ít dùng</td></tr>
+            </tbody>
+          </table>
+          <div class="lookup-note">Trong đồ án ĐHXD thống nhất dùng α = 30°. Kích thước đáy đệm = b×l gốc + 2·h<sub>đ</sub>·tan30° mỗi chiều.</div>
+        </div>
+
+        <div class="earth-box"><i class="ti ti-pencil" style="font-size:12px;vertical-align:-2px"></i>
+          Tự tính theo công thức rồi điền. tan30° = 0.5774.
+        </div>
+        <div id="dem-cat-calc" class="fml-box" style="margin-bottom:10px">Nhập thông số ở bước A để xem công thức thay số.</div>
+        <div class="ans-row"><span class="ans-label">📌 Bước 1: b' = b + 2·h<sub>đ</sub>·tan30°</span><input class="ans-inp" id="b-prime" type="number" step="0.01" placeholder="?" oninput="chkFill('b-prime', 0, 0.05)"><span class="ans-unit">m</span><span class="chip" id="chip-b-prime"></span></div>
+        <div class="ans-row"><span class="ans-label">📌 Bước 1: l' = l + 2·h<sub>đ</sub>·tan30°</span><input class="ans-inp" id="l-prime" type="number" step="0.01" placeholder="?" oninput="chkFill('l-prime', 0, 0.05)"><span class="ans-unit">m</span><span class="chip" id="chip-l-prime"></span></div>
+        <div class="ans-row"><span class="ans-label">📌 Bước 2: p<sub>đáy đệm</sub> = N₀<sup>tc</sup>/(b'·l') + γ<sub>đệm</sub>·h<sub>đ</sub> + γ̄·h<sub>m</sub></span><input class="ans-inp" id="p-dem" type="number" step="0.1" placeholder="?" oninput="chkFill('p-dem', 0, 1)"><span class="ans-unit">kPa</span><span class="chip" id="chip-p-dem"></span></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">C</div><h3>Tính [P] lớp đất thiên nhiên dưới đệm & Kiểm tra</h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">Terzaghi · Điền số</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Tính [P] tại đáy đệm cát (lớp đất thiên nhiên bên dưới)</div>
+          Dùng công thức Terzaghi với: <b>b = b'</b> (bề rộng quy đổi), <b>γ, φ, c</b> của lớp đất thiên nhiên bên dưới, <b>q = γ̄·(h<sub>m</sub> + h<sub>đ</sub>)</b>.
+        </div>
+        <div class="fml-box">
+          <div class="ftitle">Sức chịu tải Terzaghi tại đáy đệm cát — tra bảng N theo φ<sub>TN</sub></div>
+          <div class="frow">p<sub>gh</sub> = ξ₁·γ<sub>TN</sub>·N<sub>γ</sub>·b' + ξ₂·q'·N<sub>q</sub> + ξ₃·c<sub>TN</sub>·N<sub>c</sub></div>
+          <div class="frow">q' = γ̄·(h<sub>m</sub> + h<sub>đ</sub>) &nbsp;·&nbsp; [P]<sub>TN</sub> = p<sub>gh</sub>/2.0</div>
+        </div>
+        <div class="earth-box"><i class="ti ti-pencil" style="font-size:12px;vertical-align:-2px"></i>
+          Tra bảng Terzaghi theo φ<sub>TN</sub> đã nhập ở bước A → tính tay → điền [P].
+        </div>
+        <div class="ans-row"><span class="ans-label">📌 [P]<sub>TN</sub> — SCT lớp đất thiên nhiên tại đáy đệm</span><input class="ans-inp" id="P-dem-tn" type="number" step="0.1" placeholder="?" oninput="chkDemCat()"><span class="ans-unit">kPa</span><span class="chip" id="chip-P-dem"></span></div>
+        <div class="mcq-wrap" style="margin-top:10px">
+          <div class="mcq-q">📌 Kiểm tra điều kiện: p<sub>đáy đệm</sub> ≤ [P]<sub>TN</sub>?</div>
+          <div class="mcq-opts g2c" id="dem-mcq-opts">
+            <div class="mcq-opt" id="mco-dem-0" onclick="pickMCQ('dem',0,0)"><span class="mkey">A</span><span>✓ Thỏa mãn — đệm cát hợp lý</span></div>
+            <div class="mcq-opt" id="mco-dem-1" onclick="pickMCQ('dem',1,0)"><span class="mkey">B</span><span>✗ Không thỏa — cần tăng h<sub>đ</sub> hoặc tăng b×l</span></div>
+          </div>
+        </div>
+        <div id="dem-cat-verdict" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════════ 2.4 KẾT LUẬN ══════════════════ -->
 <div class="card" id="s-ketluan">
   <div class="card-hd"><i class="ti ti-check-list"></i>
@@ -516,8 +779,8 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
     </div>
 
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-g" onclick="toast('Đã lưu kết quả Module 02!')"><i class="ti ti-device-floppy"></i> Lưu kết quả</button>
-      <button class="btn btn-B" onclick="toast('Module 03 đang phát triển!')"><i class="ti ti-arrow-right"></i> Module 03: Chiều cao móng</button>
+      <button class="btn btn-g" onclick="saveProgress()"><i class="ti ti-device-floppy"></i> Lưu tiến độ</button>
+      <button class="btn btn-B" onclick="goModule03()"><i class="ti ti-arrow-right"></i> Module 03: Chiều cao móng →</button>
       <a href="module01_phuong_an.html" class="btn btn-ghost"><i class="ti ti-arrow-left"></i> Về Module 01</a>
     </div>
   </div>
@@ -574,6 +837,65 @@ var K0_COLS=[1.0,1.2,1.4,1.6,1.8,2.0,3.0,999];
 var ANS={};
 var SIZES=[]; // [{b,l}]
 var RESULTS=[]; // [{ptb,pmax,pmin,P,ok_tech,ok_econ,pct}]
+
+/* ═══ LOOKUP TABLE COMPONENT ═══ */
+function mkLookupTable(title,ref,location,howto,tableHtml,note){
+  return '<div class="lookup-table-wrap">'+
+    '<div class="lookup-table-hdr">'+
+      '<div class="lookup-table-hdr-left">'+
+        '<div class="lookup-table-title"><i class="ti ti-table" style="font-size:13px;vertical-align:-2px;margin-right:5px"></i>'+title+'</div>'+
+        '<div class="lookup-table-ref">'+ref+'</div>'+
+      '</div>'+
+      '<span class="lookup-table-loc"><i class="ti ti-book-2" style="font-size:11px;vertical-align:-1px"></i> '+location+'</span>'+
+    '</div>'+
+    '<div class="lookup-how"><div class="lookup-how-lbl"><i class="ti ti-hand-finger" style="font-size:12px"></i> Cách tra bảng</div>'+howto+'</div>'+
+    tableHtml+
+    (note?'<div class="lookup-note"><b>Ghi chú:</b> '+note+'</div>':'')+
+  '</div>';
+}
+
+/* ═══ AUTOSAVE ═══ */
+var AUTOSAVE_KEY='nmong';
+function saveProgress(){
+  try{
+    var d=JSON.parse(localStorage.getItem(AUTOSAVE_KEY)||'{}');
+    d.m02_saved=true;
+    d.m02_time=new Date().toLocaleString('vi-VN');
+    // Lưu kết quả b,l cuối cùng
+    var bf=document.getElementById('b-final'),lf=document.getElementById('l-final');
+    if(bf&&bf.value) d.m02_b=parseFloat(bf.value);
+    if(lf&&lf.value) d.m02_l=parseFloat(lf.value);
+    var sf=document.getElementById('S-final');
+    if(sf&&sf.value) d.m02_S=parseFloat(sf.value);
+    localStorage.setItem(AUTOSAVE_KEY,JSON.stringify(d));
+    // Show save banner
+    var bann=document.getElementById('save-banner');
+    if(bann){bann.style.display='flex';document.getElementById('save-time').textContent='Lưu lúc: '+d.m02_time;}
+    toast('✓ Đã lưu tiến độ Module 02');
+  }catch(e){toast('Lỗi lưu: '+e.message);}
+}
+function restoreProgress(){
+  try{
+    var raw=localStorage.getItem(AUTOSAVE_KEY);if(!raw)return;
+    var d=JSON.parse(raw);
+    if(d.m02_saved){
+      var bann=document.getElementById('save-banner');
+      if(bann){bann.style.display='flex';document.getElementById('save-time').textContent='Lần lưu trước: '+d.m02_time;}
+    }
+  }catch(e){}
+}
+
+/* ═══ NAVIGATE MODULE 03 ═══ */
+function goModule03(){
+  saveProgress();
+  var total=0,done=0;
+  Object.keys(ANS).forEach(function(k){if(ANS[k]!==null&&ANS[k]!==undefined){total++;if(ANS[k]===true)done++;}});
+  var pct=total?Math.round(done/total*100):0;
+  if(pct<40){
+    if(!confirm('Bạn mới hoàn thành '+pct+'% module 02. Vẫn tiếp tục sang Module 03?')) return;
+  }
+  window.location.href='module03_chieu_cao_cot_thep.html';
+}
 
 /* ═══ UTILS ═══ */
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
@@ -675,7 +997,11 @@ function calcFsb(){
   var b1el=document.getElementById('b1');if(b1el&&!b1el.value)b1el.value=(b*0.9).toFixed(1);
   var l1el=document.getElementById('l1');if(l1el&&!l1el.value)l1el.value=(l*0.9).toFixed(1);
 }
-function updateSizes(){}
+function updateSizes(){
+  var b=gv('b1'),l=gv('l1');
+  var lbEl=document.getElementById('lb_ratio');
+  if(lbEl&&b&&l) lbEl.value=(l/b).toFixed(2);
+}
 
 /* ═══ BUILD TTGH1 ═══ */
 function buildTTGH1(){
@@ -718,6 +1044,7 @@ function buildTTGH1(){
 
   buildSummaryTable();
   document.getElementById('ttgh1-summary-wrap').style.display='block';
+  showLop2HintAndWrap();
   goto('s-ttgh1');
   // sync b-lun, l-lun with first valid size
   if(RESULTS.length){var r=RESULTS[0];document.getElementById('b-lun').value=r.b;document.getElementById('l-lun').value=r.l;}
@@ -899,11 +1226,14 @@ function chkFill(id,ans,tol){
   if(!inp)return;
   var v=parseFloat(inp.value);
   if(isNaN(v)){inp.classList.remove('ok','no');if(chip){chip.className='chip';chip.textContent='';}ANS[id]=null;updateProg();return;}
-  // find real ans
+  // find real ans — dynamic lookup
   var realAns=ans;
   if(id==='ptx'&&ANS['ptx-ans'])realAns=ANS['ptx-ans'];
   if(id==='pgl'&&ANS['pgl-ans'])realAns=ANS['pgl-ans'];
   if(id==='hi_lun'&&ANS['hi-ans'])realAns=ANS['hi-ans'];
+  if(id==='b-prime'&&DEM_ANS.bprime)realAns=DEM_ANS.bprime;
+  if(id==='l-prime'&&DEM_ANS.lprime)realAns=DEM_ANS.lprime;
+  if(id==='p-dem'&&DEM_ANS.pdem)realAns=DEM_ANS.pdem;
   var ok=tol>0?Math.abs(v-realAns)<=tol:true;
   inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);
   if(chip){chip.className='chip '+(ok?'ok':'no');chip.textContent=ok?'✓':'✗';}
@@ -987,9 +1317,137 @@ function scrollNext(){
   for(var i=0;i<all.length;i++){if(all[i].offsetParent){all[i].scrollIntoView({behavior:'smooth',block:'center'});all[i].focus();break;}}
 }
 
+/* ═══ KIỂM TRA LỚP 2 ═══ */
+function buildK0Lop2Table(){
+  // Reuse K0 data, copy tbody from main k0 table
+  var html='';
+  K0_ZB.forEach(function(zb){
+    var row=K0_DATA[zb];
+    html+='<tr id="k0lop2-'+zb+'"><td style="font-weight:700;color:var(--Pdk)">'+zb+'</td>'+
+      row.map(function(v){return '<td>'+v.toFixed(3)+'</td>';}).join('')+'</tr>';
+  });
+  var el=document.getElementById('k0-lop2-body');
+  if(el) el.innerHTML=html;
+}
+
+function calcLop2Check(){
+  var b=gv('b1')||gv('b-chon'), l=gv('l1')||gv('l-chon');
+  var lb=l&&b?l/b:1.4;
+  var zbVal=gv('zb-lop2');
+  var pgl=ANS['pgl-ans']||gv('pgl');
+  if(!zbVal||!pgl) return;
+  // k0 answer at this z/b
+  var k0_ans=getK0(zbVal,lb);
+  // highlight row
+  document.querySelectorAll('[id^="k0lop2-"]').forEach(function(r){r.classList.remove('highlight');});
+  var bestZb=K0_ZB.reduce(function(a,c){return Math.abs(c-zbVal)<Math.abs(a-zbVal)?c:a;});
+  var el=document.getElementById('k0lop2-'+bestZb);if(el)el.classList.add('highlight');
+  // check zb answer
+  var zbInp=document.getElementById('zb-lop2');
+  var chip_zb=document.getElementById('chip-zb-lop2');
+  // zb itself is user-entered — just verify k0
+  var k0Inp=document.getElementById('k0-lop2');
+  var chip_k0=document.getElementById('chip-k0-lop2');
+  if(k0Inp&&k0Inp.value){
+    var k0v=parseFloat(k0Inp.value);
+    var ok_k0=Math.abs(k0v-k0_ans)<=0.01;
+    k0Inp.classList.toggle('ok',ok_k0);k0Inp.classList.toggle('no',!ok_k0);
+    if(chip_k0){chip_k0.className='chip '+(ok_k0?'ok':'no');chip_k0.textContent=ok_k0?'✓':'✗';}
+    ANS['k0-lop2']=ok_k0;
+  }
+  var sgl_ans=+(k0_ans*pgl).toFixed(2);
+  var sglInp=document.getElementById('sgl-lop2');
+  var chip_sgl=document.getElementById('chip-sgl-lop2');
+  if(sglInp&&sglInp.value){
+    var sglv=parseFloat(sglInp.value);
+    var ok_sgl=Math.abs(sglv-sgl_ans)<=1;
+    sglInp.classList.toggle('ok',ok_sgl);sglInp.classList.toggle('no',!ok_sgl);
+    if(chip_sgl){chip_sgl.className='chip '+(ok_sgl?'ok':'no');chip_sgl.textContent=ok_sgl?'✓':'✗';}
+    ANS['sgl-lop2']=ok_sgl;
+  }
+  // Verdict
+  var Plop2=gv('P-lop2'),sbt=gv('sbt-lop2'),sgl=parseFloat(document.getElementById('sgl-lop2').value)||sgl_ans;
+  if(Plop2){
+    var ok_lop2=(sgl+sbt)<=Plop2;
+    var v=document.getElementById('lop2-verdict');
+    if(v) v.innerHTML=ok_lop2?
+      '<div class="succ-box"><b>✓ Đạt:</b> σ<sub>gl</sub>(z)+σ<sub>bt</sub>(z) = '+(sgl+sbt).toFixed(1)+' kPa ≤ [P]<sub>lớp 2</sub> = '+Plop2+' kPa.</div>':
+      '<div class="err-box"><b>✗ Không đạt:</b> σ<sub>gl</sub>(z)+σ<sub>bt</sub>(z) = '+(sgl+sbt).toFixed(1)+' kPa &gt; [P]<sub>lớp 2</sub> = '+Plop2+' kPa. Cần tăng b×l hoặc xét móng cọc.</div>';
+    ANS['lop2-ok']=ok_lop2; updateProg();
+  }
+}
+
+function showLop2HintAndWrap(){
+  var b=gv('b1'), l=gv('l1'), hm=gv('hm');
+  var pgl=ANS['pgl-ans']||0;
+  var h1=gv('h1_val'); // chiều dày lớp 1
+  var lb=l&&b?+(l/b).toFixed(2):1.4;
+  // Show wrap
+  var wrap=document.getElementById('lop2-check-wrap');if(wrap) wrap.style.display='block';
+  buildK0Lop2Table();
+  // Update hint
+  if(b&&l&&hm){
+    var z_lop2=Math.max(0,h1-hm); // khoảng cách từ đáy móng đến đỉnh lớp 2
+    var zb_lop2=z_lop2>0?+(z_lop2/b).toFixed(3):0;
+    var k0_lop2=getK0(zb_lop2,lb);
+    var sgl_lop2=+(k0_lop2*pgl).toFixed(2);
+    var hint=document.getElementById('lop2-calc-hint');
+    if(hint) hint.innerHTML=
+      '<div class="ftitle">Gợi ý thay số — kiểm tra lớp 2</div>'+
+      '<div class="frow">z từ đáy móng đến đỉnh lớp 2 = h₁ – h<sub>m</sub> = '+h1+' – '+hm+' = <em>'+z_lop2.toFixed(2)+' m</em></div>'+
+      '<div class="frow">z/b = '+z_lop2.toFixed(2)+'/'+b+' = <em>'+zb_lop2+'</em> &nbsp;·&nbsp; l/b = '+l+'/'+b+' = <em>'+lb+'</em></div>'+
+      '<div class="frow">Tra bảng k₀ ≈ <em>'+k0_lop2.toFixed(3)+'</em> → σ<sub>gl</sub>(z) = '+k0_lop2.toFixed(3)+'×'+pgl.toFixed(1)+' = <em>'+sgl_lop2+' kPa</em></div>';
+    // Pre-fill zb
+    var zbEl=document.getElementById('zb-lop2');if(zbEl&&!zbEl.value) zbEl.value=zb_lop2;
+  }
+}
+
+/* ═══ ĐỆM CÁT ═══ */
+var DEM_ANS={bprime:0,lprime:0,pdem:0};
+function calcDemCat(){
+  var hd=parseFloat(document.getElementById('hd').value)||0;
+  var b=parseFloat(document.getElementById('b-dem').value)||0;
+  var l=parseFloat(document.getElementById('l-dem').value)||0;
+  var gdem=parseFloat(document.getElementById('g-dem').value)||18.5;
+  var N0tc=parseFloat(document.getElementById('N0tc').value)||0;
+  var hm=parseFloat(document.getElementById('hm').value)||0;
+  var gtb=parseFloat(document.getElementById('gamma_tb').value)||20;
+  if(!hd||!b||!l) return;
+  var tan30=Math.tan(30*Math.PI/180); // 0.5774
+  var bp=+(b+2*hd*tan30).toFixed(3);
+  var lp=+(l+2*hd*tan30).toFixed(3);
+  var p_dem=+(N0tc/(bp*lp)+gdem*hd+gtb*hm).toFixed(2);
+  DEM_ANS.bprime=bp; DEM_ANS.lprime=lp; DEM_ANS.pdem=p_dem;
+  // Update calc box with substituted formula
+  var calc=document.getElementById('dem-cat-calc');
+  if(calc) calc.innerHTML=
+    '<div class="ftitle">Công thức thay số — tan30° = '+tan30.toFixed(4)+'</div>'+
+    '<div class="frow">b' = '+b+' + 2×'+hd+'×tan30° = <em>'+bp+' m</em></div>'+
+    '<div class="frow">l' = '+l+' + 2×'+hd+'×tan30° = <em>'+lp+' m</em></div>'+
+    '<div class="frow">p<sub>đáy đệm</sub> = '+N0tc+'/('+bp+'×'+lp+') + '+gdem+'×'+hd+' + '+gtb+'×'+hm+' = <em>'+p_dem+' kPa</em></div>';
+  // Update chip answers
+  var bpInp=document.getElementById('b-prime');
+  if(bpInp&&bpInp.value) chkFill('b-prime',bp,0.05);
+  var lpInp=document.getElementById('l-prime');
+  if(lpInp&&lpInp.value) chkFill('l-prime',lp,0.05);
+  var pdInp=document.getElementById('p-dem');
+  if(pdInp&&pdInp.value) chkFill('p-dem',p_dem,1);
+}
+function chkDemCat(){
+  var pdem=parseFloat(document.getElementById('p-dem').value)||DEM_ANS.pdem;
+  var Ptn=parseFloat(document.getElementById('P-dem-tn').value)||0;
+  if(!Ptn||!pdem) return;
+  var ok=pdem<=Ptn;
+  var v=document.getElementById('dem-cat-verdict');
+  if(v) v.innerHTML=ok?
+    '<div class="succ-box"><b>✓ Đệm cát hợp lý:</b> p<sub>đáy</sub>='+pdem+'kPa ≤ [P]<sub>TN</sub>='+Ptn+'kPa. Lớp đất thiên nhiên đủ sức chịu tải.</div>':
+    '<div class="err-box"><b>✗ Đệm cát chưa đủ:</b> p<sub>đáy</sub>='+pdem+'kPa > [P]<sub>TN</sub>='+Ptn+'kPa. Cần tăng h<sub>đ</sub> hoặc tăng kích thước móng hoặc xét phương án cọc.</div>';
+  ANS['dem-ok']=ok; updateProg();
+}
+
 /* ═══ INIT ═══ */
 window.onload=function(){
-  buildTerzTable();buildK0Table();buildLunLayers();
+  buildTerzTable();buildK0Table();buildLunLayers();restoreProgress();
   // load from localStorage
   try{
     var raw=localStorage.getItem('nmong'); if(!raw)return;
