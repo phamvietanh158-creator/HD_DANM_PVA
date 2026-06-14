@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P2·M03 – Chiều cao & Cốt thép Móng Băng</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --P:#2E7D32;--Pdk:#1B5E20;--Plt:#E8F5E9;--Pmd:#388E3C;
+  --A:#FF8F00;--Alt:#FFF8E1;--Adk:#E65100;
+  --G:#2E7D32;--Glt:#E8F5E9;--Gdk:#1B5E20;
+  --R:#C62828;--Rlt:#FFEBEE;
+  --B:#1565C0;--Blt:#E3F2FD;
+  --bg:#F1F8E9;--sur:#fff;--brd:#C8E6C9;--muted:#558B2F;--text:#1C0A00;
+  --sans:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:12px;--sh:0 2px 16px rgba(46,125,50,.1)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:var(--sans);color:var(--text);font-size:14px;line-height:1.6}
+.hdr{background:var(--Pdk);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(27,94,32,.4)}
+.hdr-in{max-width:960px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:12px}
+.back-btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff;padding:5px 13px;border-radius:7px;cursor:pointer;font-size:.78rem;font-weight:600;font-family:var(--sans);display:flex;align-items:center;gap:5px;text-decoration:none}
+.back-btn:hover{background:rgba(255,255,255,.24)}
+.hdr-title{flex:1}.hdr-title h1{font-size:.95rem;font-weight:700}.hdr-title p{font-size:.7rem;opacity:.7;margin-top:1px}
+.pb{font-family:var(--mono);font-size:.76rem;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:4px 13px;border-radius:20px}
+.tabs-bar{background:var(--Pdk)}.tabs-in{max-width:960px;margin:0 auto;display:flex;gap:2px;padding:5px 14px;overflow-x:auto;scrollbar-width:none}
+.tab{padding:5px 14px;border-radius:7px;font-size:.76rem;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;border:none;background:transparent;font-family:var(--sans);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.tab:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.88)}.tab.on{background:var(--A);color:#fff}
+.tn{font-family:var(--mono);font-size:.6rem;background:rgba(255,255,255,.18);padding:1px 5px;border-radius:3px}
+main{max-width:960px;margin:0 auto;padding:20px 16px 90px}
+.prog-wrap{margin-bottom:18px}.prog-top{display:flex;justify-content:space-between;font-size:.76rem;font-weight:600;color:var(--muted);margin-bottom:4px}
+.prog-track{height:7px;background:var(--brd);border-radius:10px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--P),var(--A));border-radius:10px;transition:width .4s}
+.card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:18px;overflow:hidden}
+.card-hd{background:var(--P);color:#fff;padding:11px 18px;display:flex;align-items:center;gap:9px}
+.card-hd i{font-size:19px;opacity:.9}.card-hd h2{font-size:.9rem;font-weight:700}.card-hd p{font-size:.73rem;opacity:.72;margin-top:1px}
+.cbadge{margin-left:auto;font-family:var(--mono);font-size:.64rem;font-weight:700;padding:3px 9px;border-radius:5px;background:rgba(255,255,255,.18);letter-spacing:1px;text-transform:uppercase}
+.card-body{padding:16px 18px}
+.step{border:1.5px solid var(--brd);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.step-hd{padding:9px 14px;display:flex;align-items:center;gap:9px;background:#f8fdf8;border-bottom:1.5px solid var(--brd);cursor:pointer;user-select:none}
+.step-hd:hover{background:var(--Plt)}
+.snb{width:26px;height:26px;border-radius:50%;color:#fff;font-size:.74rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);background:var(--P)}
+.step-hd h3{font-size:.86rem;font-weight:700;color:var(--text);flex:1}
+.stag{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+.chev{font-size:15px;color:#ccc;transition:transform .2s;flex-shrink:0}
+.step-body{padding:14px 16px}.step-body.hide{display:none}
+.theory{background:var(--Blt);border-left:4px solid var(--B);border-radius:0 7px 7px 0;padding:10px 14px;margin-bottom:10px;font-size:.83rem;color:#0d2a52;line-height:1.7}
+.theory-lbl{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--B);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.earth-box{background:var(--Plt);border-left:4px solid var(--Pmd);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:var(--Pdk);margin-bottom:12px;line-height:1.65}
+.info-box{background:var(--Blt);border-left:4px solid var(--B);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:#0d2a52;margin-bottom:12px;line-height:1.65}
+.warn-box{background:var(--Alt);border-left:4px solid var(--A);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:#3a2800;margin-bottom:12px;line-height:1.65}
+.succ-box{background:var(--Glt);border-left:4px solid var(--G);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:#1a3a1a;margin:8px 0}
+.err-box{background:var(--Rlt);border-left:4px solid var(--R);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:#6a1010;margin:8px 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.fi{display:flex;gap:6px;align-items:center}.fi input{flex:1}
+.ut{font-size:.76rem;color:var(--muted);white-space:nowrap;font-family:var(--mono)}
+input[type=number],input[type=text],select{padding:7px 10px;border:1.5px solid var(--brd);border-radius:7px;font-family:var(--sans);font-size:.86rem;background:#f8fdf8;color:var(--text);outline:none;transition:border-color .18s;width:100%}
+input:focus,select:focus{border-color:var(--P);box-shadow:0 0 0 3px rgba(46,125,50,.1);background:#fff}
+input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-family:var(--mono)}
+.ans-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(200,230,201,.3)}
+.ans-row:last-child{border-bottom:none}
+.ans-label{flex:1;font-size:.84rem;line-height:1.5}
+.ans-inp{width:110px!important;padding:6px 9px;border:2px solid var(--brd);border-radius:7px;font-family:var(--mono);font-size:.88rem;text-align:right;background:#f8fdf8;flex-shrink:0;transition:border-color .18s}
+.ans-inp:focus{border-color:var(--P);box-shadow:0 0 0 3px rgba(46,125,50,.1);background:#fff}
+.ans-inp.ok{border-color:var(--G)!important;background:var(--Glt)!important}
+.ans-inp.no{border-color:var(--R)!important;background:var(--Rlt)!important}
+.ans-unit{font-family:var(--mono);font-size:.76rem;color:var(--muted);width:52px;flex-shrink:0}
+.chip{font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:10px;min-width:28px;text-align:center;flex-shrink:0}
+.chip.ok{background:var(--Glt);color:var(--Gdk)}.chip.no{background:var(--Rlt);color:var(--R)}
+.fml-box{background:#f5fdf5;border:1px solid var(--brd);border-radius:8px;padding:10px 14px;margin:8px 0;font-family:var(--mono);font-size:.82rem;line-height:1.95}
+.ftitle{font-family:var(--sans);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:4px}
+.frow{color:var(--Pdk)}.frow em{color:var(--B);font-style:normal;font-weight:700}
+.tbl{width:100%;border-collapse:collapse;font-size:.8rem;margin:8px 0}
+.tbl th{background:var(--Pdk);color:rgba(255,255,255,.85);padding:.4rem .6rem;font-size:.67rem;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.4px}
+.tbl th.L{text-align:left;padding-left:.75rem}
+.tbl td{padding:.35rem .5rem;border-bottom:1px solid rgba(200,230,201,.35);text-align:center;vertical-align:middle}
+.tbl td.L{text-align:left;padding-left:.75rem;font-weight:600}
+.tbl td.sym{font-family:var(--mono);color:var(--B);font-weight:600}
+.mcq-wrap{margin:10px 0}.mcq-q{font-size:.86rem;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.5}
+.mcq-opts{display:grid;gap:7px}.g2c{grid-template-columns:1fr 1fr}
+.mcq-opt{border:2px solid var(--brd);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:.82rem;display:flex;align-items:center;gap:8px;transition:all .15s;background:#f8fdf8;line-height:1.4}
+.mcq-opt:hover{border-color:var(--Pmd);background:var(--Plt)}
+.mcq-opt.ok{border-color:var(--G)!important;background:var(--Glt)!important}
+.mcq-opt.no{border-color:var(--R)!important;background:var(--Rlt)!important}
+.mkey{width:22px;height:22px;border-radius:50%;background:var(--P);color:#fff;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono)}
+.sec-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--brd)}
+.divider{border:none;border-top:1px solid var(--brd);margin:12px 0}
+.btn{border:none;cursor:pointer;font-family:var(--sans);font-weight:700;border-radius:7px;transition:all .18s;display:inline-flex;align-items:center;gap:5px;font-size:.85rem;padding:9px 18px}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}.btn:active{transform:translateY(0)}
+.btn-p{background:var(--P);color:#fff}.btn-a{background:var(--A);color:#fff}
+.btn-g{background:var(--G);color:#fff}.btn-B{background:var(--B);color:#fff}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--brd);padding:8px 15px}
+.btn-ghost:hover{background:var(--Plt)}
+.btn-sm{padding:5px 11px!important;font-size:.75rem!important}
+.schema{background:#f5fdf5;border:1px solid var(--brd);border-radius:8px;padding:10px;margin:10px 0;display:flex;justify-content:center;align-items:center}
+.schema-cap{text-align:center;font-size:.74rem;font-weight:700;color:var(--muted);margin-top:4px;font-family:var(--sans)}
+.sticky-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);border-top:1px solid var(--brd);padding:9px 20px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(8px);z-index:50}
+.toast{position:fixed;bottom:65px;left:50%;transform:translateX(-50%) translateY(16px);background:#333;color:#fff;padding:8px 20px;border-radius:20px;font-size:.82rem;font-weight:600;opacity:0;transition:all .28s;pointer-events:none;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.conc{background:#f5fdf5;border:1px solid var(--brd);border-radius:8px;padding:13px 15px;margin-top:12px}
+.conc h4{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px}
+textarea.conc-inp{width:100%;height:90px;resize:vertical;padding:8px 10px;border:1.5px solid var(--brd);border-radius:7px;font-family:var(--sans);font-size:.84rem;outline:none;background:#fff}
+textarea.conc-inp:focus{border-color:var(--P)}
+/* So sánh với móng đơn badge */
+.diff-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,143,0,.15);border:1px solid rgba(255,143,0,.4);border-radius:8px;padding:3px 9px;font-size:.67rem;font-weight:700;color:#E65100;margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <a href="module02_bang_nen.html" class="back-btn"><i class="ti ti-arrow-left"></i> B·02</a>
+    <div class="hdr-title">
+      <h1>Phần 2 · Module 03 – Chiều cao & Cốt thép Móng Băng</h1>
+      <p>Kiểm tra cắt 1 phương (phá hoại nghiêng) · Tính cốt thép phương b · Đồ án Nền Móng – TS. Phạm Việt Anh</p>
+    </div>
+    <div class="pb" id="hdr-prog">0 / 0</div>
+  </div>
+</header>
+
+<div class="tabs-bar"><div class="tabs-in">
+  <button class="tab on" onclick="goto('s-vatlieu')"><span class="tn">3.1</span> Vật liệu & h sơ bộ</button>
+  <button class="tab" onclick="goto('s-cat')"><span class="tn">3.2</span> Kiểm tra cắt</button>
+  <button class="tab" onclick="goto('s-cotthep')"><span class="tn">3.3</span> Cốt thép</button>
+  <button class="tab" onclick="goto('s-ketluan')"><span class="tn">3.4</span> Kết luận</button>
+</div></div>
+
+<main>
+<div class="prog-wrap">
+  <div class="prog-top"><span>Tiến độ Module B03</span><span id="prog-text">0 / 0</span></div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<!-- ══════════════════ 3.1 VẬT LIỆU & CHIỀU CAO SƠ BỘ ══════════════════ -->
+<div class="card" id="s-vatlieu">
+  <div class="card-hd"><i class="ti ti-layers-subtract"></i>
+    <div><h2>3.1 · Vật Liệu & Chọn Chiều Cao Móng Băng Sơ Bộ</h2>
+    <p>Mác bê tông, mác thép · Chiều cao làm việc h₀ = h – a</p></div>
+    <span class="cbadge">Bước 1</span>
+  </div>
+  <div class="card-body">
+    <div class="earth-box"><i class="ti ti-bulb" style="font-size:13px;vertical-align:-2px"></i>
+      Số liệu b đáy băng và tải trọng tải từ Module B·01 và B·02. Kiểm tra lại và chọn vật liệu, chiều cao sơ bộ.
+    </div>
+
+    <div class="sec-lbl"><i class="ti ti-building" style="font-size:14px"></i> A. Số liệu kích thước và tải trọng</div>
+    <div class="warn-box">
+      <div class="diff-badge"><i class="ti ti-alert-triangle" style="font-size:11px"></i> Khác móng đơn</div><br>
+      Móng băng: tải trọng phân bố đường <b>N₀<sup>tt</sup> (kN/m)</b>, tính trên 1m dài.<br>
+      Kiểm tra kết cấu dùng tải <b>tính toán (tt)</b>. Áp lực đáy: p₀ = N₀<sup>tt</sup>/b (kPa).
+    </div>
+    <div class="g4" style="margin-bottom:12px">
+      <div class="fg"><div class="fl">b — bề rộng đáy băng</div><div class="fi"><input type="number" id="b_b3" placeholder="1.5" step="0.05" oninput="updH0B()"><span class="ut">m</span></div></div>
+      <div class="fg"><div class="fl">h<sub>m</sub> — chiều sâu đặt móng</div><div class="fi"><input type="number" id="hm_b3" placeholder="1.8"><span class="ut">m</span></div></div>
+      <div class="fg"><div class="fl">b<sub>t</sub> — bề rộng tường/dầm (mm)</div><div class="fi"><input type="number" id="bt_b3" placeholder="300" oninput="updH0B()"><span class="ut">mm</span></div></div>
+      <div class="fg"><div class="fl">h<sub>t</sub> — chiều cao dầm (mm)</div><div class="fi"><input type="number" id="ht_b3" placeholder="600"><span class="ut">mm</span></div></div>
+    </div>
+    <div class="g3" style="margin-bottom:12px">
+      <div class="fg"><div class="fl">N₀<sup>tt</sup> (kN/m)</div><div class="fi"><input type="number" id="N0tt_b3" placeholder="350"><span class="ut">kN/m</span></div></div>
+      <div class="fg"><div class="fl">M₀<sup>tt</sup> (kNm/m)</div><div class="fi"><input type="number" id="M0tt_b3" placeholder="0"><span class="ut">kNm/m</span></div></div>
+      <div class="fg"><div class="fl">Q₀<sup>tt</sup> (kN/m)</div><div class="fi"><input type="number" id="Q0tt_b3" placeholder="0"><span class="ut">kN/m</span></div></div>
+    </div>
+
+    <div class="sec-lbl"><i class="ti ti-building-arch" style="font-size:14px"></i> B. Vật liệu móng</div>
+    <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Yêu cầu vật liệu</div>
+      Bê tông tối thiểu <b>B20</b> — thép chịu lực dùng <b>AIII (CB400-V)</b> hoặc <b>AII (CB300-T)</b>. Lớp bảo vệ a ≥ 35mm (móng tiếp xúc đất).
+    </div>
+    <div class="g3" style="margin-bottom:10px">
+      <div class="fg"><div class="fl">Mác bê tông</div>
+        <select id="mac-bt" onchange="updVL()">
+          <option value="B20">B20 — R_b=11.5 MPa, R_bt=0.90 MPa</option>
+          <option value="B25" selected>B25 — R_b=14.5 MPa, R_bt=1.05 MPa</option>
+          <option value="B30">B30 — R_b=17.0 MPa, R_bt=1.20 MPa</option>
+        </select>
+      </div>
+      <div class="fg"><div class="fl">Loại thép chịu lực</div>
+        <select id="mac-thep" onchange="updVL()">
+          <option value="AII">AII (CB300-T) — R_s=280 MPa</option>
+          <option value="AIII" selected>AIII (CB400-V) — R_s=365 MPa</option>
+        </select>
+      </div>
+      <div class="fg"><div class="fl">Lớp bảo vệ a (mm)</div>
+        <input type="number" id="abv" value="40" step="5" oninput="updH0B()">
+      </div>
+    </div>
+    <div class="g3" style="margin-bottom:10px">
+      <div class="fg"><div class="fl">R<sub>bt</sub> (MPa)</div><input type="number" id="Rbt" readonly></div>
+      <div class="fg"><div class="fl">R<sub>s</sub> (MPa)</div><input type="number" id="Rs" readonly></div>
+      <div class="fg"><div class="fl">Hệ số điều kiện làm việc γ<sub>b2</sub></div><input type="number" id="gb2" value="0.9" step="0.05"></div>
+    </div>
+
+    <div class="sec-lbl"><i class="ti ti-ruler-measure" style="font-size:14px"></i> C. Chọn chiều cao móng sơ bộ</div>
+    <div class="info-box">
+      <b>Gợi ý chọn h sơ bộ:</b> h ≈ b/3 đến b/4. Với móng băng thường h = 0.3 – 0.6m. Sau khi kiểm tra cắt ở mục 3.2, điều chỉnh nếu cần.
+    </div>
+    <div class="g3">
+      <div class="fg"><div class="fl">Chiều cao móng h (m)</div><input type="number" id="h_mob" placeholder="VD: 0.45" step="0.05" oninput="updH0B()"></div>
+      <div class="fg"><div class="fl">Chiều cao làm việc h₀ = h – a/1000</div><input type="number" id="h0" readonly></div>
+      <div class="fg">
+        <div class="fl">Kiểm tra h₀ sơ bộ</div>
+        <div id="h0-check" style="padding:7px 10px;border-radius:7px;font-size:.8rem;border:1.5px solid var(--brd);background:#f8fdf8">Nhập h để xem</div>
+      </div>
+    </div>
+    <div class="mcq-wrap" style="margin-top:12px">
+      <div class="mcq-q">📌 Chiều cao h₀ sơ bộ theo điều kiện nào?</div>
+      <div class="mcq-opts g2c">
+        <div class="mcq-opt" id="mco-h0-0" onclick="pickMCQ('h0',0,0)"><span class="mkey">A</span><span>h₀ ≥ b/3 — đảm bảo cứng (móng băng dày hơn)</span></div>
+        <div class="mcq-opt" id="mco-h0-1" onclick="pickMCQ('h0',1,0)"><span class="mkey">B</span><span>h₀ ≥ N₀<sup>tt</sup>/(R<sub>bt</sub>·1) — điều kiện cắt sơ bộ</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ 3.2 KIỂM TRA CẮT 1 PHƯƠNG ══════════════════ -->
+<div class="card" id="s-cat">
+  <div class="card-hd" style="background:#1B5E20"><i class="ti ti-cut"></i>
+    <div><h2>3.2 · Kiểm Tra Cắt 1 Phương (Phá Hoại Tiết Diện Nghiêng)</h2>
+    <p>Móng băng chỉ kiểm tra phá hoại 1 phương — theo phương ngang b · Không có 2 phương như móng đơn</p></div>
+    <span class="cbadge">Kiểm tra cắt</span>
+  </div>
+  <div class="card-body">
+
+    <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Lý thuyết kiểm tra cắt 1 phương — Móng băng</div>
+      <div class="diff-badge"><i class="ti ti-alert-triangle" style="font-size:11px"></i> Khác hoàn toàn móng đơn</div><br>
+      Móng băng dài vô tận → <b>chỉ kiểm tra phá hoại theo 1 phương</b> (phương ngang b, tiết diện thẳng đứng nghiêng 45°).<br>
+      <b>Lực cắt Q<sub>0</sub></b> tại mép tường/dầm (tiết diện ngàm 1-1): diện tích phần móng nhô ra × áp lực nền.<br>
+      <b>Khả năng chống cắt Q<sub>CĐ</sub></b> = γ<sub>b2</sub>·R<sub>bt</sub>·1·h₀ (tính trên 1m dài băng).
+    </div>
+
+    <!-- Sơ đồ tổng quan -->
+    <div class="schema">
+      <svg viewBox="0 0 560 260" width="560" height="260" style="max-width:100%">
+        <defs>
+          <marker id="arrQ" markerWidth="6" markerHeight="6" refX="3" refY="0" orient="auto"><path d="M0,6 L6,6 L3,0Z" fill="#C62828"/></marker>
+          <marker id="arrB" markerWidth="6" markerHeight="6" refX="3" refY="6" orient="auto"><path d="M0,0 L6,0 L3,6Z" fill="#1565C0"/></marker>
+          <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(46,125,50,.3)" stroke-width="1.5"/>
+          </pattern>
+        </defs>
+        <!-- Đất nền -->
+        <rect x="0" y="160" width="560" height="100" fill="rgba(46,125,50,.1)"/>
+        <!-- Móng băng (mặt cắt ngang) -->
+        <rect x="120" y="160" width="320" height="60" fill="#8D6E63" stroke="#5D4037" stroke-width="1.5" rx="2"/>
+        <!-- Cốt thép -->
+        <line x1="125" y1="212" x2="435" y2="212" stroke="#FF8F00" stroke-width="2.5"/>
+        <!-- Lớp bảo vệ dim -->
+        <line x1="436" y1="220" x2="436" y2="212" stroke="#FF8F00" stroke-width="1" stroke-dasharray="2,1"/>
+        <text x="440" y="218" font-size="7.5" fill="#FF8F00" font-family="Plus Jakarta Sans">a</text>
+        <!-- Tường/dầm -->
+        <rect x="230" y="30" width="100" height="130" fill="rgba(46,125,50,.35)" stroke="rgba(46,125,50,.7)" stroke-width="1.5" rx="2"/>
+        <text x="280" y="97" text-anchor="middle" font-size="9" fill="rgba(27,94,32,.9)" font-weight="700" font-family="Plus Jakarta Sans">TƯỜNG</text>
+        <text x="280" y="109" text-anchor="middle" font-size="8.5" fill="rgba(27,94,32,.8)" font-family="Plus Jakarta Sans">b_t</text>
+        <!-- Tiết diện ngàm 1-1 (mép trái tường) -->
+        <line x1="230" y1="20" x2="230" y2="225" stroke="#1565C0" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="220" y="17" font-size="9" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">1</text>
+        <text x="220" y="232" font-size="9" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">1</text>
+        <!-- Tiết diện ngàm 1-1 phải tường -->
+        <line x1="330" y1="20" x2="330" y2="225" stroke="#2E7D32" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="333" y="17" font-size="9" fill="#2E7D32" font-weight="700" font-family="Plus Jakarta Sans">1'</text>
+        <text x="333" y="232" font-size="9" fill="#2E7D32" font-weight="700" font-family="Plus Jakarta Sans">1'</text>
+        <!-- Mặt phá hoại nghiêng 45° bên trái -->
+        <line x1="230" y1="160" x2="190" y2="220" stroke="#C62828" stroke-width="2" stroke-dasharray="3,2"/>
+        <!-- Mặt phá hoại nghiêng 45° bên phải -->
+        <line x1="330" y1="160" x2="370" y2="220" stroke="#C62828" stroke-width="2" stroke-dasharray="3,2"/>
+        <!-- Label góc 45° -->
+        <text x="198" y="192" font-size="8" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">45°</text>
+        <text x="345" y="192" font-size="8" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">45°</text>
+        <!-- Áp lực nền phân bố đều (đơn giản, móng băng thường đối xứng) -->
+        <rect x="120" y="230" width="320" height="12" fill="rgba(198,40,40,.15)"/>
+        <line x1="120" y1="220" x2="440" y2="220" stroke="#C62828" stroke-width="1"/>
+        <!-- Mũi tên áp lực nền -->
+        <line x1="145" y1="242" x2="145" y2="222" stroke="#C62828" stroke-width="1.5" marker-end="url(#arrQ)"/>
+        <line x1="190" y1="242" x2="190" y2="222" stroke="#C62828" stroke-width="1.5" marker-end="url(#arrQ)"/>
+        <line x1="370" y1="242" x2="370" y2="222" stroke="#C62828" stroke-width="1.5" marker-end="url(#arrQ)"/>
+        <line x1="415" y1="242" x2="415" y2="222" stroke="#C62828" stroke-width="1.5" marker-end="url(#arrQ)"/>
+        <text x="280" y="255" text-anchor="middle" font-size="8.5" fill="#C62828" font-weight="700" font-family="Plus Jakarta Sans">p₀ = N₀ᵗᵗ/b (phân bố đều trên 1m dài)</text>
+        <!-- b dimension -->
+        <line x1="120" y1="150" x2="440" y2="150" stroke="#1565C0" stroke-width="1.2"/>
+        <line x1="120" y1="146" x2="120" y2="154" stroke="#1565C0" stroke-width="1"/>
+        <line x1="440" y1="146" x2="440" y2="154" stroke="#1565C0" stroke-width="1"/>
+        <text x="280" y="147" text-anchor="middle" font-size="8.5" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">b</text>
+        <!-- c_ng dimension bên trái: từ mép tường đến mép móng -->
+        <line x1="120" y1="135" x2="230" y2="135" stroke="#FF8F00" stroke-width="1.2"/>
+        <line x1="120" y1="131" x2="120" y2="139" stroke="#FF8F00" stroke-width="1"/>
+        <line x1="230" y1="131" x2="230" y2="139" stroke="#FF8F00" stroke-width="1"/>
+        <text x="175" y="132" text-anchor="middle" font-size="8" fill="#E65100" font-weight="700" font-family="Plus Jakarta Sans">c_ng = ½(b – b_t)</text>
+        <!-- h0 dimension -->
+        <line x1="450" y1="160" x2="450" y2="220" stroke="#795548" stroke-width="1.2"/>
+        <line x1="446" y1="160" x2="454" y2="160" stroke="#795548" stroke-width="1"/>
+        <line x1="446" y1="220" x2="454" y2="220" stroke="#795548" stroke-width="1"/>
+        <text x="455" y="194" font-size="8" fill="#795548" font-weight="700" font-family="Plus Jakarta Sans">h</text>
+        <!-- Vùng console nhô ra (gạch sọc) -->
+        <rect x="120" y="160" width="110" height="60" fill="url(#hatch)"/>
+        <rect x="330" y="160" width="110" height="60" fill="url(#hatch)"/>
+        <!-- Label vùng ngàm -->
+        <text x="175" y="193" text-anchor="middle" font-size="7.5" fill="var(--P)" font-weight="700" font-family="Plus Jakarta Sans">Console</text>
+        <text x="175" y="204" text-anchor="middle" font-size="7" fill="var(--P)" font-family="Plus Jakarta Sans">Q₀ tác dụng</text>
+        <!-- N0 arrow -->
+        <line x1="280" y1="8" x2="280" y2="25" stroke="rgba(46,125,50,.9)" stroke-width="2" marker-end="url(#arrQ)"/>
+        <text x="283" y="16" font-size="8.5" fill="rgba(46,125,50,.9)" font-weight="700" font-family="Plus Jakarta Sans">N₀ᵗᵗ (kN/m)</text>
+      </svg>
+    </div>
+    <div class="schema-cap">Sơ đồ kiểm tra cắt 1 phương — Móng băng · Mặt phá hoại nghiêng 45° tại mép tường</div>
+
+    <!-- Bảng so sánh với móng đơn -->
+    <table class="tbl" style="margin-bottom:14px">
+      <thead><tr><th class="L">Đặc điểm</th><th>Móng đơn</th><th>Móng băng</th></tr></thead>
+      <tbody>
+        <tr><td class="L">Kiểm tra phá hoại</td><td>2 phương (l và b) — nén thủng</td><td class="sym">1 phương (theo b)</td></tr>
+        <tr><td class="L">Lực đâm thủng Q₀</td><td>Lực cắt trong tháp thủng hình chóp</td><td class="sym">Q₀ = p₀ × c_ng × 1m</td></tr>
+        <tr><td class="L">Lực chống phá hoại</td><td>P_cđt = R_bt × b_tb × h₀</td><td class="sym">Q_CĐ = γ_b2·R_bt·1·h₀</td></tr>
+        <tr><td class="L">Điều kiện</td><td>P_đt ≤ P_cđt</td><td class="sym">Q₀ ≤ Q_CĐ</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Bước A: Tính áp lực tại đáy móng -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">A</div><h3>Tính áp lực đáy móng (tải tính toán)</h3>
+        <span class="stag" style="background:var(--Glt);color:var(--Gdk)">Tính toán</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="earth-box"><i class="ti ti-pencil" style="font-size:12px;vertical-align:-2px"></i>
+          Dùng tải <b>tính toán (tt)</b> để kiểm tra kết cấu. Ký hiệu p₀ để phân biệt với p<sub>tx</sub> ở TTGH1 nền.<br>
+          Với móng băng: <b>p₀ = N₀<sup>tt</sup>/b</b> (không cộng trọng lượng bản thân khi kiểm tra cắt kết cấu).
+        </div>
+        <div class="fml-box">
+          <div class="ftitle">Áp lực tại đáy móng băng — tải tính toán</div>
+          <div class="frow"><em>M₀<sup>tt</sup><sub>đáy</sub></em> = M₀<sup>tt</sup> + Q₀<sup>tt</sup>·h<sub>m</sub> &nbsp;(momen tại đáy móng)</div>
+          <div class="frow"><em>p₀</em> = N₀<sup>tt</sup>/b &nbsp;(áp lực trung bình đáy băng — bỏ qua trọng lượng bản thân)</div>
+          <div class="frow"><em>p₀<sub>max</sub></em> = p₀ + 6·M₀<sup>tt</sup><sub>đáy</sub>/b² &nbsp;·&nbsp; <em>p₀<sub>min</sub></em> = p₀ – 6·M₀<sup>tt</sup><sub>đáy</sub>/b²</div>
+          <div style="font-size:.76rem;color:var(--muted);margin-top:4px">
+            Nếu M₀=Q₀=0 (thường gặp): p₀<sub>max</sub> = p₀<sub>min</sub> = p₀ (phân bố đều)
+          </div>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 M₀<sup>tt</sup><sub>đáy</sub> = M₀<sup>tt</sup> + Q₀<sup>tt</sup>·h<sub>m</sub></span>
+          <input class="ans-inp" id="Mtday_b" type="number" step="0.1" placeholder="?" oninput="chkCat('Mtday_b')"><span class="ans-unit">kNm/m</span><span class="chip" id="ck-Mtday_b"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 p₀ = N₀<sup>tt</sup>/b &nbsp;(áp lực trung bình — không cộng γ̄·h<sub>m</sub>)</span>
+          <input class="ans-inp" id="p0_b" type="number" step="0.1" placeholder="?" oninput="chkCat('p0_b')"><span class="ans-unit">kPa</span><span class="chip" id="ck-p0_b"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 p₀<sub>max</sub> = p₀ + 6·M₀<sup>tt</sup><sub>đáy</sub>/b²</span>
+          <input class="ans-inp" id="p0max_b" type="number" step="0.1" placeholder="?" oninput="chkCat('p0max_b')"><span class="ans-unit">kPa</span><span class="chip" id="ck-p0max_b"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 p₀<sub>min</sub> = p₀ – 6·M₀<sup>tt</sup><sub>đáy</sub>/b²</span>
+          <input class="ans-inp" id="p0min_b" type="number" step="0.1" placeholder="?" oninput="chkCat('p0min_b')"><span class="ans-unit">kPa</span><span class="chip" id="ck-p0min_b"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bước B: Tính lực cắt Q₀ -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">B</div><h3>Tính lực cắt Q₀ tại tiết diện ngàm (mép tường)</h3>
+        <span class="stag" style="background:var(--Glt);color:var(--Gdk)">Tính tay · Điền số</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="theory" style="font-size:.8rem"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Lực cắt Q₀ tại mép tường</div>
+          Lực cắt Q₀ = tổng phản lực nền tác dụng lên phần móng console nhô ra ngoài mép tường (tính trên 1m dài băng).<br>
+          <b>c<sub>ng</sub></b> = ½·(b – b<sub>t</sub>/1000) = cánh tay đòn console (m)<br>
+          <b>Áp lực tại tiết diện ngàm</b>: nội suy tuyến tính trong biểu đồ hình thang.<br>
+          <b>Q₀</b> = p<sub>0,tb-console</sub> × c<sub>ng</sub> × 1m (trên 1m dài)
+        </div>
+        <div class="fml-box">
+          <div class="ftitle">Công thức tính Q₀ (lực cắt tại tiết diện ngàm 1-1)</div>
+          <div class="frow"><em>c<sub>ng</sub></em> = ½·(b – b<sub>t</sub>/1000) &nbsp;— cánh tay đòn console</div>
+          <div class="frow"><em>p<sub>ng</sub></em> = p₀<sub>min</sub> + (p₀<sub>max</sub>–p₀<sub>min</sub>)·(b–c<sub>ng</sub>)/b &nbsp;— áp lực tại mép tường</div>
+          <div class="frow"><em>p<sub>0,tb</sub></em> = ½·(p₀<sub>max</sub> + p<sub>ng</sub>) &nbsp;— áp lực TB trên console</div>
+          <div class="frow"><em>Q₀</em> = p<sub>0,tb</sub> × c<sub>ng</sub> × 1 &nbsp;(kN/m)</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:3px">Khi không có momen: p₀max=p₀min=p₀ → Q₀ = p₀ × c_ng × 1</div>
+        </div>
+        <div id="cat-hint" class="fml-box" style="margin-top:8px">Nhập đủ số liệu và bấm "Tính gợi ý" để xem công thức thay số.</div>
+        <div class="ans-row">
+          <span class="ans-label">📌 c<sub>ng</sub> = ½·(b – b<sub>t</sub>/1000) — cánh tay đòn console</span>
+          <input class="ans-inp" id="cng_b" type="number" step="0.001" placeholder="?" oninput="chkCat('cng_b')"><span class="ans-unit">m</span><span class="chip" id="ck-cng_b"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 p<sub>ng</sub> — áp lực nền tại tiết diện ngàm (mép tường)</span>
+          <input class="ans-inp" id="png_b" type="number" step="0.1" placeholder="?" oninput="chkCat('png_b')"><span class="ans-unit">kPa</span><span class="chip" id="ck-png_b"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 p<sub>0,tb</sub> = ½·(p₀<sub>max</sub> + p<sub>ng</sub>)</span>
+          <input class="ans-inp" id="p0tb_b" type="number" step="0.1" placeholder="?" oninput="chkCat('p0tb_b')"><span class="ans-unit">kPa</span><span class="chip" id="ck-p0tb_b"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 <b>Q₀</b> = p<sub>0,tb</sub> × c<sub>ng</sub> × 1m &nbsp;(lực cắt tại ngàm, tính trên 1m dài)</span>
+          <input class="ans-inp" id="Q0_b" type="number" step="0.1" placeholder="?" oninput="chkCat('Q0_b')"><span class="ans-unit">kN/m</span><span class="chip" id="ck-Q0_b"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bước C: Tính khả năng chống cắt -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">C</div><h3>Tính khả năng chống cắt Q<sub>CĐ</sub> & Kết luận</h3>
+        <span class="stag" style="background:var(--Glt);color:var(--Gdk)">Tính toán · Kiểm tra</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="fml-box">
+          <div class="ftitle">Công thức khả năng chống cắt (TCVN 5574:2018)</div>
+          <div class="frow"><em>Q<sub>CĐ</sub></em> = γ<sub>b2</sub> × R<sub>bt</sub> × b<sub>0</sub> × h₀</div>
+          <div class="frow">Trong đó: b<sub>0</sub> = 1m (tính trên 1m dài băng), γ<sub>b2</sub> = 0.9</div>
+          <div class="frow"><em>Điều kiện:</em> Q₀ ≤ Q<sub>CĐ</sub></div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:3px">
+            R<sub>bt</sub> đơn vị MPa = kN/mm² → R<sub>bt</sub> (kPa) = R<sub>bt</sub> (MPa) × 1000
+          </div>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 <b>Q<sub>CĐ</sub></b> = γ<sub>b2</sub> × R<sub>bt</sub> (kPa) × 1m × h₀</span>
+          <input class="ans-inp" id="QCD_b" type="number" step="0.1" placeholder="?" oninput="chkCat('QCD_b'); chkCatResult()"><span class="ans-unit">kN/m</span><span class="chip" id="ck-QCD_b"></span>
+        </div>
+
+        <div class="mcq-wrap" style="margin-top:10px">
+          <div class="mcq-q" id="mcq-cat-q">📌 So sánh điều kiện chống cắt — điền Q₀ và Q<sub>CĐ</sub> ở trên trước</div>
+          <div class="mcq-opts g2c">
+            <div class="mcq-opt" id="mco-cat-0" onclick="pickMCQ('cat',0,ANS_CAT_OK?0:1)"><span class="mkey">A</span><span>✓ Thỏa mãn — Q₀ ≤ Q<sub>CĐ</sub></span></div>
+            <div class="mcq-opt" id="mco-cat-1" onclick="pickMCQ('cat',1,ANS_CAT_OK?0:1)"><span class="mkey">B</span><span>✗ Không thỏa mãn — tăng h hoặc tăng mác BT</span></div>
+          </div>
+        </div>
+        <div id="cat-result" style="margin-top:8px"></div>
+
+        <div class="warn-box" style="margin-top:10px"><i class="ti ti-alert-triangle" style="font-size:12px;vertical-align:-2px"></i>
+          <b>Điều kiện kinh tế:</b> (Q<sub>CĐ</sub> – Q₀) / Q<sub>CĐ</sub> ≤ 20%. Nếu &gt;20% → quá an toàn, giảm h (bước 5cm).
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 Kinh tế: (Q<sub>CĐ</sub> – Q₀) / Q<sub>CĐ</sub> × 100%</span>
+          <input class="ans-inp" id="cat-econ" type="number" step="0.1" placeholder="?" oninput="chkCat('cat-econ')"><span class="ans-unit">%</span><span class="chip" id="ck-cat-econ"></span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-a" onclick="calcCat()"><i class="ti ti-calculator"></i> Tính kiểm tra cắt (gợi ý đáp số)</button>
+  </div>
+</div>
+
+<!-- ══════════════════ 3.3 CỐT THÉP ══════════════════ -->
+<div class="card" id="s-cotthep">
+  <div class="card-hd"><i class="ti ti-git-merge"></i>
+    <div><h2>3.3 · Tính Cốt Thép Móng Băng — Sơ Đồ Ngàm</h2>
+    <p>Tính trên 1m dài băng · Thép chịu lực phương b (ngang) · Thép phân bố phương dọc</p></div>
+    <span class="cbadge">Cốt thép</span>
+  </div>
+  <div class="card-body">
+
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">LT</div><h3>Lý thuyết tính cốt thép móng băng</h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">Đọc trước</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="diff-badge" style="margin-bottom:8px"><i class="ti ti-alert-triangle" style="font-size:11px"></i> Khác móng đơn — Chỉ 1 phương chịu lực</div>
+        <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Sơ đồ ngàm — Tính trên 1m dài băng</div>
+          Móng băng tính cốt thép theo sơ đồ ngàm tương tự móng đơn, nhưng <b>chỉ tính 1 phương (phương b)</b>.<br>
+          <b>Thép chịu lực</b>: bố trí theo phương ngang (phương b), ngàm tại mép tường/dầm.<br>
+          <b>Thép phân bố</b>: bố trí theo phương dọc, lấy 15–20% thép chịu lực.
+        </div>
+
+        <!-- Sơ đồ ngàm cốt thép -->
+        <div class="schema">
+          <svg viewBox="0 0 500 160" width="490" height="155" style="max-width:100%">
+            <defs>
+              <marker id="arr6" markerWidth="6" markerHeight="6" refX="3" refY="6" orient="auto"><path d="M0,0 L6,0 L3,6Z" fill="#C62828"/></marker>
+            </defs>
+            <!-- Đáy móng -->
+            <rect x="20" y="50" width="460" height="50" fill="#8D6E63" rx="2"/>
+            <!-- Cốt thép chịu lực (phương b) -->
+            <line x1="25" y1="92" x2="475" y2="92" stroke="#FF8F00" stroke-width="3"/>
+            <text x="478" y="96" font-size="8.5" fill="#FF8F00" font-weight="700" font-family="Plus Jakarta Sans">Fa (chịu lực)</text>
+            <!-- Cốt thép phân bố (phương dọc, vẽ ngang ra) -->
+            <line x1="120" y1="50" x2="120" y2="100" stroke="rgba(255,143,0,.4)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <line x1="200" y1="50" x2="200" y2="100" stroke="rgba(255,143,0,.4)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <line x1="300" y1="50" x2="300" y2="100" stroke="rgba(255,143,0,.4)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <line x1="380" y1="50" x2="380" y2="100" stroke="rgba(255,143,0,.4)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <!-- Tường -->
+            <rect x="190" y="0" width="120" height="50" fill="rgba(46,125,50,.3)" stroke="rgba(46,125,50,.6)" stroke-width="1.2" rx="1"/>
+            <text x="250" y="27" text-anchor="middle" font-size="8" fill="rgba(27,94,32,.9)" font-weight="700" font-family="Plus Jakarta Sans">TƯỜNG b_t</text>
+            <!-- Tiết diện ngàm 1-1 -->
+            <line x1="190" y1="0" x2="190" y2="105" stroke="#1565C0" stroke-width="2" stroke-dasharray="4,3"/>
+            <text x="178" y="5" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">1</text>
+            <text x="178" y="112" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">1</text>
+            <!-- Tiết diện 1-1 phải -->
+            <line x1="310" y1="0" x2="310" y2="105" stroke="#1565C0" stroke-width="2" stroke-dasharray="4,3"/>
+            <text x="313" y="5" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">1</text>
+            <text x="313" y="112" font-size="8" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">1</text>
+            <!-- Áp lực nền phân bố đều -->
+            <rect x="20" y="108" width="460" height="10" fill="rgba(198,40,40,.18)"/>
+            <line x1="20" y1="100" x2="480" y2="100" stroke="#C62828" stroke-width="1"/>
+            <line x1="60" y1="118" x2="60" y2="102" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr6)"/>
+            <line x1="130" y1="118" x2="130" y2="102" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr6)"/>
+            <line x1="370" y1="118" x2="370" y2="102" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr6)"/>
+            <line x1="440" y1="118" x2="440" y2="102" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr6)"/>
+            <text x="250" y="138" text-anchor="middle" font-size="8" fill="#C62828" font-family="Plus Jakarta Sans">p₀ (phân bố đều, đơn giản hóa)</text>
+            <!-- c_ng label -->
+            <line x1="20" y1="128" x2="190" y2="128" stroke="#E65100" stroke-width="1.2"/>
+            <line x1="20" y1="124" x2="20" y2="132" stroke="#E65100" stroke-width="1"/>
+            <line x1="190" y1="124" x2="190" y2="132" stroke="#E65100" stroke-width="1"/>
+            <text x="105" y="145" text-anchor="middle" font-size="8" fill="#E65100" font-weight="700" font-family="Plus Jakarta Sans">c_ng = ½(b – b_t)</text>
+            <!-- M_ng label -->
+            <text x="105" y="38" text-anchor="middle" font-size="8.5" fill="#1565C0" font-weight="700" font-family="Plus Jakarta Sans">M_ng tại 1-1</text>
+            <!-- phân bố label -->
+            <text x="340" y="70" font-size="7" fill="rgba(255,143,0,.7)" font-family="Plus Jakarta Sans">Thép phân bố</text>
+            <text x="340" y="80" font-size="7" fill="rgba(255,143,0,.7)" font-family="Plus Jakarta Sans">(phương dọc)</text>
+          </svg>
+        </div>
+        <div class="schema-cap">Sơ đồ ngàm — Cốt thép móng băng (tính trên 1m dài) · Thép chịu lực phương ngang b</div>
+
+        <div class="fml-box" style="margin-top:10px">
+          <div class="ftitle">Công thức tính cốt thép — Móng băng (tính trên 1m dài)</div>
+          <div class="frow"><em>c<sub>ng</sub></em> = ½·(b – b<sub>t</sub>/1000) &nbsp;— cánh tay đòn ngàm</div>
+          <div class="frow"><em>p<sub>ng</sub></em> = p₀<sub>min</sub> + (p₀<sub>max</sub>–p₀<sub>min</sub>)·(b–c<sub>ng</sub>)/b</div>
+          <div class="frow"><em>M<sub>ng</sub></em> = (p₀<sub>max</sub> + p<sub>ng</sub>)/2 × c<sub>ng</sub> × 1m × c<sub>ng</sub>/2 &nbsp;(kN·m/m)</div>
+          <div class="frow"><em>F<sub>a</sub></em> = M<sub>ng</sub> / (0.9 × R<sub>s</sub> (kPa) × h₀) &nbsp;→ cm²/m</div>
+          <div class="frow"><em>Thép phân bố</em>: F<sub>a,pd</sub> = 15–20% × F<sub>a</sub> &nbsp;(không nhỏ hơn Ø8 a250)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tính cốt thép -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb" style="background:#1565C0">B</div><h3>Tính M<sub>ng</sub> và F<sub>a</sub> — Thép chịu lực phương b (ngang)</h3>
+        <span class="stag" style="background:var(--Glt);color:var(--Gdk)">Tính tay · Điền số</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="earth-box"><i class="ti ti-pencil" style="font-size:12px;vertical-align:-2px"></i>
+          Dùng p₀<sub>max</sub>, p₀<sub>min</sub> đã tính ở Bước 3.2. Tất cả tính trên 1m dài băng.
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 c<sub>ng</sub> = ½·(b – b<sub>t</sub>/1000) — cánh tay đòn ngàm</span>
+          <input class="ans-inp" id="cng_ct" type="number" step="0.001" placeholder="?" oninput="chkCT('cng_ct')"><span class="ans-unit">m</span><span class="chip" id="ck-cng_ct"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 p<sub>ng</sub> — áp lực tại tiết diện ngàm 1-1</span>
+          <input class="ans-inp" id="png_ct" type="number" step="0.1" placeholder="?" oninput="chkCT('png_ct')"><span class="ans-unit">kPa</span><span class="chip" id="ck-png_ct"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 M<sub>ng</sub> = (p₀<sub>max</sub>+p<sub>ng</sub>)/2 × c<sub>ng</sub> × 1 × c<sub>ng</sub>/2</span>
+          <input class="ans-inp" id="Mng_b3" type="number" step="0.1" placeholder="?" oninput="chkCT('Mng_b3')"><span class="ans-unit">kNm/m</span><span class="chip" id="ck-Mng_b3"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 <b>F<sub>a</sub></b> = M<sub>ng</sub> / (0.9 × R<sub>s</sub> × h₀) &nbsp;—&nbsp; thép chịu lực phương ngang</span>
+          <input class="ans-inp" id="Fa_b" type="number" step="0.01" placeholder="?" oninput="chkCT('Fa_b')"><span class="ans-unit">cm²/m</span><span class="chip" id="ck-Fa_b"></span>
+        </div>
+
+        <div class="divider"></div>
+        <p style="font-size:.82rem;font-weight:600;margin-bottom:8px;color:var(--muted)">Chọn và bố trí thép chịu lực phương ngang (trên 1m dài băng):</p>
+        <div class="g4">
+          <div class="fg"><div class="fl">Đường kính d (mm)</div>
+            <select id="d-ngang" onchange="calcThepNgang()">
+              <option value="10">Ø10</option><option value="12">Ø12</option><option value="14">Ø14</option>
+              <option value="16" selected>Ø16</option><option value="18">Ø18</option><option value="20">Ø20</option><option value="22">Ø22</option>
+            </select>
+          </div>
+          <div class="fg"><div class="fl">a<sub>s</sub> = πd²/4 (cm²)</div><input type="number" id="as-ngang" readonly></div>
+          <div class="fg"><div class="fl">Số thanh n (trên 1m)</div><input type="number" id="n-ngang" readonly></div>
+          <div class="fg"><div class="fl">Khoảng cách a (mm)</div><input type="number" id="sp-ngang" readonly></div>
+        </div>
+        <div id="thep-ngang-result" style="margin-top:8px"></div>
+        <div class="mcq-wrap">
+          <div class="mcq-q">📌 Khoảng cách bố trí thép chịu lực phương ngang?</div>
+          <div class="mcq-opts g2c">
+            <div class="mcq-opt" id="mco-spn-0" onclick="pickMCQ('spn',0,0)"><span class="mkey">A</span><span>Hợp lý — 100mm ≤ a ≤ 200mm (móng băng)</span></div>
+            <div class="mcq-opt" id="mco-spn-1" onclick="pickMCQ('spn',1,0)"><span class="mkey">B</span><span>Không hợp lý — thay đổi d</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thép phân bố dọc -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb" style="background:#FF8F00">D</div><h3>Thép phân bố phương dọc băng</h3>
+        <span class="stag" style="background:var(--Alt);color:var(--Adk)">Cấu tạo</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="theory" style="font-size:.8rem">
+          Thép phân bố dọc đặt vuông góc với thép chịu lực, bên trên thép chịu lực.<br>
+          <b>Diện tích:</b> F<sub>a,pd</sub> = 15–20% × F<sub>a</sub> ≥ 0.1% × b × h₀ (nhưng ít nhất Ø8 a250)<br>
+          <b>Khoảng cách:</b> không quá 300mm.
+        </div>
+        <div class="g3" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">F<sub>a,pd</sub> yêu cầu = 15–20%×F<sub>a</sub></div><input type="number" id="Fapd_req" readonly style="font-family:var(--mono)"></div>
+          <div class="fg"><div class="fl">Chọn d phân bố (mm)</div>
+            <select id="d-doc" onchange="calcThepDoc()">
+              <option value="8">Ø8</option><option value="10" selected>Ø10</option><option value="12">Ø12</option><option value="14">Ø14</option>
+            </select>
+          </div>
+          <div class="fg"><div class="fl">Khoảng cách a<sub>pd</sub> (mm)</div><input type="number" id="sp-doc" value="200" oninput="calcThepDoc()"></div>
+        </div>
+        <div id="thep-doc-result" style="margin-top:8px"></div>
+        <div class="mcq-wrap">
+          <div class="mcq-q">📌 Thép phân bố dọc có đủ yêu cầu tối thiểu?</div>
+          <div class="mcq-opts g2c">
+            <div class="mcq-opt" id="mco-spd-0" onclick="pickMCQ('spd',0,0)"><span class="mkey">A</span><span>Đủ — F<sub>a,pd</sub> ≥ 15%×F<sub>a</sub> và a ≤ 300mm</span></div>
+            <div class="mcq-opt" id="mco-spd-1" onclick="pickMCQ('spd',1,0)"><span class="mkey">B</span><span>Chưa đủ — tăng d hoặc giảm khoảng cách</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-a" onclick="calcCotThepB()"><i class="ti ti-calculator"></i> Tính gợi ý toàn bộ cốt thép</button>
+  </div>
+</div>
+
+<!-- ══════════════════ 3.4 KẾT LUẬN ══════════════════ -->
+<div class="card" id="s-ketluan">
+  <div class="card-hd"><i class="ti ti-check-list"></i>
+    <div><h2>3.4 · Kết Luận Chiều Cao & Cốt Thép Móng Băng</h2>
+    <p>Tổng kết thiết kế kết cấu · Ghi số liệu chọn · Chuẩn bị Module B·04</p></div>
+    <span class="cbadge">Kết luận</span>
+  </div>
+  <div class="card-body">
+    <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Tiêu chí chiều cao h hợp lý</div>
+      Chiều cao h hợp lý khi: ✔ Thỏa mãn cắt 1 phương (Q₀ ≤ Q<sub>CĐ</sub>) &nbsp;
+      ✔ Điều kiện kinh tế (Q<sub>CĐ</sub>–Q₀)/Q<sub>CĐ</sub> ≤ 20% &nbsp;
+      ✔ Cốt thép bố trí được với khoảng cách 100–200mm.
+    </div>
+
+    <div class="g3" style="margin-bottom:12px">
+      <div class="fg"><div class="fl">Chiều cao móng h chọn (m)</div><div class="fi"><input type="number" id="h-final" placeholder="?" oninput="updFinal()"><span class="ut">m</span></div></div>
+      <div class="fg"><div class="fl">Chiều cao làm việc h₀</div><div class="fi"><input type="number" id="h0-final" readonly><span class="ut">m</span></div></div>
+      <div class="fg"><div class="fl">Lớp bảo vệ a</div><div class="fi"><input type="number" id="a-final" readonly><span class="ut">mm</span></div></div>
+    </div>
+
+    <div id="final-verdict" style="margin-bottom:12px"></div>
+
+    <div class="conc">
+      <h4>Kết luận thép chịu lực phương ngang (phương b)</h4>
+      <div class="ans-row">
+        <span class="ans-label">Thép chịu lực — cách đặt</span>
+        <input type="text" id="kl-thep-ngang" placeholder="VD: Ø16 a=150mm (6.7 thanh/m)" style="flex:1;max-width:320px">
+      </div>
+      <h4 style="margin-top:10px">Kết luận thép phân bố phương dọc</h4>
+      <div class="ans-row">
+        <span class="ans-label">Thép phân bố dọc — cách đặt</span>
+        <input type="text" id="kl-thep-doc" placeholder="VD: Ø10 a=200mm" style="flex:1;max-width:320px">
+      </div>
+    </div>
+
+    <div class="conc" style="margin-top:10px">
+      <h4>Kết luận tổng hợp (tự viết)</h4>
+      <textarea class="conc-inp" id="kl-tong" placeholder="VD: Chiều cao móng băng h=0.45m, h₀=0.41m thỏa mãn điều kiện cắt 1 phương (Q₀=85kN/m ≤ QCĐ=98kN/m) và kinh tế 13% ≤ 20%. Thép chịu lực phương ngang: Ø16 a=150mm (F_a=13.4cm²/m). Thép phân bố dọc: Ø10 a=200mm. Khoảng cách trong phạm vi cho phép."></textarea>
+    </div>
+
+    <div class="info-box" style="margin-top:12px"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px"></i>
+      <b>Bước tiếp theo:</b> Hoàn thành bản vẽ và kết luận Phần 2 (Module B·04) — Vẽ mặt cắt ngang móng băng với đầy đủ thép và kích thước.
+    </div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-g" onclick="saveB03()"><i class="ti ti-device-floppy"></i> Lưu tiến độ</button>
+      <button class="btn btn-B" onclick="goB04()"><i class="ti ti-arrow-right"></i> B·04 Bản vẽ & Kết luận →</button>
+      <a href="module02_bang_nen.html" class="btn btn-ghost"><i class="ti ti-arrow-left"></i> Về B·02</a>
+    </div>
+  </div>
+</div>
+</main>
+
+<div class="sticky-nav">
+  <div style="font-size:.76rem;font-weight:600;color:var(--muted)">P2·M03 · Chiều cao & Cốt thép Móng Băng</div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <span id="nav-prog" style="font-size:.76rem;font-weight:700;color:var(--muted)">0/0</span>
+    <button class="btn btn-p btn-sm" onclick="scrollNext()"><i class="ti ti-chevron-down"></i> Câu tiếp</button>
+  </div>
+</div>
+
+<script>
+/* ══ CONSTANTS ══ */
+var VL={B20:{Rb:11500,Rbt:900},B25:{Rb:14500,Rbt:1050},B30:{Rb:17000,Rbt:1200}};
+var THEP={AII:{Rs:280000},AIII:{Rs:365000}};
+var ANS={};
+var ANS_CAT_OK=false;
+var CACHE={};
+
+/* ══ UTILS ══ */
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
+function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function goto(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function togS(hd){var b=hd.nextElementSibling;b.classList.toggle('hide');var c=hd.querySelector('.chev');if(c)c.style.transform=b.classList.contains('hide')?'rotate(-90deg)':'';}
+function pickMCQ(grp,ci,correct){
+  document.querySelectorAll('[id^="mco-'+grp+'-"]').forEach(function(el){el.classList.remove('ok','no');});
+  var ok=(ci===correct);
+  var el=document.getElementById('mco-'+grp+'-'+ci);if(el)el.classList.add(ok?'ok':'no');
+  if(!ok){var ce=document.getElementById('mco-'+grp+'-'+correct);if(ce)ce.classList.add('ok');}
+  ANS['mcq-'+grp]=ok;updateProg();
+  toast(ok?'✓ Đúng!':'✗ Xem đáp án xanh');
+}
+function chkFill(id,ans,tol){
+  var inp=document.getElementById(id),chip=document.getElementById('ck-'+id);if(!inp)return false;
+  var v=parseFloat(inp.value);
+  if(isNaN(v)){inp.classList.remove('ok','no');if(chip){chip.className='chip';chip.textContent='';}ANS[id]=null;updateProg();return false;}
+  var ok=Math.abs(v-ans)<=tol;
+  inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);
+  if(chip){chip.className='chip '+(ok?'ok':'no');chip.textContent=ok?'✓':'✗';}
+  ANS[id]=ok;updateProg();return ok;
+}
+function updateProg(){
+  var total=0,done=0;Object.keys(ANS).forEach(function(k){if(ANS[k]!==null&&ANS[k]!==undefined){total++;if(ANS[k]===true)done++;}});
+  var pct=total?Math.round(done/total*100):0;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-text').textContent=done+' / '+total+' ('+pct+'%)';
+  document.getElementById('nav-prog').textContent=done+'/'+total;
+  document.getElementById('hdr-prog').textContent=done+' / '+total;
+}
+function scrollNext(){
+  var all=document.querySelectorAll('.ans-inp:not(.ok)');
+  for(var i=0;i<all.length;i++){if(all[i].offsetParent){all[i].scrollIntoView({behavior:'smooth',block:'center'});all[i].focus();break;}}
+}
+
+/* ══ VẬT LIỆU ══ */
+function updVL(){
+  var bt=sv('mac-bt')||'B25',thep=sv('mac-thep')||'AIII';
+  var Rbt_MPa=(VL[bt]||VL.B25).Rbt/1000;
+  var Rs_MPa=(THEP[thep]||THEP.AIII).Rs/1000;
+  document.getElementById('Rbt').value=Rbt_MPa.toFixed(3);
+  document.getElementById('Rs').value=Rs_MPa.toFixed(0);
+  updH0B();
+}
+function updH0B(){
+  var h=gv('h_mob'),a=gv('abv')/1000;
+  var h0=h-a;
+  if(h0>0){
+    document.getElementById('h0').value=h0.toFixed(3);
+    var chk=document.getElementById('h0-check');
+    var b=gv('b_b3');
+    var h0min=b>0?b/3:0;
+    var ok=h0>=h0min;
+    chk.style.background=ok?'var(--Glt)':'var(--Rlt)';
+    chk.style.borderColor=ok?'var(--G)':'var(--R)';
+    chk.style.color=ok?'var(--Gdk)':'var(--R)';
+    chk.textContent=ok?'✓ h₀='+h0.toFixed(3)+'m ≥ b/3='+h0min.toFixed(3)+'m — OK':'✗ h₀='+h0.toFixed(3)+'m < b/3='+h0min.toFixed(3)+'m — tăng h';
+  } else {
+    document.getElementById('h0').value='';
+    document.getElementById('h0-check').textContent='Nhập h để xem';
+    document.getElementById('h0-check').style.background='';
+  }
+}
+
+/* ══ KIỂM TRA CẮT — TÍNH GỢI Ý ══ */
+function calcCat(){
+  var b=gv('b_b3'),hm=gv('hm_b3'),bt=gv('bt_b3')/1000;
+  var N=gv('N0tt_b3'),M=gv('M0tt_b3'),Q=gv('Q0tt_b3');
+  var h0=gv('h0');
+  var macbt=sv('mac-bt')||'B25';
+  var gb2=gv('gb2')||0.9;
+  var Rbt_kPa=(VL[macbt]||VL.B25).Rbt; // kPa
+  if(!b||!h0||!N){alert('Nhập đủ b, h₀, N₀ᵗᵗ trước!');return;}
+
+  var Mtday=M+Q*hm;
+  var p0=N/b;
+  var dM=Mtday>0?6*Mtday/(b*b):0;
+  var p0max=p0+dM,p0min=p0-dM;
+
+  var cng=0.5*(b-bt);
+  var png=p0min+(p0max-p0min)*(b-cng)/b;
+  var p0tb_con=0.5*(p0max+png);
+  var Q0=p0tb_con*cng*1; // kN/m
+
+  var QCD=gb2*Rbt_kPa*1*h0; // kN/m
+  var econ=(QCD-Q0)/QCD*100;
+
+  CACHE={Mtday,p0,p0max,p0min,cng,png,p0tb_con,Q0,QCD,econ};
+  ANS_CAT_OK=Q0<QCD;
+
+  // Show hint
+  var hint=document.getElementById('cat-hint');
+  hint.innerHTML='<div class="ftitle">Công thức thay số</div>'+
+    '<div class="frow">M₀ᵗᵗ<sub>đáy</sub> = '+M+' + '+Q+'×'+hm+' = <em>'+Mtday.toFixed(2)+' kNm/m</em></div>'+
+    '<div class="frow">p₀ = '+N+'/'+b+' = <em>'+p0.toFixed(2)+' kPa</em></div>'+
+    '<div class="frow">p₀<sub>max</sub> = '+p0.toFixed(2)+' + 6×'+Mtday.toFixed(2)+'/'+b+'² = <em>'+p0max.toFixed(2)+' kPa</em></div>'+
+    '<div class="frow">c<sub>ng</sub> = ½×('+b+' – '+bt+') = <em>'+cng.toFixed(3)+' m</em></div>'+
+    '<div class="frow">p<sub>ng</sub> = '+p0min.toFixed(2)+' + ('+p0max.toFixed(2)+'-'+p0min.toFixed(2)+')'+'×('+b+'-'+cng.toFixed(3)+')/'+b+' = <em>'+png.toFixed(2)+' kPa</em></div>'+
+    '<div class="frow">p<sub>0,tb</sub> = ½×('+p0max.toFixed(2)+' + '+png.toFixed(2)+') = <em>'+p0tb_con.toFixed(2)+' kPa</em></div>'+
+    '<div class="frow">Q₀ = '+p0tb_con.toFixed(2)+'×'+cng.toFixed(3)+'×1 = <em>'+Q0.toFixed(2)+' kN/m</em></div>'+
+    '<div class="frow">Q<sub>CĐ</sub> = '+gb2+'×'+Rbt_kPa+'×1×'+h0+' = <em>'+QCD.toFixed(2)+' kN/m</em></div>';
+
+  // Update MCQ question
+  document.getElementById('mcq-cat-q').textContent='📌 So sánh: Q₀='+Q0.toFixed(1)+'kN/m vs Q_CĐ='+QCD.toFixed(1)+'kN/m';
+
+  var box=document.getElementById('cat-result');
+  box.className=ANS_CAT_OK?'succ-box':'err-box';
+  box.innerHTML='<b>'+(ANS_CAT_OK?'✓ Thỏa mãn cắt 1 phương':'✗ Không thỏa — tăng h hoặc mác BT')+':</b> Q₀='+Q0.toFixed(1)+'kN/m '+(ANS_CAT_OK?'≤':'>')+' Q<sub>CĐ</sub>='+QCD.toFixed(1)+'kN/m &nbsp;·&nbsp; Kinh tế: '+econ.toFixed(1)+'%'+(econ<=20?' ≤ 20% ✓':' > 20% → giảm h');
+
+  toast('Gợi ý: Q₀='+Q0.toFixed(1)+'kN/m · QCĐ='+QCD.toFixed(1)+'kN/m · '+(ANS_CAT_OK?'ĐẠT':'CẦN TĂNG h'));
+}
+function chkCat(id){
+  var c=CACHE;
+  var map={
+    'Mtday_b':[c.Mtday||0,1],
+    'p0_b':[c.p0||0,0.5],'p0max_b':[c.p0max||0,0.5],'p0min_b':[c.p0min||0,0.5],
+    'cng_b':[c.cng||0,0.005],'png_b':[c.png||0,0.5],'p0tb_b':[c.p0tb_con||0,0.5],
+    'Q0_b':[c.Q0||0,0.5],'QCD_b':[c.QCD||0,0.5],'cat-econ':[c.econ||0,0.5]
+  };
+  var pair=map[id];if(!pair||!pair[0])return;
+  chkFill(id,pair[0],pair[1]);
+}
+function chkCatResult(){
+  if(CACHE.Q0&&CACHE.QCD){ANS_CAT_OK=CACHE.Q0<CACHE.QCD;}
+}
+
+/* ══ CỐT THÉP ══ */
+function calcCotThepB(){
+  var b=gv('b_b3'),bt=gv('bt_b3')/1000;
+  var h0=gv('h0');
+  var macthep=sv('mac-thep')||'AIII';
+  var Rs=(THEP[macthep]||THEP.AIII).Rs; // Pa
+  var c=CACHE;
+  if(!c.p0){calcCat();}
+  var p0max=c.p0max||gv('p0max_b');
+  var p0min=c.p0min||gv('p0min_b');
+  var cng=0.5*(b-bt);
+  var png=c.png||(p0min+(p0max-p0min)*(b-cng)/b);
+  var Mng=(p0max+png)/2*cng*1*cng/2; // kNm/m
+  var Fa=Mng/(0.9*Rs/1000/1000*h0)*10000; // cm²/m (Rs Pa → kPa → kN/m²)
+  CACHE.cng_ct=cng;CACHE.png_ct=png;CACHE.Mng_b3=Mng;CACHE.Fa_b=Fa;
+  toast('Gợi ý: Fa='+Fa.toFixed(2)+'cm²/m');
+  // Update Fapd
+  var Fapd=0.175*Fa;
+  var fpEl=document.getElementById('Fapd_req');if(fpEl)fpEl.value=Fapd.toFixed(2);
+  calcThepNgang();calcThepDoc();
+}
+function chkCT(id){
+  var c=CACHE;
+  var map={'cng_ct':[c.cng_ct||0,0.005],'png_ct':[c.png_ct||0,0.5],'Mng_b3':[c.Mng_b3||0,0.5],'Fa_b':[c.Fa_b||0,0.2]};
+  var pair=map[id];if(!pair||!pair[0])return;
+  chkFill(id,pair[0],pair[1]);
+}
+function calcThepNgang(){
+  var d=parseFloat(sv('d-ngang')||'16');
+  var as=Math.PI*d*d/4/100; // cm²
+  document.getElementById('as-ngang').value=as.toFixed(3);
+  var Fa=gv('Fa_b')||CACHE.Fa_b||0;if(!Fa)return;
+  var n=Math.ceil(Fa/as);
+  document.getElementById('n-ngang').value=n;
+  var sp=Math.round(1000/n); // mm (trên 1m rộng → n thanh → khoảng cách = 1000/n)
+  document.getElementById('sp-ngang').value=sp;
+  var ok=sp>=100&&sp<=200;
+  var box=document.getElementById('thep-ngang-result');
+  if(box){
+    box.className=ok?'succ-box':'err-box';
+    box.innerHTML='<b>'+(ok?'✓ Hợp lý':'✗ Điều chỉnh')+':</b> Ø'+d+' a='+sp+'mm / Fa<sub>tt</sub>='+(n*as).toFixed(2)+'cm²/m. '+(ok?'Khoảng cách trong 100–200mm.':'Khoảng cách ngoài 100–200mm — thay đổi d.');
+  }
+  var co=ok?0:1;
+  document.querySelectorAll('[id^="mco-spn-"]').forEach(function(e){e.classList.remove('ok','no');});
+  var el=document.getElementById('mco-spn-'+co);if(el)el.classList.add(ok?'ok':'no');
+  ANS['mcq-spn']=ok;updateProg();
+}
+function calcThepDoc(){
+  var d=parseFloat(sv('d-doc')||'10');
+  var sp=gv('sp-doc')||200;
+  var as=Math.PI*d*d/4/100; // cm²
+  var n=Math.round(1000/sp);
+  var Fapd=n*as; // cm²/m
+  var Fapd_req=gv('Fapd_req')||0;
+  var ok=(Fapd>=Fapd_req||Fapd_req===0)&&sp<=300&&d>=8;
+  var box=document.getElementById('thep-doc-result');
+  if(box){
+    box.className=ok?'succ-box':'err-box';
+    box.innerHTML='<b>'+(ok?'✓ Đủ yêu cầu':'✗ Chưa đủ')+':</b> Ø'+d+' a='+sp+'mm / Fa<sub>pd</sub>='+(Fapd).toFixed(2)+'cm²/m'+(Fapd_req?' (yêu cầu ≥'+Fapd_req.toFixed(2)+'cm²/m)':'')+'. '+(ok?'Đảm bảo phân bố tốt.':'Tăng d hoặc giảm khoảng cách.');
+  }
+  document.querySelectorAll('[id^="mco-spd-"]').forEach(function(e){e.classList.remove('ok','no');});
+  var el=document.getElementById('mco-spd-'+(ok?0:1));if(el)el.classList.add(ok?'ok':'no');
+  ANS['mcq-spd']=ok;updateProg();
+}
+
+/* ══ KẾT LUẬN ══ */
+function updFinal(){
+  var h=gv('h-final'),a=gv('abv');
+  if(h){document.getElementById('h0-final').value=(h-a/1000).toFixed(3);}
+  document.getElementById('a-final').value=a;
+  var v=document.getElementById('final-verdict');
+  var Q0=CACHE.Q0||gv('Q0_b'),QCD=CACHE.QCD||gv('QCD_b');
+  if(!Q0||!QCD){v.innerHTML='';return;}
+  var ok=Q0<QCD;var econ=(QCD-Q0)/QCD*100;var eok=econ<=20;
+  v.className=(ok&&eok)?'succ-box':'err-box';
+  v.innerHTML='<b>'+(ok&&eok?'✓ Chiều cao móng hợp lý':'✗ Cần điều chỉnh')+':</b> Q₀='+Q0.toFixed(1)+'kN/m '+(ok?'≤':'>=')+' Q<sub>CĐ</sub>='+QCD.toFixed(1)+'kN/m · Kinh tế: '+econ.toFixed(1)+'%'+(eok?' ≤ 20% ✓':' > 20% → giảm h');
+}
+
+/* ══ SAVE / NAVIGATE ══ */
+function saveB03(){
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong_p2')||'{}');
+    d.m03_saved=true;d.m03_time=new Date().toLocaleString('vi-VN');
+    d.m03_h=gv('h-final')||gv('h_mob');
+    d.m03_h0=gv('h0-final')||gv('h0');
+    d.m03_abv=gv('abv');
+    d.m03_mac_bt=sv('mac-bt');
+    d.m03_mac_thep=sv('mac-thep');
+    d.m03_Fa=CACHE.Fa_b||gv('Fa_b');
+    d.m03_Q0=CACHE.Q0||gv('Q0_b');
+    d.m03_QCD=CACHE.QCD||gv('QCD_b');
+    d.m03_thep_ngang=document.getElementById('kl-thep-ngang').value;
+    d.m03_thep_doc=document.getElementById('kl-thep-doc').value;
+    localStorage.setItem('nmong_p2',JSON.stringify(d));
+    toast('✓ Đã lưu tiến độ P2·M03');
+  }catch(e){toast('Lỗi lưu: '+e);}
+}
+function goB04(){saveB03();window.location.href='module04_bang_tong_hop.html';}
+
+/* ══ INIT ══ */
+window.onload=function(){
+  updVL();
+  // Load từ localStorage
+  try{
+    var d2=JSON.parse(localStorage.getItem('nmong_p2')||'{}');
+    if(d2.N0tt_b){document.getElementById('N0tt_b3').value=d2.N0tt_b;}
+    if(d2.M0tt_b){document.getElementById('M0tt_b3').value=d2.M0tt_b;}
+    if(d2.Q0tt_b){document.getElementById('Q0tt_b3').value=d2.Q0tt_b;}
+    if(d2.hm_b){document.getElementById('hm_b3').value=d2.hm_b;}
+    if(d2.b_bang){document.getElementById('b_b3').value=d2.b_bang;}
+    if(d2.bt_b){document.getElementById('bt_b3').value=d2.bt_b;}
+    if(d2.ht_b){document.getElementById('ht_b3').value=d2.ht_b;}
+    if(d2.m03_h){document.getElementById('h_mob').value=d2.m03_h;updH0B();}
+    if(d2.m03_mac_bt){document.getElementById('mac-bt').value=d2.m03_mac_bt;updVL();}
+    if(d2.m03_mac_thep){document.getElementById('mac-thep').value=d2.m03_mac_thep;updVL();}
+    if(d2.m03_saved)toast('✓ Đã tải dữ liệu đã lưu');
+    else toast('✓ Đã tải số liệu từ P2·M01–M02');
+  }catch(e){}
+  // Init ANS
+  ['Mtday_b','p0_b','p0max_b','p0min_b','cng_b','png_b','p0tb_b','Q0_b','QCD_b','cat-econ',
+   'cng_ct','png_ct','Mng_b3','Fa_b',
+   'mcq-h0','mcq-cat','mcq-spn','mcq-spd'].forEach(function(k){ANS[k]=null;});
+  updateProg();
+};
+</script>
+</body>
+</html>
