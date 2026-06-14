@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P2·M04 – Kết luận & Bản vẽ Móng Băng</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --P:#2E7D32;--Pdk:#1B5E20;--Plt:#E8F5E9;--Pmd:#388E3C;
+  --A:#FF8F00;--Alt:#FFF8E1;--Adk:#E65100;
+  --G:#2E7D32;--Glt:#E8F5E9;--Gdk:#1B5E20;
+  --R:#C62828;--Rlt:#FFEBEE;--B:#1565C0;--Blt:#E3F2FD;
+  --bg:#F1F8E9;--sur:#fff;--brd:#C8E6C9;--muted:#558B2F;--text:#1C0A00;
+  --sans:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:12px;--sh:0 2px 16px rgba(46,125,50,.1)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:var(--sans);color:var(--text);font-size:14px;line-height:1.6}
+.hdr{background:var(--Pdk);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(27,94,32,.4)}
+.hdr-in{max-width:1020px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:12px}
+.back-btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff;padding:5px 13px;border-radius:7px;font-size:.78rem;font-weight:600;font-family:var(--sans);display:flex;align-items:center;gap:5px;text-decoration:none}
+.back-btn:hover{background:rgba(255,255,255,.24)}
+.hdr-title{flex:1}.hdr-title h1{font-size:.95rem;font-weight:700}.hdr-title p{font-size:.7rem;opacity:.7;margin-top:1px}
+.tabs-bar{background:var(--Pdk)}.tabs-in{max-width:1020px;margin:0 auto;display:flex;gap:2px;padding:5px 14px;overflow-x:auto;scrollbar-width:none}
+.tab{padding:5px 14px;border-radius:7px;font-size:.76rem;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;border:none;background:transparent;font-family:var(--sans);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.tab:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.88)}.tab.on{background:var(--A);color:#fff}
+.tn{font-family:var(--mono);font-size:.6rem;background:rgba(255,255,255,.18);padding:1px 5px;border-radius:3px}
+main{max-width:1020px;margin:0 auto;padding:20px 16px 80px}
+.card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:18px;overflow:hidden}
+.card-hd{background:var(--P);color:#fff;padding:11px 18px;display:flex;align-items:center;gap:9px}
+.card-hd i{font-size:19px;opacity:.9}.card-hd h2{font-size:.9rem;font-weight:700}.card-hd p{font-size:.73rem;opacity:.72;margin-top:1px}
+.cbadge{margin-left:auto;font-family:var(--mono);font-size:.64rem;font-weight:700;padding:3px 9px;border-radius:5px;background:rgba(255,255,255,.18);letter-spacing:1px;text-transform:uppercase}
+.card-body{padding:16px 18px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.fi{display:flex;gap:6px;align-items:center}.fi input{flex:1}
+.ut{font-size:.76rem;color:var(--muted);white-space:nowrap;font-family:var(--mono)}
+input[type=number],input[type=text],select,textarea{padding:7px 10px;border:1.5px solid var(--brd);border-radius:7px;font-family:var(--sans);font-size:.86rem;background:#f8fdf8;color:var(--text);outline:none;transition:border-color .18s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--P);box-shadow:0 0 0 3px rgba(46,125,50,.1);background:#fff}
+input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-family:var(--mono)}
+.earth-box{background:var(--Plt);border-left:4px solid var(--Pmd);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:var(--Pdk);margin-bottom:12px;line-height:1.65}
+.info-box{background:var(--Blt);border-left:4px solid var(--B);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:#0d2a52;margin-bottom:12px;line-height:1.65}
+.succ-box{background:var(--Glt);border-left:4px solid var(--G);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:#1a3a1a;margin:8px 0}
+.tbl{width:100%;border-collapse:collapse;font-size:.82rem;margin:8px 0}
+.tbl th{background:var(--Pdk);color:rgba(255,255,255,.88);padding:.45rem .7rem;font-size:.68rem;font-weight:700;text-align:center;text-transform:uppercase}
+.tbl th.L{text-align:left;padding-left:.9rem}
+.tbl td{padding:.4rem .65rem;border-bottom:1px solid rgba(200,230,201,.35);vertical-align:middle}
+.tbl td.L{text-align:left;padding-left:.9rem;font-weight:600}
+.tbl td.sym{font-family:var(--mono);color:var(--B);font-weight:600;text-align:center}
+.tbl td.val{font-family:var(--mono);font-weight:600;color:var(--Pdk);text-align:center}
+.tbl tr.hi{background:var(--Glt)}
+.divider{border:none;border-top:1px solid var(--brd);margin:14px 0}
+.sec-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--brd)}
+.btn{border:none;cursor:pointer;font-family:var(--sans);font-weight:700;border-radius:7px;transition:all .18s;display:inline-flex;align-items:center;gap:5px;font-size:.85rem;padding:9px 18px}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}.btn:active{transform:translateY(0)}
+.btn-p{background:var(--P);color:#fff}.btn-a{background:var(--A);color:#fff}
+.btn-g{background:var(--G);color:#fff}.btn-B{background:var(--B);color:#fff}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--brd);padding:8px 15px}
+.btn-ghost:hover{background:var(--Plt)}
+.btn-sm{padding:5px 11px!important;font-size:.75rem!important}
+.drawing-wrap{background:#fff;border:1.5px solid var(--brd);border-radius:8px;overflow:hidden}
+.checklist{list-style:none;padding:0;margin:0}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(200,230,201,.35);font-size:.84rem}
+.checklist li:last-child{border-bottom:none}
+.checklist li input[type=checkbox]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer;accent-color:var(--G)}
+.checklist li.done{text-decoration:line-through;color:var(--muted)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:#333;color:#fff;padding:8px 20px;border-radius:20px;font-size:.82rem;font-weight:600;opacity:0;transition:all .28s;pointer-events:none;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* SUMMARY CARDS */
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.sum-card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);padding:13px;text-align:center;position:relative;overflow:hidden}
+.sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sum-card.c1::before{background:var(--P)}.sum-card.c2::before{background:var(--A)}
+.sum-card.c3::before{background:var(--G)}.sum-card.c4::before{background:var(--B)}
+.sv-val{font-size:1.35rem;font-weight:700;font-family:var(--mono);line-height:1.2;margin-top:4px;color:var(--Pdk)}
+.sv-lbl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-top:3px}
+.sv-unit{font-size:.7rem;color:#aaa}
+/* OK BADGE */
+.ok-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:8px;font-size:.72rem;font-weight:700}
+.ok-badge.ok{background:var(--Glt);color:var(--Gdk)}.ok-badge.no{background:var(--Rlt);color:var(--R)}
+/* DIM INPUT */
+.dim-inp{width:70px!important;padding:5px 7px;border:1.5px solid var(--brd);border-radius:6px;font-size:.82rem;font-family:var(--mono);text-align:center;background:#f8fdf8}
+.dim-inp:focus{border-color:var(--P);background:#fff;outline:none}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <a href="module03_bang_cot_thep.html" class="back-btn"><i class="ti ti-arrow-left"></i> B·03</a>
+    <div class="hdr-title">
+      <h1>Phần 2 · Module 04 – Kết Luận & Bản Vẽ Móng Băng</h1>
+      <p>Tổng kết thiết kế · Bản vẽ mặt cắt ngang + mặt bằng · Ghi chú kỹ thuật · Checklist hoàn thành Phần 2</p>
+    </div>
+  </div>
+</header>
+
+<div class="tabs-bar"><div class="tabs-in">
+  <button class="tab on" onclick="goto('s-tomtat')"><span class="tn">4.1</span> Tổng kết thiết kế</button>
+  <button class="tab" onclick="goto('s-banve')"><span class="tn">4.2</span> Bản vẽ móng băng</button>
+  <button class="tab" onclick="goto('s-ghichu')"><span class="tn">4.3</span> Ghi chú & Checklist</button>
+</div></div>
+
+<main>
+
+<!-- ══════════════════ 4.1 TỔNG KẾT ══════════════════ -->
+<div class="card" id="s-tomtat">
+  <div class="card-hd"><i class="ti ti-list-check"></i>
+    <div><h2>4.1 · Tổng Kết Thiết Kế Móng Băng</h2>
+    <p>Điền kết quả từ các module trước · Bảng tổng hợp để lập bản vẽ và kết luận đồ án</p></div>
+    <span class="cbadge">Kết luận</span>
+  </div>
+  <div class="card-body">
+    <div class="earth-box"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px"></i>
+      Điền kết quả thiết kế đã tính ở Module B·01 → B·03. Hệ thống tổng hợp và vẽ sơ đồ tự động.
+    </div>
+
+    <!-- STRIP KẾT QUẢ NHANH -->
+    <div class="sum-grid" id="sum-grid">
+      <div class="sum-card c1"><div class="sv-val" id="sv-b">–</div><div class="sv-lbl">Bề rộng đáy băng</div><div class="sv-unit">b (m)</div></div>
+      <div class="sum-card c2"><div class="sv-val" id="sv-h">–</div><div class="sv-lbl">Chiều cao móng</div><div class="sv-unit">h (m)</div></div>
+      <div class="sum-card c3"><div class="sv-val" id="sv-S">–</div><div class="sv-lbl">Độ lún S</div><div class="sv-unit">mm ≤ 80mm</div></div>
+      <div class="sum-card c4"><div class="sv-val" id="sv-thep">–</div><div class="sv-lbl">Thép chịu lực</div><div class="sv-unit">Phương ngang b</div></div>
+    </div>
+
+    <div class="g2">
+      <!-- CỘT TRÁI: KÍCH THƯỚC + KẾT CẤU -->
+      <div>
+        <div class="sec-lbl"><i class="ti ti-ruler-measure" style="font-size:13px"></i> Kích thước hình học</div>
+        <table class="tbl">
+          <thead><tr><th class="L">Thông số</th><th>Ký hiệu</th><th>Giá trị</th><th>ĐV</th></tr></thead>
+          <tbody>
+            <tr><td class="L">Bề rộng đáy băng</td><td class="sym">b</td><td><input class="dim-inp" type="number" id="r-b" step="0.05" oninput="updSummary()"></td><td class="sym">m</td></tr>
+            <tr><td class="L">Chiều sâu đặt móng</td><td class="sym">h<sub>m</sub></td><td><input class="dim-inp" type="number" id="r-hm" step="0.1" oninput="updSummary()"></td><td class="sym">m</td></tr>
+            <tr><td class="L">Chiều cao móng</td><td class="sym">h</td><td><input class="dim-inp" type="number" id="r-h" step="0.05" oninput="updSummary()"></td><td class="sym">m</td></tr>
+            <tr><td class="L">Chiều cao làm việc</td><td class="sym">h₀</td><td><input class="dim-inp" type="number" id="r-h0" step="0.005"></td><td class="sym">m</td></tr>
+            <tr><td class="L">Bề rộng tường/dầm</td><td class="sym">b<sub>t</sub></td><td><input class="dim-inp" type="number" id="r-bt" value="300"></td><td class="sym">mm</td></tr>
+            <tr><td class="L">Chiều cao dầm đỡ</td><td class="sym">h<sub>t</sub></td><td><input class="dim-inp" type="number" id="r-ht" value="600"></td><td class="sym">mm</td></tr>
+            <tr><td class="L">Lớp bảo vệ cốt thép</td><td class="sym">a</td><td><input class="dim-inp" type="number" id="r-a" value="40"></td><td class="sym">mm</td></tr>
+            <tr><td class="L">Lớp bê tông lót C8</td><td class="sym">h<sub>lót</sub></td><td><input class="dim-inp" type="number" id="r-hlot" value="100"></td><td class="sym">mm</td></tr>
+            <tr><td class="L">Mực nước ngầm MNN</td><td class="sym">h<sub>MNN</sub></td><td><input class="dim-inp" type="number" id="r-mnn" step="0.1"></td><td class="sym">m</td></tr>
+          </tbody>
+        </table>
+
+        <div class="sec-lbl" style="margin-top:10px"><i class="ti ti-building-arch" style="font-size:13px"></i> Vật liệu</div>
+        <table class="tbl">
+          <tbody>
+            <tr><td class="L">Mác bê tông</td><td colspan="3"><select id="r-macbt"><option>B20</option><option selected>B25</option><option>B30</option></select></td></tr>
+            <tr><td class="L">Loại thép chịu lực</td><td colspan="3"><select id="r-macthep"><option>AII (CB300-T)</option><option selected>AIII (CB400-V)</option></select></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CỘT PHẢI: KẾT QUẢ KIỂM TRA + THÉP -->
+      <div>
+        <div class="sec-lbl"><i class="ti ti-shield-check" style="font-size:13px"></i> Kết quả kiểm tra</div>
+        <table class="tbl">
+          <thead><tr><th class="L">Kiểm tra</th><th>Kết quả</th><th>[Cho phép]</th><th>OK?</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="L">p<sub>tx</sub> (TTGH1)</td>
+              <td><input class="dim-inp" type="number" id="r-ptx" oninput="updOK()"> kPa</td>
+              <td class="sym">[P]</td>
+              <td><input class="dim-inp" type="number" id="r-P" oninput="updOK()"> kPa</td>
+            </tr>
+            <tr>
+              <td class="L">p<sub>max</sub> (TTGH1)</td>
+              <td><input class="dim-inp" type="number" id="r-pmax" oninput="updOK()"> kPa</td>
+              <td class="sym">1.2[P]</td>
+              <td id="r-pmax-ok">–</td>
+            </tr>
+            <tr>
+              <td class="L">p<sub>min</sub> ≥ 0</td>
+              <td><input class="dim-inp" type="number" id="r-pmin" oninput="updOK()"> kPa</td>
+              <td class="sym">≥ 0</td>
+              <td id="r-pmin-ok">–</td>
+            </tr>
+            <tr>
+              <td class="L">Kinh tế TTGH1</td>
+              <td><input class="dim-inp" type="number" id="r-kte"> %</td>
+              <td class="sym">≤ 10%</td>
+              <td id="r-kte-ok">–</td>
+            </tr>
+            <tr>
+              <td class="L">Độ lún S (TTGH2)</td>
+              <td><input class="dim-inp" type="number" id="r-S" oninput="updSummary(); updOK()"> mm</td>
+              <td class="sym">[S]=80mm</td>
+              <td id="r-S-ok">–</td>
+            </tr>
+            <tr>
+              <td class="L">Kiểm tra lớp 2</td>
+              <td colspan="2"><select id="r-lop2-ok"><option value="">Chưa áp dụng</option><option value="ok">✓ Thỏa mãn</option><option value="no">✗ Không thỏa</option></select></td>
+              <td id="r-lop2-badge">–</td>
+            </tr>
+            <tr>
+              <td class="L">Cắt 1 phương Q₀</td>
+              <td><input class="dim-inp" type="number" id="r-Q0"> kN/m</td>
+              <td class="sym">Q<sub>CĐ</sub></td>
+              <td><input class="dim-inp" type="number" id="r-QCD"> kN/m</td>
+            </tr>
+            <tr>
+              <td class="L">Kinh tế cắt</td>
+              <td><input class="dim-inp" type="number" id="r-kte-cat"> %</td>
+              <td class="sym">≤ 20%</td>
+              <td id="r-cat-ok">–</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="sec-lbl" style="margin-top:10px"><i class="ti ti-git-merge" style="font-size:13px"></i> Cốt thép bố trí</div>
+        <table class="tbl">
+          <thead><tr><th>Loại thép</th><th>Đường kính</th><th>Khoảng cách</th><th>F<sub>a</sub></th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="sym">Chịu lực ngang (b)</td>
+              <td><input type="text" id="r-thep-ngang" placeholder="VD: Ø16" style="width:80px;padding:4px 6px;font-family:var(--mono);font-size:.82rem" oninput="updSummary()"></td>
+              <td><input class="dim-inp" type="number" id="r-sp-ngang" placeholder="150"> mm</td>
+              <td><input class="dim-inp" type="number" id="r-Fa-ngang"> cm²/m</td>
+            </tr>
+            <tr>
+              <td class="sym">Phân bố dọc</td>
+              <td><input type="text" id="r-thep-doc" placeholder="VD: Ø10" style="width:80px;padding:4px 6px;font-family:var(--mono);font-size:.82rem"></td>
+              <td><input class="dim-inp" type="number" id="r-sp-doc" placeholder="200"> mm</td>
+              <td class="sym">≥15%F<sub>a</sub></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <button class="btn btn-p" style="margin-top:12px" onclick="genSummary()"><i class="ti ti-refresh"></i> Cập nhật tổng hợp & vẽ</button>
+  </div>
+</div>
+
+<!-- ══════════════════ 4.2 BẢN VẼ ══════════════════ -->
+<div class="card" id="s-banve">
+  <div class="card-hd"><i class="ti ti-layout-2"></i>
+    <div><h2>4.2 · Bản Vẽ Móng Băng — Mặt Cắt Ngang & Mặt Bằng</h2>
+    <p>Sơ đồ kỹ thuật tự động · Mặt cắt ngang thể hiện b, h, hm, thép, BT lót · Tham chiếu khi vẽ tay</p></div>
+    <span class="cbadge">Bản vẽ</span>
+  </div>
+  <div class="card-body">
+    <div class="info-box"><i class="ti ti-pencil" style="font-size:13px;vertical-align:-2px"></i>
+      Bản vẽ tự động từ số liệu đã nhập. Dùng để <b>tham chiếu khi vẽ tay</b>. Yêu cầu đồ án: vẽ mặt cắt ngang (tỉ lệ 1:20 hoặc 1:25) + mặt bằng một đoạn băng + thép bố trí + khung tên đầy đủ.
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <button class="btn btn-a btn-sm" onclick="drawBang()"><i class="ti ti-refresh"></i> Vẽ lại</button>
+      <button class="btn btn-ghost btn-sm" onclick="window.print()"><i class="ti ti-printer"></i> In bản vẽ</button>
+    </div>
+
+    <!-- HAI BẢN VẼ SONG SONG -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+      <!-- Mặt cắt ngang (đặc trưng của móng băng) -->
+      <div>
+        <div style="font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;text-align:center">
+          Mặt cắt ngang 1-1 (Cắt vuông góc băng)
+        </div>
+        <div class="drawing-wrap">
+          <svg id="mc-svg" viewBox="0 0 360 340" width="100%" style="display:block;background:#fff"></svg>
+        </div>
+        <div style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:4px">Tỉ lệ minh hoạ · Thể hiện b, h, hm, thép, BT lót</div>
+      </div>
+
+      <!-- Mặt bằng một đoạn băng -->
+      <div>
+        <div style="font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;text-align:center">
+          Mặt bằng một đoạn móng băng (View từ trên)
+        </div>
+        <div class="drawing-wrap">
+          <svg id="mb-svg" viewBox="0 0 360 340" width="100%" style="display:block;background:#fff"></svg>
+        </div>
+        <div style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:4px">Tỉ lệ minh hoạ · Thể hiện b, thép ngang + dọc, tường</div>
+      </div>
+    </div>
+
+    <!-- BẢNG YÊU CẦU BẢN VẼ -->
+    <div class="sec-lbl" style="margin-top:16px"><i class="ti ti-notes" style="font-size:14px"></i> Yêu cầu bản vẽ đồ án Phần 2 — Móng băng</div>
+    <table class="tbl">
+      <thead><tr><th>STT</th><th class="L">Nội dung cần thể hiện trên bản vẽ</th><th>Tỉ lệ / Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">1</td><td class="L">Mặt cắt ngang móng băng (cắt vuông góc trục băng)</td><td>1:20 hoặc 1:25 · Thể hiện b, h, hm, h₀, BT lót</td></tr>
+        <tr><td class="sym">2</td><td class="L">Mặt bằng một đoạn băng (thể hiện cách bố trí thép)</td><td>1:20 · Cắt ngang qua đáy móng</td></tr>
+        <tr><td class="sym">3</td><td class="L">Thép chịu lực phương ngang — ký hiệu, d, khoảng cách</td><td>Thể hiện rõ trên cả hai bản vẽ</td></tr>
+        <tr><td class="sym">4</td><td class="L">Thép phân bố dọc — ký hiệu, d, khoảng cách</td><td>Bản vẽ mặt bằng + kích thước ngang</td></tr>
+        <tr><td class="sym">5</td><td class="L">Bề rộng tường/dầm b_t, khoảng nhô c_ng hai bên</td><td>Thể hiện trên mặt cắt ngang</td></tr>
+        <tr><td class="sym">6</td><td class="L">Mực nước ngầm MNN</td><td>Thể hiện trên mặt cắt, khoảng cách từ mặt đất</td></tr>
+        <tr><td class="sym">7</td><td class="L">Lớp bê tông lót C8 dày 100mm</td><td>Thể hiện dưới đáy móng trên mặt cắt</td></tr>
+        <tr><td class="sym">8</td><td class="L">Ghi chú vật liệu: mác BT, mác thép, lớp bảo vệ</td><td>Góc ghi chú hoặc chú thích</td></tr>
+        <tr><td class="sym">9</td><td class="L">Tỉ lệ, tiêu đề, họ tên SV, MSSV, lớp</td><td>Khung tên góc dưới phải</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════ 4.3 GHI CHÚ & CHECKLIST ══════════════════ -->
+<div class="card" id="s-ghichu">
+  <div class="card-hd"><i class="ti ti-circle-check"></i>
+    <div><h2>4.3 · Ghi Chú Kỹ Thuật & Checklist Hoàn Thành Phần 2</h2>
+    <p>Kiểm tra lại trước khi nộp · So sánh điểm khác biệt Móng băng vs Móng đơn</p></div>
+    <span class="cbadge">Hoàn thành</span>
+  </div>
+  <div class="card-body">
+    <div class="g2">
+      <!-- CHECKLIST -->
+      <div>
+        <div class="sec-lbl">Checklist nội dung đồ án Phần 2 — Móng Băng</div>
+        <ul class="checklist" id="checklist">
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·01.1 Số liệu tải trọng phân bố đường N₀, M₀, Q₀ (kN/m)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·01.2 Chọn sơ bộ h<sub>m</sub>, phân tích lớp đặt móng</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·01.3 Địa chất: φ, c, γ, E₀ cho từng lớp</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·02.1 TTGH1 Terzaghi — móng băng ξ₁=ξ₂=ξ₃=1</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·02.2 Kiểm tra p<sub>tx</sub> ≤ [P], p<sub>max</sub> ≤ 1.2[P], p<sub>min</sub> ≥ 0</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·02.3 Điều kiện kinh tế TTGH1 ≤ 10%</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·02.4 Kiểm tra tải truyền xuống lớp 2 (nếu có)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·02.5 TTGH2 — bảng lún từng lớp theo K<sub>z</sub> (không phải K₀)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·02.6 Kết luận b đáy băng hợp lý</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·03.1 Chọn vật liệu BT (≥B20) + thép (AII/AIII)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·03.2 Kiểm tra cắt 1 phương Q₀ ≤ Q<sub>CĐ</sub> + kinh tế ≤ 20%</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·03.3 Tính cốt thép chịu lực phương ngang (khoảng cách 100–200mm)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·03.4 Tính thép phân bố dọc ≥ 15%F<sub>a</sub>, a ≤ 300mm</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·04.1 Bản vẽ mặt cắt ngang + mặt bằng đoạn băng</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·04.2 Ghi chú vật liệu, tỉ lệ, khung tên đầy đủ</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span>B·04.3 Kết luận tổng hợp Phần 2 (tự viết bên cạnh)</span></li>
+        </ul>
+        <div id="check-progress" style="margin-top:10px;font-size:.82rem;color:var(--muted);font-weight:600"></div>
+      </div>
+
+      <!-- GHI CHÚ + KẾT LUẬN -->
+      <div>
+        <div class="sec-lbl">Điểm khác biệt cốt lõi Móng băng vs Móng đơn</div>
+        <table class="tbl">
+          <thead><tr><th class="L">Nội dung</th><th>Móng đơn</th><th>Móng băng</th></tr></thead>
+          <tbody>
+            <tr><td class="L">Tải trọng</td><td class="sym">kN</td><td class="sym">kN/m</td></tr>
+            <tr><td class="L">Hệ số hình dạng Terzaghi</td><td class="sym">ξ₁,ξ₂,ξ₃ ≠ 1</td><td class="sym">ξ=1 (cả 3)</td></tr>
+            <tr><td class="L">Bảng tra lún</td><td class="sym">Bảng K₀ (2 chiều)</td><td class="sym">Bảng K<sub>z</sub> (1 chiều)</td></tr>
+            <tr><td class="L">Kiểm tra kết cấu</td><td class="sym">Nén thủng 2 phương</td><td class="sym">Cắt 1 phương</td></tr>
+            <tr><td class="L">Cốt thép</td><td class="sym">2 phương chịu lực</td><td class="sym">1 phương + phân bố</td></tr>
+            <tr><td class="L">Khoảng cách thép</td><td class="sym">150–250mm</td><td class="sym">100–200mm</td></tr>
+            <tr><td class="L">Điều kiện kinh tế cắt</td><td class="sym">(P<sub>cđt</sub>–P<sub>đt</sub>)/P<sub>cđt</sub> ≤ 20%</td><td class="sym">(Q<sub>CĐ</sub>–Q₀)/Q<sub>CĐ</sub> ≤ 20%</td></tr>
+          </tbody>
+        </table>
+
+        <div class="sec-lbl" style="margin-top:12px">Ghi chú kỹ thuật qui định đồ án</div>
+        <table class="tbl">
+          <thead><tr><th class="L">Nội dung</th><th>Qui định</th></tr></thead>
+          <tbody>
+            <tr><td class="L">Hệ số an toàn Terzaghi Fs</td><td class="sym">2.0</td></tr>
+            <tr><td class="L">Điều kiện kinh tế TTGH1</td><td class="sym">([P]–p_tx)/[P] ≤ 10%</td></tr>
+            <tr><td class="L">Điều kiện lún [S]</td><td class="sym">80mm (khung BTCT)</td></tr>
+            <tr><td class="L">Điều kiện kinh tế cắt</td><td class="sym">≤ 20%</td></tr>
+            <tr><td class="L">BT móng tối thiểu</td><td class="sym">B20</td></tr>
+            <tr><td class="L">BT lót</td><td class="sym">C8, dày 100mm</td></tr>
+            <tr><td class="L">Lớp bảo vệ a</td><td class="sym">≥ 40mm (móng băng)</td></tr>
+            <tr><td class="L">Chiều cao h làm tròn</td><td class="sym">Bội số 5cm</td></tr>
+          </tbody>
+        </table>
+
+        <div class="sec-lbl" style="margin-top:12px">Kết luận cuối cùng Phần 2</div>
+        <textarea id="kl-cuoi" style="height:130px;resize:vertical" placeholder="Tóm tắt toàn bộ thiết kế móng băng:&#10;VD: Thiết kế móng băng dưới tường cho tải N₀tc=280 kN/m.&#10;— Móng nông trên nền tự nhiên, hm=1.5m, lớp đặt móng là cát vừa φ=30°.&#10;— Bề rộng đáy băng chọn: b=1.4m.&#10;— Bê tông B25, thép AIII. Chiều cao móng h=0.45m, h₀=0.41m.&#10;— Thép chịu lực: Ø16 a=150mm (F_a=13.4cm²/m). Thép phân bố dọc: Ø10 a=200mm.&#10;— Thỏa mãn TTGH1 (ptx=195kPa ≤ [P]=210kPa), TTGH2 (S=52mm ≤ 80mm), cắt 1 phương và kinh tế."></textarea>
+      </div>
+    </div>
+
+    <!-- HOÀN THÀNH PHẦN 2 -->
+    <div style="margin-top:18px;padding:18px;background:var(--Glt);border:2px solid var(--G);border-radius:var(--r);text-align:center">
+      <i class="ti ti-trophy" style="font-size:36px;color:var(--G);display:block;margin-bottom:8px"></i>
+      <div style="font-size:1.05rem;font-weight:700;color:var(--Gdk);margin-bottom:5px">Hoàn thành Phần 2 — Thiết kế Móng Băng!</div>
+      <div style="font-size:.85rem;color:var(--G)">Kiểm tra đầy đủ checklist trước khi chuyển sang Phần 3 (Móng Cọc) hoặc nộp đồ án.</div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <button class="btn btn-g" onclick="saveB04()"><i class="ti ti-device-floppy"></i> Lưu kết luận</button>
+      <button class="btn" style="background:#6A1B9A;color:#fff" onclick="window.location.href='../index.html'"><i class="ti ti-home"></i> Về trang chủ</button>
+      <button class="btn btn-B" onclick="window.location.href='../phan3/module05_thiet_ke_coc.html'"><i class="ti ti-arrow-right"></i> Sang Phần 3: Móng Cọc</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
+function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function goto(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+
+/* ══ SVG helpers ══ */
+function ce(tag,a){var el=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.keys(a).forEach(function(k){el.setAttribute(k,a[k]);});return el;}
+function ct(tag,a,txt){var el=ce(tag,a);el.textContent=txt;return el;}
+
+/* ══ SUMMARY UPDATE ══ */
+function updSummary(){
+  var b=gv('r-b'),h=gv('r-h'),S=gv('r-S'),thep=sv('r-thep-ngang'),sp=gv('r-sp-ngang');
+  if(b) document.getElementById('sv-b').textContent=b;
+  if(h) document.getElementById('sv-h').textContent=h;
+  if(S) document.getElementById('sv-S').textContent=S;
+  if(thep||sp) document.getElementById('sv-thep').textContent=(thep||'?')+(sp?' a'+sp:'');
+}
+
+function updOK(){
+  var ptx=gv('r-ptx'),P=gv('r-P'),pmax=gv('r-pmax'),pmin=gv('r-pmin'),kte=gv('r-kte'),S=gv('r-S'),ktec=gv('r-kte-cat');
+  // pmax
+  var pmEl=document.getElementById('r-pmax-ok');
+  if(pmax&&P)pmEl.innerHTML=pmax<=1.2*P?'<span class="ok-badge ok">✓ ĐẠT</span>':'<span class="ok-badge no">✗ KTM</span>';
+  // pmin
+  var pmEl2=document.getElementById('r-pmin-ok');
+  if(pmin!==0||document.getElementById('r-pmin').value!=='')pmEl2.innerHTML=pmin>=0?'<span class="ok-badge ok">✓ ≥ 0</span>':'<span class="ok-badge no">✗ Kéo!</span>';
+  // kte
+  var kteEl=document.getElementById('r-kte-ok');
+  if(kte)kteEl.innerHTML=kte<=10?'<span class="ok-badge ok">✓ ≤10%</span>':'<span class="ok-badge no">✗ >10%</span>';
+  // S
+  var sEl=document.getElementById('r-S-ok');
+  if(S)sEl.innerHTML=S<=80?'<span class="ok-badge ok">✓ ĐẠT</span>':'<span class="ok-badge no">✗ KTM</span>';
+  // lop2
+  var l2=sv('r-lop2-ok');
+  var l2El=document.getElementById('r-lop2-badge');
+  l2El.innerHTML=l2==='ok'?'<span class="ok-badge ok">✓ ĐẠT</span>':l2==='no'?'<span class="ok-badge no">✗ KTM</span>':'–';
+  // cat
+  var catEl=document.getElementById('r-cat-ok');
+  if(ktec)catEl.innerHTML=ktec<=20?'<span class="ok-badge ok">✓ ≤20%</span>':'<span class="ok-badge no">✗ >20%</span>';
+}
+
+function genSummary(){updSummary();updOK();drawBang();toast('Đã cập nhật tổng hợp và bản vẽ!');}
+
+/* ══ BẢN VẼ: MẶT CẮT NGANG MÓNG BĂNG ══ */
+function drawSection(b,h,hm,bt,hlot,mnn){
+  var svg=document.getElementById('mc-svg'); svg.innerHTML='';
+  var W=360,H=340;
+  // Scale: fit b vào khoảng 200px
+  var SC=Math.min(160/b, 50/h, 40/hm);
+  SC=Math.max(SC,20);SC=Math.min(SC,80);
+
+  var mW=+(b*SC).toFixed(0),mH=+(h*SC).toFixed(0),hmPx=+(hm*SC).toFixed(0);
+  var btPx=+(bt/1000*SC).toFixed(0),lotPx=Math.max(6,+(hlot/1000*SC).toFixed(0));
+  var cx=(W-mW)/2, cy=30;
+
+  // ── Đất bên trên ──
+  var gY=cy+hmPx; // vị trí mặt đất (tính từ đỉnh)
+  var fY=gY-mH;   // đỉnh móng
+  svg.appendChild(ce('rect',{x:0,y:gY,width:W,height:H-gY,fill:'#D7CCC8',opacity:'0.55'}));
+  svg.appendChild(ce('line',{x1:0,y1:gY,x2:W,y2:gY,stroke:'#795548','stroke-width':'1.5','stroke-dasharray':'5,3'}));
+  svg.appendChild(ct('text',{x:8,y:gY-5,'font-size':'9','fill':'#795548','font-weight':'700','font-family':'Plus Jakarta Sans'},'Mặt đất (±0.000)'));
+
+  // ── BT lót ──
+  svg.appendChild(ce('rect',{x:cx-4,y:gY,width:mW+8,height:lotPx,fill:'#E0E0E0',stroke:'#9E9E9E','stroke-width':'0.8'}));
+  svg.appendChild(ct('text',{x:W/2,y:gY+lotPx-2,'text-anchor':'middle','font-size':'8','fill':'#888','font-family':'Plus Jakarta Sans'},'BT lót C8 — '+hlot+'mm'));
+
+  // ── Thân móng băng ──
+  svg.appendChild(ce('rect',{x:cx,y:fY,width:mW,height:mH,fill:'#8D6E63',stroke:'#3E2723','stroke-width':'1.5'}));
+  // Đường gạch chéo tượng trưng BT
+  for(var xi=0;xi<mW+mH;xi+=10){
+    var x1=cx+Math.max(0,xi-mH),y1=fY+Math.min(xi,mH);
+    var x2=cx+Math.min(xi,mW),y2=fY+Math.max(0,xi-mW);
+    svg.appendChild(ce('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:'rgba(255,255,255,.08)','stroke-width':'0.8'}));
+  }
+
+  // ── Tường/dầm ──
+  var tY=cy;
+  var txL=cx+(mW-btPx)/2;
+  svg.appendChild(ce('rect',{x:txL,y:tY,width:btPx,height:fY-tY,fill:'rgba(46,125,50,.25)',stroke:'rgba(46,125,50,.6)','stroke-width':'1.2'}));
+  svg.appendChild(ce('line',{x1:txL,y1:tY,x2:txL+btPx,y2:fY-tY+tY,stroke:'rgba(46,125,50,.25)','stroke-width':'0.8'}));
+  svg.appendChild(ce('line',{x1:txL+btPx,y1:tY,x2:txL,y2:fY-tY+tY,stroke:'rgba(46,125,50,.25)','stroke-width':'0.8'}));
+  svg.appendChild(ct('text',{x:W/2,y:tY+(fY-tY)/2+4,'text-anchor':'middle','font-size':'8.5','fill':'rgba(27,94,32,.8)','font-weight':'700','font-family':'Plus Jakarta Sans'},'Tường/Dầm'));
+  svg.appendChild(ct('text',{x:W/2,y:tY+(fY-tY)/2+14,'text-anchor':'middle','font-size':'7.5','fill':'rgba(27,94,32,.7)','font-family':'Plus Jakarta Sans'},'b_t='+bt+'mm'));
+
+  // ── Cốt thép chịu lực (ngang) ──
+  var rY=gY-8; // gần đáy móng
+  svg.appendChild(ce('line',{x1:cx+5,y1:rY,x2:cx+mW-5,y2:rY,stroke:'#1565C0','stroke-width':'2.5'}));
+  // Vòng tượng trưng
+  [0.15,0.3,0.5,0.7,0.85].forEach(function(t){
+    svg.appendChild(ce('circle',{cx:cx+mW*t,cy:rY,r:'3.5',fill:'#1565C0','stroke':'#fff','stroke-width':'0.8'}));
+  });
+  svg.appendChild(ct('text',{x:cx+mW+6,y:rY+4,'font-size':'8.5','fill':'#1565C0','font-weight':'700','font-family':'Plus Jakarta Sans'},'Fa'));
+
+  // ── Lớp bảo vệ a ──
+  svg.appendChild(ce('line',{x1:cx+mW-2,y1:rY,x2:cx+mW-2,y2:gY,stroke:'#FF8F00','stroke-width':'1','stroke-dasharray':'2,2'}));
+  svg.appendChild(ct('text',{x:cx+mW+6,y:gY-4,'font-size':'7.5','fill':'#E65100','font-family':'Plus Jakarta Sans'},'a='+gv('r-a')+'mm'));
+
+  // ── MNN ──
+  if(mnn>0){
+    var mnnY=cy+mnn*SC;
+    if(mnnY>cy&&mnnY<gY+mH){
+      svg.appendChild(ce('line',{x1:0,y1:mnnY,x2:W,y2:mnnY,stroke:'#1565C0','stroke-width':'1','stroke-dasharray':'3,3','opacity':'0.7'}));
+      svg.appendChild(ct('text',{x:8,y:mnnY-3,'font-size':'8','fill':'#1565C0','font-weight':'700','font-family':'Plus Jakarta Sans'},'MNN'));
+    }
+  }
+
+  // ── Tiết diện 1-1 ──
+  svg.appendChild(ce('line',{x1:cx-28,y1:fY+(mH*0.5),x2:cx+mW+28,y2:fY+(mH*0.5),stroke:'#C62828','stroke-width':'1','stroke-dasharray':'5,3','opacity':'0.5'}));
+  svg.appendChild(ct('text',{x:cx-30,y:fY+(mH*0.5)+4,'font-size':'10','fill':'#C62828','font-weight':'700','text-anchor':'end'},'1'));
+  svg.appendChild(ct('text',{x:cx+mW+30,y:fY+(mH*0.5)+4,'font-size':'10','fill':'#C62828','font-weight':'700'},'1'));
+
+  // ══ DIMENSION LINES ══
+  var dkColor='#1565C0',dkGreen='#2E7D32',dkOrange='#E65100';
+
+  // b — chiều ngang
+  var by=gY+lotPx+16;
+  svg.appendChild(ce('line',{x1:cx,y1:by,x2:cx+mW,y2:by,stroke:dkColor,'stroke-width':'1.2'}));
+  [cx,cx+mW].forEach(function(x){svg.appendChild(ce('line',{x1:x,y1:by-5,x2:x,y2:by+5,stroke:dkColor,'stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:cx+mW/2,y:by+14,'text-anchor':'middle','font-size':'9.5','fill':dkColor,'font-weight':'700','font-family':'Plus Jakarta Sans'},'b = '+b+' m'));
+
+  // c_ng trái
+  var cng=(b-(bt/1000))/2;
+  var cY=gY+lotPx+30;
+  svg.appendChild(ce('line',{x1:cx,y1:cY,x2:cx+mW/2-btPx/2,y2:cY,stroke:dkOrange,'stroke-width':'1'}));
+  [cx,cx+mW/2-btPx/2].forEach(function(x){svg.appendChild(ce('line',{x1:x,y1:cY-4,x2:x,y2:cY+4,stroke:dkOrange,'stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:cx+(mW/2-btPx/2)/2,y:cY+12,'text-anchor':'middle','font-size':'8','fill':dkOrange,'font-weight':'700','font-family':'Plus Jakarta Sans'},'c_ng='+cng.toFixed(2)+'m'));
+
+  // h — chiều cao móng
+  var hx=cx-28;
+  svg.appendChild(ce('line',{x1:hx,y1:fY,x2:hx,y2:gY,stroke:dkGreen,'stroke-width':'1.2'}));
+  [fY,gY].forEach(function(y){svg.appendChild(ce('line',{x1:hx-5,y1:y,x2:hx+5,y2:y,stroke:dkGreen,'stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:hx-6,y:fY+mH/2+3,'text-anchor':'middle','font-size':'9','fill':dkGreen,'font-weight':'700','transform':'rotate(-90,'+(hx-6)+','+(fY+mH/2+3)+')','font-family':'Plus Jakarta Sans'},'h='+h+'m'));
+
+  // hm — chiều sâu đặt
+  var hmx=cx+mW+28;
+  svg.appendChild(ce('line',{x1:hmx,y1:cy,x2:hmx,y2:gY,stroke:dkOrange,'stroke-width':'1.2'}));
+  [cy,gY].forEach(function(y){svg.appendChild(ce('line',{x1:hmx-5,y1:y,x2:hmx+5,y2:y,stroke:dkOrange,'stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:hmx+14,y:cy+hmPx/2+4,'font-size':'9','fill':dkOrange,'font-weight':'700','font-family':'Plus Jakarta Sans'},'hm='+hm+'m'));
+
+  // title
+  svg.appendChild(ct('text',{x:W/2,y:H-6,'text-anchor':'middle','font-size':'8.5','fill':'#999','font-family':'Plus Jakarta Sans'},'Mặt cắt 1-1 — Minh hoạ kỹ thuật'));
+}
+
+/* ══ BẢN VẼ: MẶT BẰNG MỘT ĐOẠN BĂNG ══ */
+function drawPlan(b,bt,spNgang,spDoc){
+  var svg=document.getElementById('mb-svg'); svg.innerHTML='';
+  var W=360,H=340;
+  // Vẽ một đoạn băng dài ~1.5m
+  var doai=1.5; // đoạn băng vẽ (m)
+  var SC=Math.min(180/b,130/doai,60);SC=Math.max(SC,30);
+  var mW=+(b*SC).toFixed(0);
+  var mL=+(doai*SC).toFixed(0);
+  var cx=(W-mW)/2, cy=(H-mL)/2;
+  var btPx=+(bt/1000*SC).toFixed(0);
+
+  // Nền móng (view từ trên)
+  svg.appendChild(ce('rect',{x:cx,y:cy,width:mW,height:mL,fill:'#EFEBE9',stroke:'#5D4037','stroke-width':'2'}));
+  // Gạch chéo nhạt
+  for(var di=0;di<mW+mL;di+=14){
+    var x1=cx+Math.max(0,di-mL),y1=cy+Math.min(di,mL);
+    var x2=cx+Math.min(di,mW),y2=cy+Math.max(0,di-mW);
+    svg.appendChild(ce('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:'#D7CCC8','stroke-width':'0.5','opacity':'0.5'}));
+  }
+
+  // Tường ở giữa (chiều dọc)
+  var twL=cx+(mW-btPx)/2;
+  svg.appendChild(ce('rect',{x:twL,y:cy-5,width:btPx,height:mL+10,fill:'rgba(46,125,50,.3)',stroke:'rgba(46,125,50,.7)','stroke-width':'1.5'}));
+  svg.appendChild(ct('text',{x:twL+btPx/2,y:cy-10,'text-anchor':'middle','font-size':'8.5','fill':'rgba(27,94,32,.8)','font-weight':'700','font-family':'Plus Jakarta Sans'},'Tường b_t='+bt+'mm'));
+
+  // Thép ngang (chịu lực) — đường ngang qua toàn bộ b
+  var spNgPx=Math.max(10,+(spNgang/1000*SC).toFixed(0));
+  for(var yi=cy+spNgPx/2;yi<cy+mL;yi+=spNgPx){
+    svg.appendChild(ce('line',{x1:cx+3,y1:yi,x2:cx+mW-3,y2:yi,stroke:'#1565C0','stroke-width':'1.8','opacity':'0.85'}));
+  }
+
+  // Thép dọc (phân bố) — đường dọc
+  var spDPx=Math.max(12,+(spDoc/1000*SC).toFixed(0));
+  for(var xi=cx+spDPx/2;xi<cx+mW;xi+=spDPx){
+    svg.appendChild(ce('line',{x1:xi,y1:cy+3,x2:xi,y2:cy+mL-3,stroke:'rgba(255,143,0,.7)','stroke-width':'1','stroke-dasharray':'4,2'}));
+  }
+
+  // LEGENDS
+  svg.appendChild(ce('line',{x1:cx+mW+8,y1:cy+20,x2:cx+mW+24,y2:cy+20,stroke:'#1565C0','stroke-width':'2'}));
+  svg.appendChild(ct('text',{x:cx+mW+28,y:cy+24,'font-size':'8','fill':'#1565C0','font-weight':'700','font-family':'Plus Jakarta Sans'},'Thép ngang (chịu lực)'));
+  svg.appendChild(ce('line',{x1:cx+mW+8,y1:cy+38,x2:cx+mW+24,y2:cy+38,stroke:'rgba(255,143,0,.85)','stroke-width':'1.5','stroke-dasharray':'4,2'}));
+  svg.appendChild(ct('text',{x:cx+mW+28,y:cy+42,'font-size':'8','fill':'#E65100','font-weight':'700','font-family':'Plus Jakarta Sans'},'Thép dọc (phân bố)'));
+
+  // ══ DIMENSION LINES ══
+  // b
+  var bx=cy-20;
+  svg.appendChild(ce('line',{x1:cx,y1:bx,x2:cx+mW,y2:bx,stroke:'#1565C0','stroke-width':'1.2'}));
+  [cx,cx+mW].forEach(function(x){svg.appendChild(ce('line',{x1:x,y1:bx-5,x2:x,y2:bx+5,stroke:'#1565C0','stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:cx+mW/2,y:bx-8,'text-anchor':'middle','font-size':'9.5','fill':'#1565C0','font-weight':'700','font-family':'Plus Jakarta Sans'},'b = '+b+' m'));
+
+  // Dài đoạn vẽ
+  var dx=cx-28;
+  svg.appendChild(ce('line',{x1:dx,y1:cy,x2:dx,y2:cy+mL,stroke:'#795548','stroke-width':'1.2'}));
+  [cy,cy+mL].forEach(function(y){svg.appendChild(ce('line',{x1:dx-5,y1:y,x2:dx+5,y2:y,stroke:'#795548','stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:dx-7,y:cy+mL/2+4,'text-anchor':'middle','font-size':'8.5','fill':'#795548','transform':'rotate(-90,'+(dx-7)+','+(cy+mL/2+4)+')','font-family':'Plus Jakarta Sans'},'~1.5m (minh hoạ)'));
+
+  // Mặt cắt 1-1 line
+  svg.appendChild(ce('line',{x1:cx-30,y1:cy+mL/2,x2:cx+mW+30,y2:cy+mL/2,stroke:'#C62828','stroke-width':'1','stroke-dasharray':'5,3','opacity':'0.6'}));
+  svg.appendChild(ct('text',{x:cx-32,y:cy+mL/2+4,'font-size':'9','fill':'#C62828','font-weight':'700','text-anchor':'end'},'1'));
+  svg.appendChild(ct('text',{x:cx+mW+32,y:cy+mL/2+4,'font-size':'9','fill':'#C62828','font-weight':'700'},'1'));
+
+  // Title
+  svg.appendChild(ct('text',{x:W/2,y:H-6,'text-anchor':'middle','font-size':'8.5','fill':'#999','font-family':'Plus Jakarta Sans'},'Mặt bằng đoạn băng — View từ trên'));
+}
+
+function drawBang(){
+  var b=gv('r-b')||1.4;
+  var h=gv('r-h')||0.45;
+  var hm=gv('r-hm')||1.5;
+  var bt=gv('r-bt')||300;
+  var hlot=gv('r-hlot')||100;
+  var mnn=gv('r-mnn')||0;
+  var spNgang=gv('r-sp-ngang')||150;
+  var spDoc=gv('r-sp-doc')||200;
+  drawSection(b,h,hm,bt,hlot,mnn);
+  drawPlan(b,bt,spNgang,spDoc);
+}
+
+/* ══ CHECKLIST ══ */
+function updCheck(cb){
+  cb.parentElement.classList.toggle('done',cb.checked);
+  var total=document.querySelectorAll('#checklist input').length;
+  var done=document.querySelectorAll('#checklist input:checked').length;
+  var pct=Math.round(done/total*100);
+  document.getElementById('check-progress').textContent='✔ Hoàn thành '+done+'/'+total+' mục ('+pct+'%)';
+  if(done===total) toast('🎉 Hoàn thành 100% Phần 2! Sẵn sàng nộp.');
+}
+
+/* ══ SAVE ══ */
+function saveB04(){
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong_p2')||'{}');
+    d.m04_saved=true;d.m04_time=new Date().toLocaleString('vi-VN');
+    d.m04_kl=document.getElementById('kl-cuoi').value;
+    d.m04_b=gv('r-b');d.m04_h=gv('r-h');d.m04_hm=gv('r-hm');
+    localStorage.setItem('nmong_p2',JSON.stringify(d));
+    toast('✓ Đã lưu kết luận Phần 2 — Móng Băng');
+  }catch(e){toast('Lỗi lưu');}
+}
+
+/* ══ INIT ══ */
+window.onload=function(){
+  // Load từ localStorage
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong_p2')||'{}');
+    if(d.b_bang) document.getElementById('r-b').value=d.b_bang;
+    if(d.hm_b) document.getElementById('r-hm').value=d.hm_b;
+    if(d.m03_h) document.getElementById('r-h').value=d.m03_h;
+    if(d.m03_h0) document.getElementById('r-h0').value=d.m03_h0;
+    if(d.m03_abv) document.getElementById('r-a').value=d.m03_abv;
+    if(d.bt_b) document.getElementById('r-bt').value=d.bt_b;
+    if(d.m02_saved){
+      if(d.ptx_b) document.getElementById('r-ptx').value=(d.ptx_b*10).toFixed(1); // T→kPa nếu cần
+      if(d.P_b) document.getElementById('r-P').value=(d.P_b*10).toFixed(1);
+    }
+    if(d.m03_Q0) document.getElementById('r-Q0').value=d.m03_Q0;
+    if(d.m03_QCD) document.getElementById('r-QCD').value=d.m03_QCD;
+    if(d.m03_thep_ngang) document.getElementById('r-thep-ngang').value=d.m03_thep_ngang;
+    if(d.m03_thep_doc) document.getElementById('r-thep-doc').value=d.m03_thep_doc;
+    if(d.m03_mac_bt) document.getElementById('r-macbt').value=d.m03_mac_bt;
+    if(d.m03_mac_thep) document.getElementById('r-macthep').value=d.m03_mac_thep;
+    if(d.m04_kl) document.getElementById('kl-cuoi').value=d.m04_kl;
+  }catch(e){}
+
+  // Init checklist counter
+  var total=document.querySelectorAll('#checklist input').length;
+  document.getElementById('check-progress').textContent='Tích vào từng mục khi hoàn thành — 0/'+total+' mục';
+
+  updSummary();
+  updOK();
+  drawBang();
+};
+</script>
+</body>
+</html>
