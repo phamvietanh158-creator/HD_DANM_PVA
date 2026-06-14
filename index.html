@@ -480,7 +480,7 @@ function updateStatuses(){
     } else if(done<p.mods.length){
       el.className='part-status ps-prog';
       el.textContent='Đang làm · '+done+'/'+p.mods.length+' module';
-      if(d.m01_time||d.m05_time) el.textContent+=' · '+（d.m01_time||d.m05_time||'');
+      if(d.m01_time||d.m05_time) el.textContent+=' · '+(d.m01_time||d.m05_time||'');
     } else {
       el.className='part-status ps-done';
       el.textContent='✓ Hoàn thành '+p.mods.length+'/'+p.mods.length+' module';
