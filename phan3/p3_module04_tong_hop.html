@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P3·M04 – Tổng Kết & Bản Vẽ Móng Cọc</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --P:#5D4037;--Pdk:#3E2723;--Plt:#EFEBE9;--Pmd:#795548;
+  --V:#6A1B9A;--Vlt:#F3E5F5;--Vdk:#4A148C;--Vmd:#7B1FA2;
+  --A:#FF8F00;--Alt:#FFF8E1;--Adk:#E65100;
+  --G:#2E7D32;--Glt:#E8F5E9;--Gdk:#1B5E20;
+  --R:#C62828;--Rlt:#FFEBEE;--B:#1565C0;--Blt:#E3F2FD;
+  --bg:#F3E5F5;--sur:#fff;--brd:#CE93D8;--muted:#7B1FA2;--text:#1C0A00;
+  --sans:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:12px;--sh:0 2px 16px rgba(106,27,154,.09)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:var(--sans);color:var(--text);font-size:14px;line-height:1.6}
+.hdr{background:var(--Vdk);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(74,20,140,.4)}
+.hdr-in{max-width:1020px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:12px}
+.back-btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff;padding:5px 13px;border-radius:7px;font-size:.78rem;font-weight:600;font-family:var(--sans);display:flex;align-items:center;gap:5px;text-decoration:none}
+.back-btn:hover{background:rgba(255,255,255,.24)}
+.hdr-title{flex:1}.hdr-title h1{font-size:.95rem;font-weight:700}.hdr-title p{font-size:.7rem;opacity:.7;margin-top:1px}
+.tabs-bar{background:var(--Vdk)}.tabs-in{max-width:1020px;margin:0 auto;display:flex;gap:2px;padding:5px 14px;overflow-x:auto;scrollbar-width:none}
+.tab{padding:5px 14px;border-radius:7px;font-size:.76rem;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;border:none;background:transparent;font-family:var(--sans);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.tab:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.88)}.tab.on{background:var(--A);color:#fff}
+.tn{font-family:var(--mono);font-size:.6rem;background:rgba(255,255,255,.18);padding:1px 5px;border-radius:3px}
+main{max-width:1020px;margin:0 auto;padding:20px 16px 80px}
+.card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:18px;overflow:hidden}
+.card-hd{background:var(--V);color:#fff;padding:11px 18px;display:flex;align-items:center;gap:9px}
+.card-hd i{font-size:19px;opacity:.9}.card-hd h2{font-size:.9rem;font-weight:700}.card-hd p{font-size:.73rem;opacity:.72;margin-top:1px}
+.cbadge{margin-left:auto;font-family:var(--mono);font-size:.64rem;font-weight:700;padding:3px 9px;border-radius:5px;background:rgba(255,255,255,.18);letter-spacing:1px;text-transform:uppercase}
+.card-body{padding:16px 18px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.fi{display:flex;gap:6px;align-items:center}.fi input{flex:1}
+.ut{font-size:.76rem;color:var(--muted);white-space:nowrap;font-family:var(--mono)}
+input[type=number],input[type=text],select,textarea{padding:7px 10px;border:1.5px solid var(--brd);border-radius:7px;font-family:var(--sans);font-size:.86rem;background:#fdf8ff;color:var(--text);outline:none;transition:border-color .18s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--V);box-shadow:0 0 0 3px rgba(106,27,154,.1);background:#fff}
+input[readonly]{background:var(--Vlt);color:var(--Vdk);font-weight:700;font-family:var(--mono)}
+.earth-box{background:var(--Vlt);border-left:4px solid var(--Vmd);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:var(--Vdk);margin-bottom:12px;line-height:1.65}
+.succ-box{background:var(--Glt);border-left:4px solid var(--G);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:#1a3a1a;margin:8px 0}
+.info-box{background:var(--Blt);border-left:4px solid var(--B);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.82rem;color:#0d2a52;margin-bottom:12px;line-height:1.65}
+.tbl{width:100%;border-collapse:collapse;font-size:.82rem;margin:8px 0}
+.tbl th{background:var(--Vdk);color:rgba(255,255,255,.88);padding:.45rem .7rem;font-size:.68rem;font-weight:700;text-align:center;text-transform:uppercase}
+.tbl th.L{text-align:left;padding-left:.9rem}
+.tbl td{padding:.4rem .65rem;border-bottom:1px solid rgba(206,147,216,.3);vertical-align:middle}
+.tbl td.L{text-align:left;padding-left:.9rem;font-weight:600}
+.tbl td.sym{font-family:var(--mono);color:var(--B);font-weight:600;text-align:center}
+.tbl td.val{font-family:var(--mono);font-weight:600;color:var(--Vdk);text-align:center}
+.tbl tr.hi td{background:var(--Vlt);font-weight:700}
+.tbl tr:hover td{background:#fcf5ff}
+.sec-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--brd)}
+.btn{border:none;cursor:pointer;font-family:var(--sans);font-weight:700;border-radius:7px;transition:all .18s;display:inline-flex;align-items:center;gap:5px;font-size:.85rem;padding:9px 18px}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}.btn:active{transform:translateY(0)}
+.btn-v{background:var(--V);color:#fff}.btn-a{background:var(--A);color:#fff}
+.btn-g{background:var(--G);color:#fff}.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--brd);padding:8px 15px}.btn-ghost:hover{background:var(--Vlt)}
+.btn-sm{padding:5px 11px!important;font-size:.75rem!important}
+.ok-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:8px;font-size:.72rem;font-weight:700}
+.ok-badge.ok{background:var(--Glt);color:var(--Gdk)}.ok-badge.no{background:var(--Rlt);color:var(--R)}
+/* SUM CARDS */
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.sum-card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);padding:13px;text-align:center;position:relative;overflow:hidden}
+.sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sum-card.c1::before{background:var(--V)}.sum-card.c2::before{background:var(--A)}
+.sum-card.c3::before{background:var(--G)}.sum-card.c4::before{background:var(--B)}
+.sv-val{font-size:1.3rem;font-weight:700;font-family:var(--mono);color:var(--Vdk);line-height:1.2;margin-top:4px}
+.sv-lbl{font-size:.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-top:3px}
+.sv-unit{font-size:.7rem;color:#aaa}
+/* CHECKLIST */
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(206,147,216,.3);font-size:.83rem}
+.checklist li:last-child{border-bottom:none}
+.checklist li input[type=checkbox]{width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:var(--G);cursor:pointer}
+.checklist li.done{text-decoration:line-through;color:var(--muted)}
+.ci{width:80px!important;padding:4px 6px;border:1.5px solid var(--brd);border-radius:5px;font-family:var(--mono);font-size:.78rem;text-align:center;background:#fdf8ff;outline:none}
+.ci:focus{border-color:var(--V);background:#fff}
+/* DRAWING */
+.drawing-wrap{background:#fff;border:1.5px solid var(--brd);border-radius:8px;overflow:hidden}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:#333;color:#fff;padding:8px 20px;border-radius:20px;font-size:.82rem;font-weight:600;opacity:0;transition:all .28s;pointer-events:none;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <a href="p3_module03_dai_coc.html" class="back-btn"><i class="ti ti-arrow-left"></i> P3·M03</a>
+    <div class="hdr-title">
+      <h1>Phần 3 · Module 04 – Tổng Kết & Bản Vẽ Móng Cọc</h1>
+      <p>Bảng tổng hợp thiết kế · Bản vẽ mặt bằng đài + cọc + mặt cắt đứng · Checklist hoàn thành Phần 3</p>
+    </div>
+  </div>
+</header>
+
+<div class="tabs-bar"><div class="tabs-in">
+  <button class="tab on" onclick="goto('s-tomtat')"><span class="tn">4.1</span> Tổng kết thiết kế</button>
+  <button class="tab" onclick="goto('s-banve')"><span class="tn">4.2</span> Bản vẽ sơ đồ</button>
+  <button class="tab" onclick="goto('s-ghichu')"><span class="tn">4.3</span> Checklist & Kết luận</button>
+</div></div>
+
+<main>
+
+<!-- ══════════════════ 4.1 TỔNG KẾT ══════════════════ -->
+<div class="card" id="s-tomtat">
+  <div class="card-hd"><i class="ti ti-list-check"></i>
+    <div><h2>4.1 · Tổng Kết Thiết Kế Móng Cọc</h2>
+    <p>Điền kết quả từ M01–M03 · Hệ thống tổng hợp và tự động vẽ sơ đồ</p></div>
+    <span class="cbadge">Kết luận</span>
+  </div>
+  <div class="card-body">
+    <div class="earth-box"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px"></i>
+      Dữ liệu được tải tự động từ localStorage (P3·M01→M03). Kiểm tra và bổ sung nếu thiếu, rồi bấm <b>"Cập nhật & Vẽ"</b>.
+    </div>
+
+    <!-- 4 ô tổng kết nhanh -->
+    <div class="sum-grid" id="sum-grid">
+      <div class="sum-card c1"><div class="sv-val" id="sv-P">–</div><div class="sv-lbl">[P] cọc</div><div class="sv-unit">kN</div></div>
+      <div class="sum-card c2"><div class="sv-val" id="sv-nc">–</div><div class="sv-lbl">Số cọc n_c</div><div class="sv-unit">cọc</div></div>
+      <div class="sum-card c3"><div class="sv-val" id="sv-Lc">–</div><div class="sv-lbl">Chiều dài cọc</div><div class="sv-unit">m</div></div>
+      <div class="sum-card c4"><div class="sv-val" id="sv-hdai">–</div><div class="sv-lbl">Chiều cao đài</div><div class="sv-unit">m</div></div>
+    </div>
+
+    <div class="g2">
+      <!-- CỘT TRÁI: CỌC -->
+      <div>
+        <div class="sec-lbl"><i class="ti ti-git-branch" style="font-size:13px"></i> Cọc</div>
+        <table class="tbl">
+          <thead><tr><th class="L">Thông số</th><th>Ký hiệu</th><th>Giá trị</th><th>ĐV</th></tr></thead>
+          <tbody>
+            <tr><td class="L">Loại cọc</td><td class="sym">–</td><td><input class="ci" type="text" id="r-loai-coc" placeholder="Cọc ép BTCT" style="width:130px"></td><td></td></tr>
+            <tr><td class="L">Tiết diện D<sub>c</sub></td><td class="sym">D<sub>c</sub></td><td><input class="ci" type="number" id="r-Dc" step="50" placeholder="250"><span style="font-size:.72rem;color:var(--muted)"> mm</span></td><td class="sym">mm</td></tr>
+            <tr><td class="L">Chiều dài cọc L<sub>c</sub></td><td class="sym">L<sub>c</sub></td><td><input class="ci" type="number" id="r-Lc" step="0.1" oninput="updSummary()"></td><td class="sym">m</td></tr>
+            <tr><td class="L">Số đoạn cọc</td><td class="sym">–</td><td><input class="ci" type="text" id="r-doan-coc" placeholder="VD: 3×5m"></td><td></td></tr>
+            <tr><td class="L">Lớp đặt mũi cọc</td><td class="sym">–</td><td><input class="ci" type="text" id="r-lop-mui" placeholder="Lớp 4" style="width:100px"></td><td></td></tr>
+            <tr><td class="L">SCT thiết kế [P]</td><td class="sym">[P]</td><td><input class="ci" type="number" id="r-P" oninput="updSummary()"></td><td class="sym">kN</td></tr>
+            <tr><td class="L">BT cọc / thép</td><td class="sym">–</td><td><input class="ci" type="text" id="r-vl-coc" placeholder="B30 / 4Ø16" style="width:120px"></td><td></td></tr>
+            <tr><td class="L">Phương pháp ép/đóng</td><td class="sym">–</td><td><select class="ci" id="r-pp-thi-cong" style="width:120px"><option>Ép tĩnh</option><option>Đóng búa</option><option>Khoan nhồi</option></select></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <div class="sec-lbl" style="margin-top:10px"><i class="ti ti-layout-grid" style="font-size:13px"></i> Bố trí cọc</div>
+        <table class="tbl">
+          <tbody>
+            <tr><td class="L">Số lượng cọc n<sub>c</sub></td><td><input class="ci" type="number" id="r-nc" oninput="updSummary()"></td><td class="sym">cọc</td></tr>
+            <tr><td class="L">Khoảng cách cọc a</td><td><input class="ci" type="text" id="r-a-coc" placeholder="VD: 0.75m=3D"></td><td></td></tr>
+            <tr><td class="L">Sơ đồ bố trí</td><td><input class="ci" type="text" id="r-sodo" placeholder="2×2, hoa thị…"></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CỘT PHẢI: ĐÀI -->
+      <div>
+        <div class="sec-lbl"><i class="ti ti-square-rounded" style="font-size:13px"></i> Đài cọc</div>
+        <table class="tbl">
+          <thead><tr><th class="L">Thông số</th><th>Ký hiệu</th><th>Giá trị</th><th>ĐV</th></tr></thead>
+          <tbody>
+            <tr><td class="L">Chiều sâu đặt đài h<sub>m</sub></td><td class="sym">h<sub>m</sub></td><td><input class="ci" type="number" id="r-hm" step="0.1" oninput="updSummary()"></td><td class="sym">m</td></tr>
+            <tr><td class="L">Kích thước đài B × L</td><td class="sym">B×L</td><td><input class="ci" type="text" id="r-BL-dai" placeholder="VD: 1.5×1.5"></td><td class="sym">m</td></tr>
+            <tr><td class="L">Chiều cao đài h<sub>đài</sub></td><td class="sym">h<sub>đ</sub></td><td><input class="ci" type="number" id="r-h-dai" step="0.05" oninput="updSummary()"></td><td class="sym">m</td></tr>
+            <tr><td class="L">Chiều cao làm việc h₀</td><td class="sym">h₀</td><td><input class="ci" type="number" id="r-h0" step="0.005" readonly></td><td class="sym">m</td></tr>
+            <tr><td class="L">BT đài / thép</td><td class="sym">–</td><td><input class="ci" type="text" id="r-vl-dai" placeholder="B25 / AIII" style="width:120px"></td><td></td></tr>
+            <tr><td class="L">Lớp BV đài a (mm)</td><td class="sym">a</td><td><input class="ci" type="number" id="r-abv" value="100"></td><td class="sym">mm</td></tr>
+            <tr><td class="L">BT lót C8 (mm)</td><td class="sym">–</td><td><input class="ci" type="number" id="r-hlot" value="100"></td><td class="sym">mm</td></tr>
+          </tbody>
+        </table>
+
+        <div class="sec-lbl" style="margin-top:10px"><i class="ti ti-git-merge" style="font-size:13px"></i> Cốt thép đài</div>
+        <table class="tbl">
+          <tbody>
+            <tr><td class="L">Thép phương I-I (l)</td><td><input class="ci" type="text" id="r-thep-I" placeholder="VD: 7Ø16 a=150"></td><td></td></tr>
+            <tr><td class="L">Thép phương II-II (b)</td><td><input class="ci" type="text" id="r-thep-II" placeholder="VD: 6Ø16 a=180"></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <div class="sec-lbl" style="margin-top:10px"><i class="ti ti-shield-check" style="font-size:13px"></i> Kết quả kiểm tra</div>
+        <table class="tbl">
+          <tbody>
+            <tr><td class="L">TTGH1 nền dưới mũi</td><td><input class="ci" type="text" id="r-ttgh1" placeholder="p_tb ≤ [P]_qu ✓"></td><td id="r-ttgh1-ok">–</td></tr>
+            <tr><td class="L">TTGH2 — Độ lún S</td><td><input class="ci" type="number" id="r-S" placeholder="? mm"></td><td id="r-S-ok">–</td></tr>
+            <tr><td class="L">Nén thủng cột</td><td><input class="ci" type="text" id="r-nt-cot" placeholder="P_ĐT ≤ P_CĐT ✓"></td><td id="r-nt-ok">–</td></tr>
+            <tr><td class="L">GĐ sử dụng P_max+G_c</td><td><input class="ci" type="text" id="r-ktsd" placeholder="≤ [P] ✓"></td><td id="r-sd-ok">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <button class="btn btn-v" style="margin-top:14px" onclick="genAll()"><i class="ti ti-refresh"></i> Cập nhật tổng hợp & Vẽ sơ đồ</button>
+  </div>
+</div>
+
+<!-- ══════════════════ 4.2 BẢN VẼ ══════════════════ -->
+<div class="card" id="s-banve">
+  <div class="card-hd" style="background:#4A148C"><i class="ti ti-layout-2"></i>
+    <div><h2>4.2 · Bản Vẽ Sơ Đồ Móng Cọc</h2>
+    <p>Mặt bằng đài cọc + Mặt cắt đứng · Tham chiếu khi vẽ tay bản vẽ chính thức</p></div>
+    <span class="cbadge">Bản vẽ</span>
+  </div>
+  <div class="card-body">
+    <div class="info-box"><i class="ti ti-pencil" style="font-size:13px;vertical-align:-2px"></i>
+      Sơ đồ kỹ thuật minh hoạ tự động. Bản vẽ đồ án yêu cầu: <b>mặt bằng đài</b> (tỉ lệ 1:20–1:50) + <b>mặt cắt đứng A-A</b> (thể hiện h_m, L_c, D_c, h_đài, thép đài) + <b>chi tiết cọc</b> (thép, đoạn cọc) + khung tên.
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button class="btn btn-a btn-sm" onclick="drawAll()"><i class="ti ti-refresh"></i> Vẽ lại</button>
+      <button class="btn btn-ghost btn-sm" onclick="window.print()"><i class="ti ti-printer"></i> In sơ đồ</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <!-- Mặt bằng -->
+      <div>
+        <div style="font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;text-align:center">Mặt bằng đài cọc (view từ trên)</div>
+        <div class="drawing-wrap">
+          <svg id="mb-svg" viewBox="0 0 360 340" width="100%" style="display:block;background:#fff"></svg>
+        </div>
+        <div style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:4px">Tỉ lệ minh hoạ · Thể hiện cọc, tim đài, thép đài</div>
+      </div>
+
+      <!-- Mặt cắt đứng -->
+      <div>
+        <div style="font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;text-align:center">Mặt cắt đứng A-A</div>
+        <div class="drawing-wrap">
+          <svg id="mc-svg" viewBox="0 0 360 420" width="100%" style="display:block;background:#fff"></svg>
+        </div>
+        <div style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:4px">Tỉ lệ minh hoạ · Thể hiện h_m, L_c, đài cọc, lớp đất</div>
+      </div>
+    </div>
+
+    <!-- Bảng yêu cầu bản vẽ -->
+    <div class="sec-lbl" style="margin-top:16px"><i class="ti ti-notes" style="font-size:14px"></i> Yêu cầu bản vẽ đồ án Phần 3 — Móng cọc</div>
+    <table class="tbl">
+      <thead><tr><th>STT</th><th class="L">Nội dung cần thể hiện trên bản vẽ A1</th><th>Tỉ lệ / Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">1</td><td class="L">Mặt bằng đài cọc — bố trí cọc, kích thước đài B×L</td><td>1:20 hoặc 1:50</td></tr>
+        <tr><td class="sym">2</td><td class="L">Mặt cắt đứng A-A — h_m, h_đài, L_c, thép đài I-I</td><td>1:20 hoặc 1:25</td></tr>
+        <tr><td class="sym">3</td><td class="L">Chi tiết cọc — D_c, đoạn cọc, thép dọc, đai, mũi cọc</td><td>1:25 hoặc 1:10</td></tr>
+        <tr><td class="sym">4</td><td class="L">Sơ đồ địa chất kèm theo cọc — các lớp, độ sâu mũi</td><td>Không tỉ lệ</td></tr>
+        <tr><td class="sym">5</td><td class="L">Ghi chú vật liệu: BT cọc, BT đài, thép đài, thép cọc</td><td>Chú thích góc trái</td></tr>
+        <tr><td class="sym">6</td><td class="L">Thép đài: cả 2 phương I-I và II-II, ký hiệu, d, a</td><td>Thể hiện trên mặt bằng + mặt cắt</td></tr>
+        <tr><td class="sym">7</td><td class="L">Mực nước ngầm MNN (nếu có)</td><td>Trên mặt cắt địa chất</td></tr>
+        <tr><td class="sym">8</td><td class="L">Khung tên đầy đủ: tên SV, MSSV, lớp, giáo viên, tỉ lệ</td><td>Góc dưới phải bản vẽ</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════ 4.3 CHECKLIST & KẾT LUẬN ══════════════════ -->
+<div class="card" id="s-ghichu">
+  <div class="card-hd" style="background:var(--Gdk)"><i class="ti ti-circle-check"></i>
+    <div><h2>4.3 · Checklist Hoàn Thành Phần 3 & Kết Luận Đồ Án</h2>
+    <p>Kiểm tra toàn bộ trình tự B1–B13 theo PDF hướng dẫn TS. Phạm Việt Anh</p></div>
+    <span class="cbadge">Hoàn thành</span>
+  </div>
+  <div class="card-body">
+    <div class="g2">
+      <!-- CHECKLIST -->
+      <div>
+        <div class="sec-lbl">Checklist trình tự thiết kế Phần 3 (B1–B13)</div>
+        <ul class="checklist" id="checklist">
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B1</b> Chọn phương án móng — phân tích địa chất + tải trọng</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B2</b> Chọn chiều sâu đặt đài h<sub>m</sub> (CT 3-1)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B3</b> Chọn kích thước cọc D<sub>c</sub>, chiều dài L<sub>c</sub>, số đoạn</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B4</b> Tính SCT cọc — Tra bảng thống kê [P]<sub>TB</sub> (k<sub>đ</sub>=1.4)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B4</b> Tính SCT cọc — Theo SPT [P]<sub>SPT</sub> (Fs=2.5)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B4</b> Tính SCT cọc — Theo vật liệu [P]<sub>vl</sub>, kết luận [P]=Min</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B5</b> Chọn số lượng cọc n<sub>c</sub> = ⌈β·N/[P]⌉</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B6</b> Bố trí cọc trên mặt bằng (3D ≤ a ≤ 6D, mép cọc–đài ≥ 250mm)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B7</b> Kiểm tra cọc GĐ sử dụng — P<sub>max</sub>+G<sub>c</sub> ≤ [P], kinh tế ≤ 10%</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B8</b> Kiểm tra cọc GĐ thi công — vận chuyển + cẩu lắp, kiểm tra thép + ép cọc</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B9</b> Tính kích thước đài B<sub>đ</sub> × L<sub>đ</sub> từ bố trí cọc</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B10</b> Chọn chiều cao đài H<sub>đ</sub>, tính h₀, chọn vật liệu đài</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B11</b> Kiểm tra nén thủng đài — cột đâm (CT 3-14) + hàng cọc (CT 3-16)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B11</b> Cốt thép đài — M<sub>I-I</sub>, M<sub>II-II</sub>, F<sub>a</sub>, chọn thép (CT 3-17, 3-18)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B12</b> Kiểm tra nền dưới mũi cọc — φ<sub>tb</sub>, α, B<sub>qu</sub>, L<sub>qu</sub></span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B12</b> TTGH1: p<sub>tb</sub> ≤ [P]<sub>qu</sub> (Terzaghi nền tương đương)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B12</b> TTGH2: S ≤ [S]<sub>gh</sub>=80mm (lún nền dưới mũi cọc)</span></li>
+          <li><input type="checkbox" onchange="updCheck(this)"><span><b>B13</b> Bản vẽ hoàn chỉnh: mặt bằng + mặt cắt + chi tiết cọc + khung tên</span></li>
+        </ul>
+        <div id="check-progress" style="margin-top:10px;font-size:.82rem;color:var(--muted);font-weight:600"></div>
+      </div>
+
+      <!-- GHI CHÚ + KẾT LUẬN -->
+      <div>
+        <div class="sec-lbl">Ghi chú kỹ thuật quan trọng</div>
+        <table class="tbl">
+          <thead><tr><th class="L">Điều kiện / Quy định</th><th>Giá trị</th></tr></thead>
+          <tbody>
+            <tr><td class="L">Hệ số an toàn k<sub>đ</sub> — Tra bảng</td><td class="sym">1.4</td></tr>
+            <tr><td class="L">Hệ số an toàn Fs — SPT (Meyerhoff)</td><td class="sym">2.5</td></tr>
+            <tr><td class="L">Hệ số an toàn Fs — CPT</td><td class="sym">2.0</td></tr>
+            <tr><td class="L">φ hệ số uốn dọc cọc đóng/ép</td><td class="sym">0.85</td></tr>
+            <tr><td class="L">Khoảng cách cọc 3D ≤ a ≤</td><td class="sym">6D</td></tr>
+            <tr><td class="L">Mép cọc – mép đài ≥</td><td class="sym">250mm</td></tr>
+            <tr><td class="L">Kinh tế GĐ sử dụng ≤</td><td class="sym">10%</td></tr>
+            <tr><td class="L">BT đài tối thiểu</td><td class="sym">B20</td></tr>
+            <tr><td class="L">Lớp BV đài a ≥</td><td class="sym">100mm</td></tr>
+            <tr><td class="L">Thép đài khoảng cách</td><td class="sym">150–250mm</td></tr>
+            <tr><td class="L">[S]<sub>gh</sub> khung BTCT</td><td class="sym">80mm</td></tr>
+            <tr><td class="L">Giới hạn h₀/c nén thủng</td><td class="sym">1 ÷ 2.5 (cột)<br>1/2.5 ÷ 1/0.6 (hàng)</td></tr>
+          </tbody>
+        </table>
+
+        <div class="sec-lbl" style="margin-top:12px">Kết luận tổng hợp Phần 3</div>
+        <textarea id="kl-p3" style="height:160px;resize:vertical" placeholder="Ví dụ kết luận:&#10;Thiết kế móng cọc BTCT ép 250×250mm cho mặt bằng số XX, tải N₀ᵗᵗ=1590kN.&#10;— Mũi cọc cắm vào lớp 4 (cát thô chặt, SPT=34) tại độ sâu 16.3m.&#10;— Chiều dài cọc Lc=15.3m, chia 3 đoạn 5+5+5.3m.&#10;— SCT cọc [P]=320kN (tra bảng). Bố trí 7 cọc hoa thị, a=0.75m=3D.&#10;— Đài B×L=2.0×2.2m, h_đài=0.8m, BT B25, thép AIII.&#10;— Thép đài I-I: 9Ø16 a=200mm; II-II: 8Ø16 a=220mm.&#10;— Thỏa mãn nén thủng, TTGH1 (p_tb=36kPa≤[P]=128kPa), TTGH2 (S=4.9cm=49mm≤80mm)."></textarea>
+      </div>
+    </div>
+
+    <!-- HOÀN THÀNH -->
+    <div style="margin-top:18px;padding:18px;background:var(--Glt);border:2px solid var(--G);border-radius:var(--r);text-align:center">
+      <i class="ti ti-trophy" style="font-size:36px;color:var(--G);display:block;margin-bottom:8px"></i>
+      <div style="font-size:1.05rem;font-weight:700;color:var(--Gdk);margin-bottom:6px">Hoàn thành Phần 3 — Thiết kế Móng Cọc!</div>
+      <div style="font-size:.84rem;color:var(--G)">Kiểm tra đầy đủ 18 mục checklist (B1–B13) và kết luận trước khi nộp đồ án.</div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <button class="btn btn-v" onclick="saveM04()"><i class="ti ti-device-floppy"></i> Lưu kết luận</button>
+      <button class="btn btn-g" onclick="genAll()"><i class="ti ti-refresh"></i> Cập nhật & Vẽ</button>
+      <a href="../index.html" class="btn btn-ghost"><i class="ti ti-home"></i> Về trang chủ</a>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+/* ══ UTILS ══ */
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
+function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function goto(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function ce(tag,a){var el=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.keys(a).forEach(function(k){el.setAttribute(k,a[k]);});return el;}
+function ct(tag,a,t){var el=ce(tag,a);el.textContent=t;return el;}
+
+/* ══ SUMMARY ══ */
+function updSummary(){
+  var P=gv('r-P'),nc=gv('r-nc'),Lc=gv('r-Lc'),h=gv('r-h-dai'),abv=gv('r-abv')||100,hdai=gv('r-h-dai');
+  var sv_ids=['sv-P','sv-nc','sv-Lc','sv-hdai'];
+  [P,nc,Lc,h].forEach(function(v,i){var el=document.getElementById(sv_ids[i]);if(el&&v)el.textContent=v;});
+  // h0
+  if(hdai){var h0=+(hdai-abv/1000).toFixed(3);var el=document.getElementById('r-h0');if(el)el.value=h0;}
+  // OK badges
+  var S=gv('r-S');
+  var sOk=document.getElementById('r-S-ok');
+  if(sOk&&S)sOk.innerHTML=S<=80?'<span class="ok-badge ok">✓ ≤80mm</span>':'<span class="ok-badge no">✗ >80mm</span>';
+}
+function genAll(){updSummary();drawAll();toast('✓ Đã cập nhật và vẽ sơ đồ');}
+
+/* ══ BẢN VẼ MẶT BẰNG ══ */
+function drawMB(){
+  var svg=document.getElementById('mb-svg');svg.innerHTML='';
+  var W=360,H=340;
+  var Dc=gv('r-Dc')||250; // mm
+  var nc=gv('r-nc')||4;
+  var Lc_raw=gv('r-Lc')||10;
+  // Estimate B_dai, L_dai from BL string
+  var BL=sv('r-BL-dai');
+  var parts=BL.split('x').map(parseFloat);if(parts.length<2||isNaN(parts[0]))parts=[1.5,1.5];
+  var Bdai=parts[0],Ldai=parts[1]||parts[0];
+  var SC=Math.min((W-80)/(Bdai||1.5),(H-80)/(Ldai||1.5));SC=Math.min(SC,160);
+
+  var dW=Bdai*SC,dH=Ldai*SC;
+  var ox=(W-dW)/2,oy=(H-dH)/2;
+
+  // Đài outline
+  svg.appendChild(ce('rect',{x:ox,y:oy,width:dW,height:dH,fill:'#EFEBE9',stroke:'#5D4037','stroke-width':'2',rx:'3'}));
+
+  // Đường trục tim
+  var cx=ox+dW/2,cy=oy+dH/2;
+  svg.appendChild(ce('line',{x1:ox-10,y1:cy,x2:ox+dW+10,y2:cy,stroke:'#C62828','stroke-width':'1','stroke-dasharray':'5,3','opacity':'0.5'}));
+  svg.appendChild(ce('line',{x1:cx,y1:oy-10,x2:cx,y2:oy+dH+10,stroke:'#C62828','stroke-width':'1','stroke-dasharray':'5,3','opacity':'0.5'}));
+
+  // Cọc — tạo bố trí tự động theo số cọc
+  var ds=(Dc/1000)*SC;
+  var piles=genPilePositions(nc,Bdai,Ldai,Dc/1000);
+  piles.forEach(function(p,i){
+    var px=ox+p[0]*SC,py=oy+p[1]*SC;
+    svg.appendChild(ce('rect',{x:px-ds/2,y:py-ds/2,width:ds,height:ds,fill:'#6A1B9A',stroke:'#4A148C','stroke-width':'1.5',rx:'2'}));
+    // Dấu + tim
+    svg.appendChild(ce('line',{x1:px-ds/2-4,y1:py,x2:px+ds/2+4,y2:py,stroke:'rgba(255,255,255,.5)','stroke-width':'.8'}));
+    svg.appendChild(ce('line',{x1:px,y1:py-ds/2-4,x2:px,y2:py+ds/2+4,stroke:'rgba(255,255,255,.5)','stroke-width':'.8'}));
+    svg.appendChild(ct('text',{x:px,y:py+3,'text-anchor':'middle','font-size':'7','fill':'#fff','font-weight':'700'},(i+1)+''));
+  });
+
+  // Thép đài (đường ngang + dọc mờ)
+  for(var yi=oy+12;yi<oy+dH-8;yi+=14)svg.appendChild(ce('line',{x1:ox+4,y1:yi,x2:ox+dW-4,y2:yi,stroke:'#1565C0','stroke-width':'0.7','opacity':'0.5'}));
+  for(var xi=ox+12;xi<ox+dW-8;xi+=14)svg.appendChild(ce('line',{x1:xi,y1:oy+4,x2:xi,y2:oy+dH-4,stroke:'#FF8F00','stroke-width':'0.7','opacity':'0.5'}));
+
+  // Dim B
+  svg.appendChild(ce('line',{x1:ox,y1:oy+dH+14,x2:ox+dW,y2:oy+dH+14,stroke:'#5D4037','stroke-width':'1.2'}));
+  [ox,ox+dW].forEach(function(x){svg.appendChild(ce('line',{x1:x,y1:oy+dH+10,x2:x,y2:oy+dH+18,stroke:'#5D4037','stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:ox+dW/2,y:oy+dH+27,'text-anchor':'middle','font-size':'9','fill':'#5D4037','font-weight':'700'},'B='+Bdai+'m'));
+
+  // Dim L
+  svg.appendChild(ce('line',{x1:ox-16,y1:oy,x2:ox-16,y2:oy+dH,stroke:'#5D4037','stroke-width':'1.2'}));
+  [oy,oy+dH].forEach(function(y){svg.appendChild(ce('line',{x1:ox-20,y1:y,x2:ox-12,y2:y,stroke:'#5D4037','stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:ox-28,y:oy+dH/2+3,'text-anchor':'middle','font-size':'9','fill':'#5D4037','font-weight':'700','transform':'rotate(-90,'+(ox-28)+','+(oy+dH/2+3)+')'},'L='+Ldai+'m'));
+
+  // Legend
+  svg.appendChild(ce('rect',{x:W-75,y:8,width:10,height:10,fill:'#6A1B9A',rx:'1'}));
+  svg.appendChild(ct('text',{x:W-62,y:17,'font-size':'7.5','fill':'#6A1B9A','font-weight':'700'},'Cọc D='+Dc+'mm'));
+  svg.appendChild(ce('line',{x1:W-75,y1:26,x2:W-65,y2:26,stroke:'#1565C0','stroke-width':'1.2'}));
+  svg.appendChild(ct('text',{x:W-62,y:30,'font-size':'7.5','fill':'#1565C0'},'Thép I-I'));
+  svg.appendChild(ce('line',{x1:W-75,y1:38,x2:W-65,y2:38,stroke:'#FF8F00','stroke-width':'1.2'}));
+  svg.appendChild(ct('text',{x:W-62,y:42,'font-size':'7.5','fill':'#FF8F00'},'Thép II-II'));
+
+  // Title
+  svg.appendChild(ct('text',{x:W/2,y:H-5,'text-anchor':'middle','font-size':'8.5','fill':'#aaa'},'Mặt bằng đài cọc — Minh hoạ kỹ thuật'));
+}
+
+/* ══ BẢN VẼ MẶT CẮT ĐỨNG A-A ══ */
+function drawMC(){
+  var svg=document.getElementById('mc-svg');svg.innerHTML='';
+  var W=360,H=420;
+  var hm=gv('r-hm')||1.0;
+  var Lc=gv('r-Lc')||12;
+  var hdai=gv('r-h-dai')||0.8;
+  var Dc=gv('r-Dc')||250;
+  var BL=sv('r-BL-dai');
+  var parts=BL.split('x').map(parseFloat);if(parts.length<2||isNaN(parts[0]))parts=[1.5,1.5];
+  var Bdai=parts[0];
+  var zmui=hm+Lc;
+  var totalH=zmui+1.5; // m thêm dưới mũi
+  var SC=Math.min((H-60)/totalH,(W-80)/(Bdai+0.5));SC=Math.min(SC,20);
+
+  var ox=50,oy=20;
+  // Màu đất
+  var soilColors=['#BCAAA4','#A1887F','#8D6E63','#795548'];
+
+  // Vẽ các lớp đất
+  var soilH=[hm+1.5,2.5,3.5,5]; // ước lượng
+  var sAcc=0;
+  soilH.forEach(function(h,i){
+    var sy=oy+sAcc*SC;
+    var sh=h*SC;
+    svg.appendChild(ce('rect',{x:ox-10,y:sy,width:W-ox,height:sh,fill:soilColors[i],'opacity':'0.15'}));
+    if(i>0)svg.appendChild(ce('line',{x1:ox-10,y1:sy,x2:W,y2:sy,stroke:soilColors[i],'stroke-width':'1','stroke-dasharray':'4,3','opacity':'0.5'}));
+    svg.appendChild(ct('text',{x:ox-8,y:sy+sh/2+4,'font-size':'7.5','fill':soilColors[i],'font-weight':'600'},'L'+(i+1)));
+    sAcc+=h;
+  });
+
+  // Mặt đất
+  var mgY=oy;
+  svg.appendChild(ce('line',{x1:ox-10,y1:mgY,x2:W,y2:mgY,stroke:'#5D4037','stroke-width':'1.5','stroke-dasharray':'5,3'}));
+  svg.appendChild(ct('text',{x:2,y:mgY+4,'font-size':'8','fill':'#5D4037','font-weight':'700'},'±0'));
+
+  // Đài cọc
+  var dW=Bdai*SC,dH=hdai*SC;
+  var dx=(W-dW)/2+ox/2,dy=oy+hm*SC-dH;
+  svg.appendChild(ce('rect',{x:dx,y:dy,width:dW,height:dH,fill:'#9C6B36',stroke:'#5D4037','stroke-width':'2'}));
+  // Gạch chéo BT đài
+  for(var gi=0;gi<dW+dH;gi+=10){
+    var gx1=dx+Math.max(0,gi-dH),gy1=dy+Math.min(gi,dH);
+    var gx2=dx+Math.min(gi,dW),gy2=dy+Math.max(0,gi-dW);
+    svg.appendChild(ce('line',{x1:gx1,y1:gy1,x2:gx2,y2:gy2,stroke:'rgba(255,255,255,.08)','stroke-width':'0.8'}));
+  }
+  svg.appendChild(ct('text',{x:dx+dW/2,y:dy+dH/2+4,'text-anchor':'middle','font-size':'8.5','fill':'#fff','font-weight':'700'},'ĐÀI CỌC'));
+
+  // BT lót
+  var lotH=6,lotW=dW+16;
+  svg.appendChild(ce('rect',{x:dx-8,y:oy+hm*SC,width:lotW,height:lotH,fill:'#D7CCC8',stroke:'#9E9E9E','stroke-width':'0.8'}));
+  svg.appendChild(ct('text',{x:dx+dW/2,y:oy+hm*SC+5,'text-anchor':'middle','font-size':'7','fill':'#666'},'BT lót C8'));
+
+  // 2 cọc
+  var cW=Math.max(Dc/1000*SC,6);
+  var cY=oy+hm*SC+lotH;
+  var cH=Lc*SC-lotH;
+  [dx+cW,dx+dW-cW-cW].forEach(function(cx){
+    svg.appendChild(ce('rect',{x:cx,y:cY,width:cW,height:cH,fill:'#6A1B9A',stroke:'#4A148C','stroke-width':'1.5'}));
+    // Thép trong cọc (4 điểm)
+    [cx+2,cx+cW-2].forEach(function(tx){
+      [cY+6,cY+cH-6].forEach(function(ty){
+        svg.appendChild(ce('circle',{cx:tx,cy:ty,r:'2',fill:'#FF8F00','stroke':'none'}));
+      });
+    });
+    // Mũi cọc tam giác
+    svg.appendChild(ce('polygon',{points:cx+','+(cY+cH)+' '+(cx+cW)+','+(cY+cH)+' '+(cx+cW/2)+','+(cY+cH+cW/2),fill:'#4A148C'}));
+  });
+  // Label cọc
+  svg.appendChild(ct('text',{x:dx+dW/2,y:cY+cH/2,'text-anchor':'middle','font-size':'7.5','fill':'rgba(106,27,154,.6)','font-weight':'700'},'CỌC '+Dc+'×'+Dc+'mm'));
+
+  // Thép đài (2 đường ngang trong đài)
+  var rY=oy+hm*SC-8;
+  svg.appendChild(ce('line',{x1:dx+6,y1:rY,x2:dx+dW-6,y2:rY,stroke:'#1565C0','stroke-width':'2.5'}));
+  [dx+10,dx+dW/2,dx+dW-10].forEach(function(rx){
+    svg.appendChild(ce('circle',{cx:rx,cy:rY,r:'3',fill:'#1565C0','stroke':'#fff','stroke-width':'0.8'}));
+  });
+
+  // ═══ DIM LINES ═══
+  var dkBlue='#1565C0',dkOrg='#E65100',dkGreen='#2E7D32';
+
+  // hm
+  var hx=W-18;
+  svg.appendChild(ce('line',{x1:hx,y1:oy,x2:hx,y2:oy+hm*SC,stroke:dkOrg,'stroke-width':'1.2'}));
+  [oy,oy+hm*SC].forEach(function(y){svg.appendChild(ce('line',{x1:hx-5,y1:y,x2:hx+5,y2:y,stroke:dkOrg,'stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:hx+8,y:oy+hm*SC/2+3,'font-size':'8','fill':dkOrg,'font-weight':'700'},'h_m='+hm+'m'));
+
+  // Lc
+  svg.appendChild(ce('line',{x1:hx,y1:oy+hm*SC,x2:hx,y2:oy+zmui*SC,stroke:dkBlue,'stroke-width':'1.2'}));
+  [oy+hm*SC,oy+zmui*SC].forEach(function(y){svg.appendChild(ce('line',{x1:hx-5,y1:y,x2:hx+5,y2:y,stroke:dkBlue,'stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:hx+8,y:oy+(hm+Lc/2)*SC+3,'font-size':'8','fill':dkBlue,'font-weight':'700'},'L_c='+Lc+'m'));
+
+  // hdai
+  var hhx=dx-22;
+  svg.appendChild(ce('line',{x1:hhx,y1:dy,x2:hhx,y2:dy+dH,stroke:dkGreen,'stroke-width':'1.2'}));
+  [dy,dy+dH].forEach(function(y){svg.appendChild(ce('line',{x1:hhx-5,y1:y,x2:hhx+5,y2:y,stroke:dkGreen,'stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:hhx-12,y:dy+dH/2+3,'text-anchor':'middle','font-size':'8','fill':dkGreen,'font-weight':'700','transform':'rotate(-90,'+(hhx-12)+','+(dy+dH/2+3)+')'},'h_đ='+hdai+'m'));
+
+  // B đài
+  svg.appendChild(ce('line',{x1:dx,y1:dy-12,x2:dx+dW,y2:dy-12,stroke:dkGreen,'stroke-width':'1'}));
+  [dx,dx+dW].forEach(function(x){svg.appendChild(ce('line',{x1:x,y1:dy-16,x2:x,y2:dy-8,stroke:dkGreen,'stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:dx+dW/2,y:dy-16,'text-anchor':'middle','font-size':'8','fill':dkGreen,'font-weight':'700'},'B='+Bdai+'m'));
+
+  // A-A section label
+  svg.appendChild(ct('text',{x:2,y:oy+hm*SC+Lc*SC/2,'font-size':'9','fill':'#C62828','font-weight':'700'},'A'));
+  svg.appendChild(ct('text',{x:2,y:oy+hm*SC+Lc*SC/2+14,'font-size':'9','fill':'#C62828','font-weight':'700'},'A'));
+
+  // Title
+  svg.appendChild(ct('text',{x:W/2,y:H-5,'text-anchor':'middle','font-size':'8.5','fill':'#aaa'},'Mặt cắt A-A — Minh hoạ kỹ thuật'));
+}
+
+/* ══ GENERATE PILE POSITIONS ══ */
+function genPilePositions(nc,B,L,Dc){
+  // Đặt cọc phân bố đều trong đài, cách mép 250mm
+  var ep=Math.max(0.25,Dc/2);
+  var bw=B-2*ep,lh=L-2*ep;
+  if(nc<=1)return[[B/2,L/2]];
+  if(nc===2)return[[ep+bw*0.5-bw*0.25,L/2],[ep+bw*0.5+bw*0.25,L/2]];
+  if(nc===3)return[[B/2,ep+lh*0.15],[ep+bw*0.1,ep+lh*0.75],[ep+bw*0.9,ep+lh*0.75]];
+  if(nc===4)return[[ep,ep],[ep+bw,ep],[ep,ep+lh],[ep+bw,ep+lh]];
+  if(nc===5)return[[ep,ep],[ep+bw,ep],[B/2,L/2],[ep,ep+lh],[ep+bw,ep+lh]];
+  if(nc===6)return[[ep,ep],[B/2,ep],[ep+bw,ep],[ep,ep+lh],[B/2,ep+lh],[ep+bw,ep+lh]];
+  if(nc===7)return[[ep,ep],[ep+bw,ep],[ep,L/2],[B/2,L/2],[ep+bw,L/2],[ep,ep+lh],[ep+bw,ep+lh]];
+  if(nc===8)return[[ep,ep],[ep+bw*0.5,ep],[ep+bw,ep],[ep,L/2],[ep+bw,L/2],[ep,ep+lh],[ep+bw*0.5,ep+lh],[ep+bw,ep+lh]];
+  if(nc===9)return[[ep,ep],[B/2,ep],[ep+bw,ep],[ep,L/2],[B/2,L/2],[ep+bw,L/2],[ep,ep+lh],[B/2,ep+lh],[ep+bw,ep+lh]];
+  // Generic: lưới
+  var nx=Math.ceil(Math.sqrt(nc)),ny=Math.ceil(nc/nx);
+  var pts=[];
+  for(var j=0;j<ny&&pts.length<nc;j++)for(var i=0;i<nx&&pts.length<nc;i++)pts.push([ep+(nx>1?i*bw/(nx-1):bw/2),ep+(ny>1?j*lh/(ny-1):lh/2)]);
+  return pts;
+}
+
+function drawAll(){drawMB();drawMC();}
+
+/* ══ CHECKLIST ══ */
+function updCheck(cb){
+  cb.parentElement.classList.toggle('done',cb.checked);
+  var total=document.querySelectorAll('#checklist input').length;
+  var done=document.querySelectorAll('#checklist input:checked').length;
+  var pct=Math.round(done/total*100);
+  document.getElementById('check-progress').textContent='✔ Hoàn thành '+done+'/'+total+' mục ('+pct+'%)';
+  if(done===total)toast('🎉 Hoàn thành 100% Phần 3! Sẵn sàng nộp đồ án.');
+}
+
+/* ══ SAVE ══ */
+function saveM04(){
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong_p3')||'{}');
+    d.m04_saved=true;d.m04_time=new Date().toLocaleString('vi-VN');
+    d.m04_kl=document.getElementById('kl-p3').value;
+    ['r-Dc','r-Lc','r-P','r-nc','r-hm','r-h-dai'].forEach(function(id){
+      var v=gv(id);if(v)d['m04_'+id.replace('r-','')]=v;
+    });
+    localStorage.setItem('nmong_p3',JSON.stringify(d));
+    toast('✓ Đã lưu kết luận Phần 3');
+  }catch(e){toast('Lỗi lưu');}
+}
+
+/* ══ INIT ══ */
+window.onload=function(){
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong_p3')||'{}');
+    // Cọc
+    if(d.coc_td)document.getElementById('r-Dc').value=d.coc_td;
+    if(d.Lc)document.getElementById('r-Lc').value=d.Lc;
+    if(d.P_coc)document.getElementById('r-P').value=d.P_coc;
+    if(d.n_coc)document.getElementById('r-nc').value=d.n_coc;
+    if(d.hm)document.getElementById('r-hm').value=d.hm;
+    if(d.h_dai)document.getElementById('r-h-dai').value=d.h_dai;
+    if(d.coc_loai)document.getElementById('r-loai-coc').value=d.coc_loai;
+    if(d.coc_bt&&d.coc_thep)document.getElementById('r-vl-coc').value=(d.coc_bt||'')+(d.coc_thep?' / '+d.coc_thep:'');
+    if(d.dai_bt&&d.dai_thep)document.getElementById('r-vl-dai').value=(d.dai_bt||'')+(d.dai_thep?' / '+d.dai_thep:'');
+    // Đài
+    if(d.B_dai&&d.L_dai)document.getElementById('r-BL-dai').value=d.B_dai+'x'+d.L_dai;
+    if(d.abv_dai)document.getElementById('r-abv').value=d.abv_dai;
+    // Cốt thép đài
+    if(d.thep_I)document.getElementById('r-thep-I').value=d.thep_I;
+    if(d.thep_II)document.getElementById('r-thep-II').value=d.thep_II;
+    // Kiểm tra
+    if(d.S_lun)document.getElementById('r-S').value=+(d.S_lun*10).toFixed(1);
+    // Kết luận
+    if(d.m04_kl)document.getElementById('kl-p3').value=d.m04_kl;
+    // Checklist counter
+    var total=document.querySelectorAll('#checklist input').length;
+    document.getElementById('check-progress').textContent='Tích vào từng mục khi hoàn thành — 0/'+total+' mục';
+    updSummary();
+    drawAll();
+    if(d.m04_saved||d.P_coc||d.Lc)toast('✓ Đã tải số liệu từ P3·M01–M03');
+  }catch(e){console.log(e);}
+};
+</script>
+</body>
+</html>
