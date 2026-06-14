@@ -370,23 +370,28 @@ main{max-width:1060px;margin:0 auto;padding:36px 20px 90px}
       <div class="part-hd p3">
         <div class="part-badge"><i class="ti ti-number-3" style="font-size:11px"></i> Phần 3</div>
         <div class="part-name">Móng Cọc</div>
-        <div class="part-sub">Cọc ép/đóng BTCT · SCT 4 phương pháp · Nhóm cọc</div>
+        <div class="part-sub">Cọc ép/đóng BTCT · SCT 4 phương pháp · Đài cọc · Kiểm tra nền</div>
       </div>
       <div class="part-body">
         <div class="part-modules">
           <div class="mod-item mp3" onclick="nav('phan3/p3_module01_phuong_an.html')">
             <span class="mod-num np3">M01</span>
-            <div class="mod-txt"><strong>Phương án & SCT Cọc</strong><span>Khai báo · Đặc trưng cọc · 4 PP tính SCT</span></div>
+            <div class="mod-txt"><strong>Số liệu & Phương án</strong><span>Tải trọng · Địa chất 4 lớp · Chiều sâu đài · Đặc trưng cọc</span></div>
             <i class="ti ti-chevron-right mod-arrow"></i>
           </div>
           <div class="mod-item mp3" onclick="nav('phan3/p3_module02_sct_coc.html')">
             <span class="mod-num np3">M02</span>
-            <div class="mod-txt"><strong>Kiểm tra cọc</strong><span>Giai đoạn sử dụng · Thi công · Nhóm cọc</span></div>
+            <div class="mod-txt"><strong>SCT Cọc & Kiểm tra</strong><span>Tra bảng · SPT · Vật liệu · Bố trí · Sử dụng · Thi công</span></div>
             <i class="ti ti-chevron-right mod-arrow"></i>
           </div>
           <div class="mod-item mp3" onclick="nav('phan3/p3_module03_dai_coc.html')">
             <span class="mod-num np3">M03</span>
-            <div class="mod-txt"><strong>Đài cọc & Kết luận</strong><span>Nén thủng đài · Cốt thép đài · Thuyết minh</span></div>
+            <div class="mod-txt"><strong>Đài cọc & Nền dưới mũi</strong><span>Nén thủng đài · Cốt thép đài · TTGH1+2 móng khối</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp3" onclick="nav('phan3/p3_module04_tong_hop.html')">
+            <span class="mod-num np3">M04</span>
+            <div class="mod-txt"><strong>Tổng hợp & Bản vẽ</strong><span>Bảng kết quả · Sơ đồ móng cọc · Checklist B1–B13</span></div>
             <i class="ti ti-chevron-right mod-arrow"></i>
           </div>
         </div>
@@ -467,7 +472,7 @@ function updateStatuses(){
   var parts=[
     {key:'nmong_p1',id:'p1',mods:['m01_done','m02_saved','m03_saved','m04_saved']},
     {key:'nmong_p2',id:'p2',mods:['m01_done','m02_saved','m03_saved','m04_saved']},
-    {key:'nmong_p3',id:'p3',mods:['m01_saved','m02_saved','m03_saved']},
+    {key:'nmong_p3',id:'p3',mods:['m01_saved','m02_saved','m03_saved','m04_saved']},
   ];
   parts.forEach(function(p){
     var d=gLS(p.key)||{};
