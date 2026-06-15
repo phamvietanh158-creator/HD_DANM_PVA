@@ -314,6 +314,11 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
       </div>
     </div>
 
+    <div class="abar">
+      <button class="btn btn-p" onclick="saveB01()"><i class="ti ti-device-floppy"></i> Lưu tiến độ</button>
+      <button class="btn btn-a" onclick="goNext()"><i class="ti ti-arrow-right"></i> B·02 Kiểm tra nền →</button>
+      <a href="../index.html" class="btn btn-ghost"><i class="ti ti-home"></i> Trang chủ</a>
+    </div>
   </div>
 </div>
 
@@ -338,12 +343,6 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
 
 </div><!-- end two-pane -->
 </main>
-
-<div style="max-width:960px;margin:0 auto;padding:12px 16px 20px;display:flex;gap:10px;flex-wrap:wrap">
-  <button class="btn btn-p" onclick="saveB01()"><i class="ti ti-device-floppy"></i> Lưu tiến độ</button>
-  <button class="btn btn-a" onclick="goNext()"><i class="ti ti-arrow-right"></i> B·02 Kiểm tra nền →</button>
-  <a href="../index.html" class="btn btn-ghost"><i class="ti ti-home"></i> Trang chủ</a>
-</div>
 
 <script>
 var ANS={};var SD_B=[];var LC=['#8D6E63','#A1887F','#795548','#6D4C41','#5D4037'];
@@ -515,10 +514,7 @@ function loadEx176B(){
 }
 
 /* ── NAVIGATE ── */
-function goNext(){
-  try{saveB01();}catch(e){}
-  window.location.href='module02_bang_nen.html';
-}
+function goNext(){saveB01();window.location.href='module02_bang_nen.html';}
 
 /* ── INIT ── */
 window.onload=function(){
