@@ -514,7 +514,10 @@ function loadEx176B(){
 }
 
 /* ── NAVIGATE ── */
-function goNext(){saveB01();window.location.href='module02_bang_nen.html';}
+function goNext(){
+  try{saveB01();}catch(e){console.log('save error:',e);}
+  window.location.href='module02_bang_nen.html';
+}
 
 /* ── INIT ── */
 window.onload=function(){
