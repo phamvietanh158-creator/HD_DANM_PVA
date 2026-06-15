@@ -186,7 +186,7 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
 
 <header class="hdr">
   <div class="hdr-in">
-    <a href="../index.html" class="back-btn" style="background:rgba(255,255,255,.08)"><i class="ti ti-home"></i></a><a href="module01_phuong_an.html" class="back-btn"><i class="ti ti-arrow-left"></i> M·01</a>
+    <a href="module01_phuong_an.html" class="back-btn"><i class="ti ti-arrow-left"></i> Module 01</a>
     <div class="hdr-title">
       <h1>Module 02 – Kiểm tra kích thước đáy móng</h1>
       <p>TTGH1: Sức chịu tải Terzaghi · TTGH2: Kiểm tra lún · Đồ án Nền Móng – TS. Phạm Việt Anh</p>
@@ -781,8 +781,7 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-g" onclick="saveProgress()"><i class="ti ti-device-floppy"></i> Lưu tiến độ</button>
       <button class="btn btn-B" onclick="goModule03()"><i class="ti ti-arrow-right"></i> Module 03: Chiều cao móng →</button>
-      <a href="module01_phuong_an.html" class="btn btn-ghost"><i class="ti ti-arrow-left"></i> M·01</a>
-      <a href="../index.html" class="btn btn-ghost"><i class="ti ti-home"></i> Trang chủ</a>
+      <a href="module01_phuong_an.html" class="btn btn-ghost"><i class="ti ti-arrow-left"></i> Về Module 01</a>
     </div>
   </div>
 </div>
@@ -888,7 +887,7 @@ function restoreProgress(){
 
 /* ═══ NAVIGATE MODULE 03 ═══ */
 function goModule03(){
-  try{saveProgress();}catch(e){console.log('save err:',e);}
+  saveProgress();
   window.location.href='module03_chieu_cao_cot_thep.html';
 }
 
