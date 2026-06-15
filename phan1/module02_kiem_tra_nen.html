@@ -888,6 +888,12 @@ function restoreProgress(){
 /* ═══ NAVIGATE MODULE 03 ═══ */
 function goModule03(){
   saveProgress();
+  var total=0,done=0;
+  Object.keys(ANS).forEach(function(k){if(ANS[k]!==null&&ANS[k]!==undefined){total++;if(ANS[k]===true)done++;}});
+  var pct=total?Math.round(done/total*100):0;
+  if(pct<40){
+    if(!confirm('Bạn mới hoàn thành '+pct+'% module 02. Vẫn tiếp tục sang Module 03?')) return;
+  }
   window.location.href='module03_chieu_cao_cot_thep.html';
 }
 
