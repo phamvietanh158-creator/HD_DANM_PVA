@@ -811,7 +811,12 @@ input[readonly]{background:var(--Vlt);color:var(--Vdk);font-weight:700;font-fami
 </div>
 
 <script>
-/* ══ BẢNG TRA ══ */
+// =====================================================
+// PHẦN 3 — MODULE 02: Sức chịu tải Cọc (PP1 ma sát bên + mũi, PP2 SPT)
+// TAU_DATA = bảng tra ma sát đơn vị τi theo độ sâu z (kPa)
+// RN_DATA = bảng tra sức chịu tải mũi cọc theo z và loại đất
+// SOILS = lớp đất từ P3M01; CACHE = đáp án trung gian
+// =====================================================
 var TAU_DATA=[
   {z:1, v:[35,23,15,12,8,4,4,3,2]},
   {z:2, v:[42,30,21,17,12,7,5,4,4]},
@@ -837,13 +842,13 @@ var RN_DATA=[
   {z:35,v:[15000,10000,null,8000,6000,null,4100,null,2250,1400]}
 ];
 
-/* ══ VẬT LIỆU ══ */
+// ═══ VẬT LIỆU: VL_BT (Rb cọc kPa), VL_THEP (Rs, Fct cốt dọc); ANS, CACHE, SOILS ═══
 var VL_BT={B22_5:{Rb:13000},B25:{Rb:14500},B30:{Rb:17000},B35:{Rb:19500}};
 var VL_THEP={'4d14':{Rs:280000,Fct:6.16},'4d16':{Rs:365000,Fct:8.04},'4d18':{Rs:365000,Fct:10.18},'4d20':{Rs:365000,Fct:12.57}};
 
 var ANS={};var CACHE={};var SOILS=[];
 
-/* ══ UTILS ══ */
+// ═══ UTILS: toast, gv/sv, goto, togS, pickMCQ, chkFill, updateProg, scrollNext ═══
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
 function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
 function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
@@ -879,7 +884,7 @@ function scrollNext(){
   for(var i=0;i<all.length;i++){if(all[i].offsetParent){all[i].scrollIntoView({behavior:'smooth',block:'center'});all[i].focus();break;}}
 }
 
-/* ══ BUILD TABLES ══ */
+// ═══ BUILD TABLES: vẽ bảng HTML TAU_DATA + RN_DATA, tô vàng hàng gần độ sâu nhập ═══
 function buildTauTable(){
   var html='';TAU_DATA.forEach(function(r){html+='<tr><td class="val">'+r.z+'</td>'+r.v.map(function(v){return '<td class="sym">'+v+'</td>';}).join('')+'</tr>';});
   document.getElementById('tau-table-body').innerHTML=html;
@@ -889,13 +894,13 @@ function buildRnTable(){
   document.getElementById('Rn-table-body').innerHTML=html;
 }
 
-/* ══ METHOD TABS ══ */
+// ═══ METHOD TABS: chuyển giữa PP1 (ma sát bên + mũi) và PP2 (SPT — công thức Meyerhof) ═══
 function showMethod(m){
   ['tb','spt','vl'].forEach(function(t){document.getElementById('m-'+t).style.display=t===m?'block':'none';});
   document.querySelectorAll('.mtab').forEach(function(b,i){b.classList.toggle('on',['tb','spt','vl'][i]===m);});
 }
 
-/* ══ BUILD MA SÁT BÊN TABLE ══ */
+// ═══ PP1 MA SÁT BÊN: buildMSBTable tạo form nhập τi·li từng lớp; calcNCoc tính [P]=Qs+Qp ═══
 function buildMSBTable(){
   var hm=gv('hm')||1.0,zmui=gv('z-mui')||16;
   if(!SOILS||SOILS.length<1){toast('Chưa có địa chất. Nhập ở P3·M01 và lưu lại.');return;}
@@ -969,7 +974,7 @@ function calcTB(){
   toast('TB: P_GH='+Pgh+'kN → [P]_TB='+P+'kN (k_đ=1.4)');
 }
 
-/* ══ BUILD SPT TABLE ══ */
+// ═══ PP2 SPT: buildSPTTable tạo form nhập N_SPT từng lớp; tính [P] theo Meyerhof ═══
 function buildSPTTable(){
   var hm=gv('hm')||1.0,zmui=gv('z-mui')||16;
   if(!SOILS||SOILS.length<1){toast('Chưa có địa chất!');return;}
@@ -1034,7 +1039,7 @@ function calcSPT(){
   toast('SPT: P_GH='+CACHE['ans_Pgh-spt']+'kN → [P]_SPT='+CACHE['ans_P-spt']+'kN (Fs=2.5)');
 }
 
-/* ══ VẬT LIỆU ══ */
+// ═══ VẬT LIỆU CỌC: calcVL tính [P]VL=φ(Rb·Fbt+Rs·Fct) — khả năng chịu tải theo vật liệu ═══
 function calcVL(){
   var Fc=gv('Fc')*10000,Fct=gv('Fct-vl'),Rb=gv('Rb-vl'),Rs=gv('Rs-vl'),phi=gv('phi-vl')||0.85;
   if(!Fc||!Rb||!Rs){toast('Thiếu số liệu VL!');return;}
@@ -1051,7 +1056,7 @@ function calcVL(){
   var pvlEl=document.getElementById('Pvl-ep');if(pvlEl&&!pvlEl.value)pvlEl.value=Pvl;
 }
 
-/* ══ SỐ LƯỢNG CỌC ══ */
+// ═══ SỐ LƯỢNG CỌC: n≥N0tc/[P]; β hệ số tải trọng lệch tâm; bố trí ô lưới 3d ═══
 function calcNCoc(){
   var N=gv('N0tt-bt'),P=gv('P-coc-bt'),beta=gv('beta-bt')||1.2;
   if(!N||!P)return;
@@ -1069,7 +1074,7 @@ function chkNCoc(){
   if(ok)drawPileLayout();
 }
 
-/* ══ BỐ TRÍ CỌC ══ */
+// ═══ BỐ TRÍ CỌC: drawPileLayout vẽ SVG mặt bằng cọc; tính B×L đài, kiểm tra khoảng cách 3d ═══
 function drawPileLayout(){
   var D=gv('Dc')||0.25;
   if(!D)D=0.25;
@@ -1171,7 +1176,7 @@ function calcDai(B,L,a,ep,aD){
   CACHE.B_dai=B;CACHE.L_dai=L;
 }
 
-/* ══ KIỂM TRA SD ══ */
+// ═══ KIỂM TRA SD: tính Pmax=N0tt/n+M0tt·xmax/Σxi² ≤ [P]; Pmin≥0 ═══
 function buildCoordTable(){
   var n=gv('n-coc-sd')||4;
   var html='';
@@ -1225,14 +1230,14 @@ function calcSD(){
   var PcocRef=gv('P-coc-final')||gv('P-coc');if(PcocRef&&!gv('P-coc-sd'))document.getElementById('P-coc-sd').value=PcocRef;
   var Gdai=+(25*B*L*hd).toFixed(1);
   var Ntotal=+(N0tt+Gdai).toFixed(1);
-  var Mx_dai=+(Mx0+Q0*hm).toFixed(1);
+  var Mx_dai=+Mx0.toFixed(1); // bỏ qua Q (không tính Q·hm)
   CACHE['ans_G-dai']=Gdai;CACHE['ans_N-total']=Ntotal;CACHE['ans_Mx-dai']=Mx_dai;
   var h=document.getElementById('sd-load-hint');
   if(h)h.innerHTML=
     '<div class="ftitle">Tải trọng tại đáy đài</div>'+
     '<div class="frow">G<sub>đài</sub> = 25×'+B+'×'+L+'×'+hd+' = <em>'+Gdai+' kN</em></div>'+
     '<div class="frow">N = '+N0tt+' + '+Gdai+' = <em>'+Ntotal+' kN</em></div>'+
-    '<div class="frow">M<sub>x,đài</sub> = '+Mx0+' + '+Q0+'×'+hm+' = <em>'+Mx_dai+' kN·m</em></div>';
+    '<div class="frow">M<sub>x,đài</sub> = M₀ᵗᵗ = <em>'+Mx_dai+' kN·m</em> (bỏ qua Q)</div>';
   // Gc
   var Dc=gv('Dc-sd')||0.25,Lc=gv('Lc-sd');
   var Gc=+(25*Lc*Dc*Dc).toFixed(1);
@@ -1264,7 +1269,7 @@ function chkKTE_sd(){
   ANS['kte-sd']=(ok&&v<=10);updateProg();
 }
 
-/* ══ KIỂM TRA TC ══ */
+// ═══ KIỂM TRA TC (VẬN CHUYỂN): uốn cọc khi cẩu/lắp; tính M_max, Fa yêu cầu ═══
 function calcTC(){
   // Auto-fill từ cache nếu chưa có
   if(!gv('L-tc')&&gv('Lc'))document.getElementById('L-tc').value=gv('Lc');
@@ -1319,7 +1324,7 @@ function calcTC(){
   toast('TC: M_max='+Mmax.toFixed(2)+'kN·m → F_a,yc='+Fa+'cm². Điền vào ô để kiểm tra.');
 }
 
-/* ══ SAVE & NAVIGATE ══ */
+// ═══ SAVE & NAVIGATE: lưu [P], n_coc, B×L đài vào nmong_p3; chuyển module03 ═══
 function saveM02(){
   try{
     var d=JSON.parse(localStorage.getItem('nmong_p3')||'{}');
@@ -1342,7 +1347,7 @@ function saveM02(){
 }
 function goM03(){saveM02();window.location.href='p3_module03_dai_coc.html';}
 
-/* ══ INIT ══ */
+// ═══ INIT: tải cọc/địa chất từ nmong_p3, xây bảng TAU+Rn, tải đề mẫu nếu cần ═══
 window.onload=function(){
   buildTauTable();buildRnTable();
   try{

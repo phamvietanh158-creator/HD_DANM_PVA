@@ -385,7 +385,13 @@ select.conc-sel{padding:8px 10px;border:1.5px solid var(--brd);border-radius:7px
 </div>
 
 <script>
-/* ═══════════════════════ DATABASE ═══════════════════════ */
+// =====================================================
+// PHẦN 1 — MODULE 01: Phân tích địa chất & Chọn phương án móng
+// DB = cơ sở dữ liệu 112 mẫu đất (1–72: đất dính, 73–112: đất rời)
+//   Mỗi entry: t=loại (d/r), W, g, del, phi, c, qc, N, [WL,WP,ep cho đất dính]
+// SOILS = 3 lớp đất SV chọn; ANS = kết quả từng câu MCQ/fill
+// Lưu kết quả vào localStorage key 'nmong_p1' (phân biệt với p2, p3)
+// =====================================================
 var DB={
 73:{t:'r',W:22.9,g:17.5,del:2.63,phi:28.17,c:0,qc:2.25,N:7},74:{t:'r',W:24.3,g:17.3,del:2.62,phi:28.5,c:0,qc:2.30,N:7},75:{t:'r',W:23.6,g:17.4,del:2.63,phi:28.67,c:0,qc:2.40,N:7},76:{t:'r',W:25.2,g:17.6,del:2.62,phi:28.83,c:0,qc:2.45,N:7},77:{t:'r',W:19.7,g:18.1,del:2.64,phi:31.0,c:0,qc:6.10,N:21},78:{t:'r',W:18.2,g:18.4,del:2.65,phi:31.17,c:0,qc:6.30,N:21},79:{t:'r',W:17.8,g:18.2,del:2.63,phi:31.5,c:0,qc:6.50,N:21},80:{t:'r',W:19.3,g:18.3,del:2.64,phi:31.83,c:0,qc:6.60,N:21},81:{t:'r',W:18.6,g:17.8,del:2.64,phi:29.0,c:0,qc:2.85,N:8},82:{t:'r',W:19.4,g:17.9,del:2.63,phi:29.33,c:0,qc:2.95,N:8},83:{t:'r',W:21.2,g:18.0,del:2.63,phi:29.5,c:0,qc:3.10,N:8},84:{t:'r',W:20.8,g:17.7,del:2.64,phi:29.67,c:0,qc:3.20,N:8},85:{t:'r',W:18.4,g:18.9,del:2.64,phi:32.17,c:0,qc:7.00,N:23},86:{t:'r',W:17.8,g:18.7,del:2.63,phi:32.5,c:0,qc:7.10,N:23},87:{t:'r',W:18.2,g:18.8,del:2.65,phi:32.67,c:0,qc:7.40,N:24},88:{t:'r',W:17.5,g:18.6,del:2.64,phi:32.83,c:0,qc:7.60,N:24},89:{t:'r',W:22.1,g:18.5,del:2.63,phi:30.33,c:0,qc:4.20,N:9},90:{t:'r',W:21.9,g:18.3,del:2.64,phi:30.67,c:0,qc:4.30,N:9},91:{t:'r',W:24.4,g:18.0,del:2.65,phi:30.83,c:0,qc:4.50,N:9},92:{t:'r',W:23.7,g:17.9,del:2.63,phi:31.0,c:0,qc:4.60,N:9},93:{t:'r',W:17.6,g:19.2,del:2.64,phi:33.5,c:0,qc:8.30,N:26},94:{t:'r',W:16.4,g:19.3,del:2.64,phi:34.0,c:0,qc:8.50,N:26},95:{t:'r',W:17.2,g:19.0,del:2.65,phi:34.5,c:0,qc:8.60,N:27},96:{t:'r',W:18.8,g:19.1,del:2.63,phi:34.83,c:0,qc:8.80,N:27},97:{t:'r',W:14.4,g:19.6,del:2.65,phi:35.5,c:0,qc:15.20,N:31},98:{t:'r',W:13.8,g:19.4,del:2.63,phi:35.83,c:0,qc:15.70,N:32},99:{t:'r',W:13.2,g:19.6,del:2.64,phi:36.17,c:0,qc:16.10,N:33},100:{t:'r',W:13.5,g:19.5,del:2.65,phi:36.5,c:0,qc:16.40,N:33},101:{t:'r',W:17.4,g:19.5,del:2.64,phi:34.5,c:0,qc:9.30,N:28},102:{t:'r',W:16.5,g:19.4,del:2.64,phi:34.83,c:0,qc:9.50,N:28},103:{t:'r',W:18.7,g:19.2,del:2.65,phi:35.17,c:0,qc:9.60,N:29},104:{t:'r',W:16.4,g:19.3,del:2.66,phi:35.5,c:0,qc:9.80,N:29},105:{t:'r',W:15.5,g:19.7,del:2.64,phi:36.0,c:0,qc:17.00,N:34},106:{t:'r',W:14.3,g:19.8,del:2.65,phi:36.5,c:0,qc:16.20,N:34},107:{t:'r',W:15.1,g:19.6,del:2.63,phi:36.83,c:0,qc:17.50,N:35},108:{t:'r',W:14.8,g:19.9,del:2.64,phi:37.0,c:0,qc:17.80,N:36},109:{t:'r',W:14.6,g:20.2,del:2.65,phi:36.0,c:0,qc:19.50,N:41},110:{t:'r',W:15.1,g:19.9,del:2.65,phi:36.33,c:0,qc:19.80,N:41},111:{t:'r',W:13.2,g:19.8,del:2.66,phi:36.67,c:0,qc:20.40,N:42},112:{t:'r',W:13.9,g:20.0,del:2.66,phi:37.0,c:0,qc:21.30,N:42},
 1:{t:'d',W:41.3,WL:38.7,WP:34.3,g:16.5,del:2.65,phi:0,c:0,qc:0.48,N:2},2:{t:'d',W:38.2,WL:35.6,WP:31.4,g:16.6,del:2.64,phi:0,c:0,qc:0.50,N:2},3:{t:'d',W:40.5,WL:37.4,WP:32.7,g:16.5,del:2.68,phi:0,c:0,qc:0.52,N:2},4:{t:'d',W:38.8,WL:36.3,WP:29.8,g:16.6,del:2.67,phi:0,c:0,qc:0.54,N:2},5:{t:'d',W:43.6,WL:41.3,WP:33.4,g:16.8,del:2.68,phi:0,c:0,qc:0.35,N:1},6:{t:'d',W:47.5,WL:44.8,WP:30.6,g:16.7,del:2.69,phi:0,c:0,qc:0.37,N:1},7:{t:'d',W:41.9,WL:38.1,WP:27.5,g:16.7,del:2.68,phi:0,c:0,qc:0.40,N:1},8:{t:'d',W:45.4,WL:42.9,WP:35.2,g:16.9,del:2.69,phi:0,c:0,qc:0.42,N:1},9:{t:'d',W:53.1,WL:47.5,WP:26.8,g:16.8,del:2.70,phi:0,c:0,qc:0.29,N:1},10:{t:'d',W:52.6,WL:46.7,WP:27.9,g:16.8,del:2.70,phi:0,c:0,qc:0.30,N:1},11:{t:'d',W:49.7,WL:45.2,WP:22.3,g:16.9,del:2.71,phi:0,c:0,qc:0.31,N:1},12:{t:'d',W:50.9,WL:40.8,WP:21.6,g:16.9,del:2.71,phi:0,c:0,qc:0.32,N:1},
@@ -406,21 +412,21 @@ var DB={
 69:{t:'d',W:26.2,WL:48.7,WP:29.4,g:19.3,del:2.73,phi:19.0,c:40,qc:5.08,N:23,ep:[0.755,0.736,0.719,0.705]},70:{t:'d',W:28.6,WL:50.1,WP:31.3,g:19.4,del:2.72,phi:19.25,c:40,qc:5.16,N:23,ep:[0.773,0.754,0.737,0.723]},71:{t:'d',W:27.4,WL:49.3,WP:30.8,g:19.5,del:2.73,phi:19.5,c:39,qc:5.25,N:24,ep:[0.754,0.735,0.718,0.704]},72:{t:'d',W:25.9,WL:54.3,WP:29.5,g:19.5,del:2.74,phi:19.75,c:38,qc:5.34,N:24,ep:[0.739,0.720,0.703,0.689]}
 };
 
-/* ═══════ CONSTANTS ═══════ */
+// ═══ HẰNG SỐ: LC=màu 3 lớp, gw=trọng lượng nước, METHOD=cách nhập (1=số hiệu/2=tay) ═══
 var LC=['#A1887F','#8D6E63','#6D4C41']; // màu 3 lớp đất
 var gw=9.81;
 var METHOD=1;
 var SOILS=[null,null,null]; // dữ liệu 3 lớp
 var ANS={}; // {key: true/false}
 
-/* ═══════ UTILS ═══════ */
+// ═══ TIỆN ÍCH: toast, gv, sv, goto, togS ═══
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
 function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
 function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 function goto(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function togS(hd){var b=hd.nextElementSibling;b.classList.toggle('hide');var c=hd.querySelector('.chev');if(c)c.style.transform=b.classList.contains('hide')?'rotate(-90deg)':'';}
 
-/* ═══════ INPUT METHOD ═══════ */
+// ═══ PHƯƠNG THỨC NHẬP: chuyển giữa Cách 1 (tra số hiệu) và Cách 2 (nhập tay) ═══
 function setMethod(m){
   METHOD=m;
   document.getElementById('mb1').classList.toggle('on',m===1);
@@ -430,7 +436,7 @@ function setMethod(m){
   if(m===2) buildM2();
 }
 
-/* ─── CÁCH 1: tra theo số hiệu ─── */
+// ═══ CÁCH 1: tạo form nhập số hiệu lớp đất (3 hàng) → tra DB → hiện preview ═══
 function buildM1(){
   var html='';
   for(var i=0;i<3;i++){
@@ -456,8 +462,8 @@ function traLop(i){
   if(!d){alert('Số hiệu #'+sh+' không có trong bảng tra!\nĐất dính: 1–72 · Đất rời: 73–112');return;}
   SOILS[i]={
     sh:sh, name:nm||'Lớp '+(i+1), h:h,
-    g:parseFloat((d.g*10).toFixed(1)), W:d.W, del:d.del,
-    phi:d.phi, c:d.t==='d'?parseFloat((d.c*100).toFixed(0)):0,
+    g:d.g, W:d.W, del:d.del,
+    phi:d.phi, c:d.t==='d'?d.c:0,
     WL:d.t==='d'?(d.WL||''):'', WP:d.t==='d'?(d.WP||''):'',
     E0:'', spt:d.N, qc:d.qc,
     isDinh:d.t==='d', ep:d.ep||null
@@ -485,7 +491,7 @@ function showM1Preview(){
   document.getElementById('m1-preview').style.display='block';
 }
 
-/* ─── CÁCH 2: nhập thủ công ─── */
+// ═══ CÁCH 2: form nhập tay từng chỉ tiêu (γ, W, WL, WP, φ, c, E0, SPT, qc) ═══
 function buildM2(){
   var html='';
   for(var i=0;i<3;i++){
@@ -533,7 +539,7 @@ function collectM2(){
   }
 }
 
-/* ═══════ CONFIRM & BUILD STEPS ═══════ */
+// ═══ XÁC NHẬN ĐỊA CHẤT: gom SOILS, render card phân tích từng lớp ═══
 function confirmData(){
   if(METHOD===2) collectM2();
   var ok=SOILS.filter(function(s){return s&&s.g>0;});
@@ -545,7 +551,7 @@ function confirmData(){
   toast('✓ Xác nhận '+ok.length+' lớp đất. Bắt đầu phân tích!');
 }
 
-/* ═══════ RENDER SOIL CARDS ═══════ */
+// ═══ DỰNG CARD PHÂN TÍCH: mỗi lớp đất 1 card (4 step: A số liệu / B tên / C trạng thái / D dẫn xuất) ═══
 function renderSoilCards(){
   var cont=document.getElementById('soil-cards');
   cont.innerHTML='';
@@ -791,7 +797,7 @@ function buildCard(s,i){
   return wrap;
 }
 
-/* ─── helpers để build step & table ─── */
+// ═══ HELPER COMPONENTS: mkLookupTable (bảng tra chuẩn), mkStep (accordion), tr2 (hàng bảng), mco (MCQ option), rowD (hàng điền chỉ tiêu) ═══
 /* ═══════ LOOKUP TABLE COMPONENT ═══════
    Tạo khối bảng tra chuẩn: header + nguồn + hướng dẫn + bảng HTML + ghi chú
    Params:
@@ -843,7 +849,7 @@ function rowD(id,label,hint,ans,tol,unit){
     '<td style="font-family:var(--mono);font-size:.76rem;color:var(--muted)">'+unit+'</td></tr>';
 }
 
-/* ═══════ MCQ PICK ═══════ */
+// ═══ MCQ: chọn đáp án, highlight xanh/đỏ, cập nhật badge đất tốt/yếu ═══
 function pickMCQ(grp,ci,correct){
   var pfx='mco-'+grp+'-';
   document.querySelectorAll('[id^="'+pfx+'"]').forEach(function(el){el.classList.remove('ok','no');});
@@ -865,7 +871,7 @@ function pickMCQ(grp,ci,correct){
   }
 }
 
-/* ═══════ FILL CHECK ═══════ */
+// ═══ KIỂM TRA ĐÁP ÁN: chkFill (ô số thường) · chkCI (ô chỉ tiêu dẫn xuất) ═══
 function chkFill(id,ans,tol){
   var inp=document.getElementById(id); if(!inp)return;
   var v=parseFloat(inp.value);
@@ -888,7 +894,7 @@ function chkCI(id,ans,tol){
   ANS['ci-'+id]=ok; updateProg();
 }
 
-/* ═══════ PROGRESS ═══════ */
+// ═══ THANH TIẾN TRÌNH: đếm ANS đúng / tổng ═══
 function updateProg(){
   var total=0,done=0;
   Object.keys(ANS).forEach(function(k){if(ANS[k]!==undefined){total++;if(ANS[k]===true)done++;}});
@@ -899,7 +905,7 @@ function updateProg(){
   document.getElementById('hdr-prog').textContent=done+' / '+total;
 }
 
-/* ═══════ TỔNG HỢP TABLE ═══════ */
+// ═══ BẢNG TỔNG HỢP ĐỊA CHẤT: tổng hợp tên, trạng thái, đánh giá tốt/yếu, φ, c, E0 ═══
 function renderTongHop(){
   var gw=9.81;
   var html='<div style="overflow-x:auto"><table class="tbl"><thead><tr>'+
@@ -929,7 +935,7 @@ function renderTongHop(){
   document.getElementById('th-table').innerHTML=html;
 }
 
-/* ═══════ MISC ═══════ */
+// ═══ CÁC HÀM PHỤ: tính n=N0tt/N0tc, cập nhật kết luận, scrollNext ═══
 function autoN(){
   var tt=gv('N0tt'),tc=gv('N0tc');
   if(tt>0&&tc>0) document.getElementById('nvt-hint').textContent='→ Gợi ý: n = '+tt+'/'+tc+' = '+(tt/tc).toFixed(2);
@@ -957,7 +963,7 @@ function scrollNext(){
   for(var i=0;i<all.length;i++){if(all[i].offsetParent){all[i].scrollIntoView({behavior:'smooth',block:'center'});all[i].focus();break;}}
 }
 
-/* ═══════ LOAD DEMO ═══════ */
+// ═══ TẢI VÍ DỤ: điền sẵn đề số 176 (N0tc=697kN, 3 lớp: #25 #94 #70) ═══
 function loadDemo(){
   document.getElementById('N0tt').value=801; document.getElementById('M0tt').value=112; document.getElementById('Q0tt').value=18;
   document.getElementById('N0tc').value=697; document.getElementById('M0tc').value=97; document.getElementById('Q0tc').value=16;
@@ -971,7 +977,7 @@ function loadDemo(){
   toast('Đã tải ví dụ đề 176 · N₀tc=697kN');
 }
 
-/* ═══════ NAVIGATE MODULE 02 ═══════ */
+// ═══ CHUYỂN SANG MODULE 02: lưu SOILS + kết quả phân tích vào nmong_p1 rồi điều hướng ═══
 function goModule02(){
   // Thu thập kết quả module01 để truyền sang
   var total=0,done=0;
@@ -998,6 +1004,14 @@ function goModule02(){
     });
     d.hm=parseFloat(document.getElementById('hm-final').value)||0;
     d.lop_dat=parseInt(document.getElementById('lop-dat').value)||2;
+    // Lưu tải trọng và kích thước cột từ form để các module sau đọc lại
+    ['N0tt','M0tt','Q0tt','N0tc','M0tc','Q0tc','bc','lc'].forEach(function(k){
+      var el=document.getElementById(k); if(el&&el.value)d[k]=parseFloat(el.value)||0;
+    });
+    var mnnEl=document.getElementById('mnn'); if(mnnEl&&mnnEl.value)d.mnn=parseFloat(mnnEl.value)||0;
+    // Alias để module02 đọc đúng tên trường
+    d.hm_sb=d.hm;
+    d.soils=d.m01_soils;
     localStorage.setItem('nmong_p1', JSON.stringify(d));
   }catch(e){}
   if(pct<50){
@@ -1010,7 +1024,7 @@ function getM01Data(){
   try{var raw=localStorage.getItem('nmong_p1');return raw?JSON.parse(raw):{};}catch(e){return {};}
 }
 
-/* ═══════ INIT ═══════ */
+// ═══ KHỞI TẠO: dựng form nhập lớp đất, nạp lại số liệu từ localStorage nmong_p1 ═══
 window.onload=function(){
   // build m1 rows
   buildM1();

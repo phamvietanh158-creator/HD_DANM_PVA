@@ -681,14 +681,19 @@ textarea.conc-inp:focus{border-color:var(--P)}
 </div>
 
 <script>
-/* ══ CONSTANTS ══ */
+// =====================================================
+// PHẦN 2 — MODULE 03: Chiều cao móng & Cốt thép Móng Băng
+// VL = cường độ bê tông; THEP = cường độ thép (Pa)
+// CACHE = lưu đáp án trung gian từ calcCat/calcCotThepB
+// Kiểm tra cắt 1 phương: Q₀=p₀tb·cng ≤ QCĐ=γ_b2·Rbt·h₀
+// =====================================================
 var VL={B20:{Rb:11500,Rbt:900},B25:{Rb:14500,Rbt:1050},B30:{Rb:17000,Rbt:1200}};
 var THEP={AII:{Rs:280000},AIII:{Rs:365000}};
 var ANS={};
 var ANS_CAT_OK=false;
 var CACHE={};
 
-/* ══ UTILS ══ */
+// ═══ UTILS: toast, gv/sv, goto, togS, pickMCQ, chkFill, updateProg, scrollNext ═══
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
 function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
 function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
@@ -724,7 +729,7 @@ function scrollNext(){
   for(var i=0;i<all.length;i++){if(all[i].offsetParent){all[i].scrollIntoView({behavior:'smooth',block:'center'});all[i].focus();break;}}
 }
 
-/* ══ VẬT LIỆU ══ */
+// ═══ VẬT LIỆU: updVL cập nhật Rbt, Rs khi đổi mác; updH0B: h₀=h-a, kiểm tra h₀≥b/3 ═══
 function updVL(){
   var bt=sv('mac-bt')||'B25',thep=sv('mac-thep')||'AIII';
   var Rbt_MPa=(VL[bt]||VL.B25).Rbt/1000;
@@ -753,7 +758,7 @@ function updH0B(){
   }
 }
 
-/* ══ KIỂM TRA CẮT — TÍNH GỢI Ý ══ */
+// ═══ KIỂM TRA CẮT 1 PHƯƠNG: Q₀=p₀tb·cng·1, QCĐ=γb2·Rbt·1·h₀; kinh tế ≤20% ═══
 function calcCat(){
   var b=gv('b_b3'),hm=gv('hm_b3'),bt=gv('bt_b3')/1000;
   var N=gv('N0tt_b3'),M=gv('M0tt_b3'),Q=gv('Q0tt_b3');
@@ -763,7 +768,7 @@ function calcCat(){
   var Rbt_kPa=(VL[macbt]||VL.B25).Rbt; // kPa
   if(!b||!h0||!N){alert('Nhập đủ b, h₀, N₀ᵗᵗ trước!');return;}
 
-  var Mtday=M+Q*hm;
+  var Mtday=M; // bỏ qua Q (không tính Q·hm)
   var p0=N/b;
   var dM=Mtday>0?6*Mtday/(b*b):0;
   var p0max=p0+dM,p0min=p0-dM;
@@ -782,7 +787,7 @@ function calcCat(){
   // Show hint
   var hint=document.getElementById('cat-hint');
   hint.innerHTML='<div class="ftitle">Công thức thay số</div>'+
-    '<div class="frow">M₀ᵗᵗ<sub>đáy</sub> = '+M+' + '+Q+'×'+hm+' = <em>'+Mtday.toFixed(2)+' kNm/m</em></div>'+
+    '<div class="frow">M₀ᵗᵗ<sub>đáy</sub> = M₀ᵗᵗ = <em>'+Mtday.toFixed(2)+' kNm/m</em> (bỏ qua Q)</div>'+
     '<div class="frow">p₀ = '+N+'/'+b+' = <em>'+p0.toFixed(2)+' kPa</em></div>'+
     '<div class="frow">p₀<sub>max</sub> = '+p0.toFixed(2)+' + 6×'+Mtday.toFixed(2)+'/'+b+'² = <em>'+p0max.toFixed(2)+' kPa</em></div>'+
     '<div class="frow">c<sub>ng</sub> = ½×('+b+' – '+bt+') = <em>'+cng.toFixed(3)+' m</em></div>'+
@@ -815,7 +820,8 @@ function chkCatResult(){
   if(CACHE.Q0&&CACHE.QCD){ANS_CAT_OK=CACHE.Q0<CACHE.QCD;}
 }
 
-/* ══ CỐT THÉP ══ */
+// ═══ CỐT THÉP: Mng=(p₀max+png)/2·cng·1·cng/2, Fa=Mng/(0.9Rs·h₀)
+//     calcThepNgang/Doc: chọn d, tính số thanh n, khoảng cách a ═══
 function calcCotThepB(){
   var b=gv('b_b3'),bt=gv('bt_b3')/1000;
   var h0=gv('h0');
@@ -880,7 +886,7 @@ function calcThepDoc(){
   ANS['mcq-spd']=ok;updateProg();
 }
 
-/* ══ KẾT LUẬN ══ */
+// ═══ KẾT LUẬN: tổng hợp h, h₀, cốt thép; kiểm tra cắt + kinh tế ═══
 function updFinal(){
   var h=gv('h-final'),a=gv('abv');
   if(h){document.getElementById('h0-final').value=(h-a/1000).toFixed(3);}
@@ -893,7 +899,7 @@ function updFinal(){
   v.innerHTML='<b>'+(ok&&eok?'✓ Chiều cao móng hợp lý':'✗ Cần điều chỉnh')+':</b> Q₀='+Q0.toFixed(1)+'kN/m '+(ok?'≤':'>=')+' Q<sub>CĐ</sub>='+QCD.toFixed(1)+'kN/m · Kinh tế: '+econ.toFixed(1)+'%'+(eok?' ≤ 20% ✓':' > 20% → giảm h');
 }
 
-/* ══ SAVE / NAVIGATE ══ */
+// ═══ saveB03: lưu h, cốt thép vào nmong_p2; goB04: lưu rồi chuyển module04 ═══
 function saveB03(){
   try{
     var d=JSON.parse(localStorage.getItem('nmong_p2')||'{}');
@@ -914,7 +920,7 @@ function saveB03(){
 }
 function goB04(){saveB03();window.location.href='module04_bang_tong_hop.html';}
 
-/* ══ INIT ══ */
+// ═══ INIT: cập nhật vật liệu, tải N/M/b/h từ nmong_p2, khởi tạo ANS ═══
 window.onload=function(){
   updVL();
   // Load từ localStorage

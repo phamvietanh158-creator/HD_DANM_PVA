@@ -796,7 +796,13 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
 </div>
 
 <script>
-/* ═══════════════ CONSTANTS ═══════════════ */
+// =====================================================
+// PHẦN 1 — MODULE 02: Kiểm tra kích thước đáy móng (TTGH 1 + TTGH 2)
+// TERZ = Terzaghi bearing capacity [Nγ,Nq,Nc] theo φ°
+// K0_DATA = hệ số phân bố ứng suất k₀ (tra theo z/b và l/b)
+// SIZES/RESULTS = các cặp b×l thử và kết quả kiểm tra
+// Dữ liệu vào/ra qua localStorage key 'nmong_p1'
+// =====================================================
 var TERZ={
   0:[0.00,1.00,5.70],5:[0.14,1.64,7.34],10:[0.56,2.69,9.61],
   11:[0.69,2.98,10.16],12:[0.85,3.29,10.76],13:[1.04,3.63,11.41],
@@ -838,7 +844,7 @@ var ANS={};
 var SIZES=[]; // [{b,l}]
 var RESULTS=[]; // [{ptb,pmax,pmin,P,ok_tech,ok_econ,pct}]
 
-/* ═══ LOOKUP TABLE COMPONENT ═══ */
+// Component bảng tra chuẩn (dùng lại từ M01)
 function mkLookupTable(title,ref,location,howto,tableHtml,note){
   return '<div class="lookup-table-wrap">'+
     '<div class="lookup-table-hdr">'+
@@ -854,7 +860,7 @@ function mkLookupTable(title,ref,location,howto,tableHtml,note){
   '</div>';
 }
 
-/* ═══ AUTOSAVE ═══ */
+// ═══ TỰ ĐỘNG LƯU / KHÔI PHỤC: ghi m02_saved, b, l, S vào nmong_p1 ═══
 var AUTOSAVE_KEY='nmong_p1';
 function saveProgress(){
   try{
@@ -885,7 +891,7 @@ function restoreProgress(){
   }catch(e){}
 }
 
-/* ═══ NAVIGATE MODULE 03 ═══ */
+// ═══ CHUYỂN SANG MODULE 03: lưu tiến độ rồi điều hướng ═══
 function goModule03(){
   saveProgress();
   var total=0,done=0;
@@ -897,14 +903,14 @@ function goModule03(){
   window.location.href='module03_chieu_cao_cot_thep.html';
 }
 
-/* ═══ UTILS ═══ */
+// ═══ TIỆN ÍCH: toast, gv, sv, goto, togS ═══
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
 function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
 function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 function goto(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function togS(hd){var b=hd.nextElementSibling;b.classList.toggle('hide');var c=hd.querySelector('.chev');if(c)c.style.transform=b.classList.contains('hide')?'rotate(-90deg)':'';}
 
-/* ═══ INIT TABLES ═══ */
+// ═══ DỰNG BẢNG TRA: Terzaghi và K₀ ═══
 function buildTerzTable(){
   var phis=Object.keys(TERZ).map(Number).sort(function(a,b){return a-b;});
   var html='';
@@ -929,7 +935,7 @@ function buildK0Table(){
   document.getElementById('k0-body').innerHTML=html;
 }
 
-/* ═══ TERZAGHI LOOKUP ═══ */
+// ═══ NỘI SUY TERZAGHI [Nγ,Nq,Nc] theo φ (nội suy tuyến tính) ═══
 function getTerz(phi){
   var keys=Object.keys(TERZ).map(Number).sort(function(a,b){return a-b;});
   // interpolate
@@ -947,7 +953,7 @@ function highlightTerz(phi){
   if(el)el.classList.add('highlight');
 }
 
-/* ═══ SHAPE FACTORS ═══ */
+// ═══ HỆ SỐ HÌNH DẠNG [ξ1,ξ2,ξ3]: băng/vuông/chữ nhật ═══
 function shapeFactor(b,l,shape){
   if(shape==='strip') return [1,1,1];
   if(shape==='square') return [0.8,1,1.3];
@@ -955,7 +961,7 @@ function shapeFactor(b,l,shape){
   return [1-0.2*r, 1, 1+0.2*r];
 }
 
-/* ═══ CALC SCT TERZAGHI ═══ */
+// ═══ SỨC CHỊU TẢI Terzaghi: pgh = ξ1·γ1·Nγ·b + ξ2·q·Nq + ξ3·c·Nc · [P]=pgh/2 ═══
 function calcSCT(b,l){
   var phi=gv('phi1'),c=gv('c1'),gam1=gv('gam1'),gam0=gv('gam0');
   var hm=gv('hm'),h1=gv('h1_val'),shape=sv('shape');
@@ -972,18 +978,18 @@ function calcSCT(b,l){
   return {P:P,pgh:pgh,Ng:Ng,Nq:Nq,Nc:Nc,q:q,xi:xi};
 }
 
-/* ═══ CALC PTB PMAX ═══ */
+// ═══ ÁP LỰC ĐÁY MÓNG: ptb = N0tc/(b·l)+γ̄·hm · pmax = ptb+6Mtc/(b·l²) ═══
 function calcP(b,l){
   var N0tc=gv('N0tc'),M0tc=gv('M0tc'),Q0tc=gv('Q0tc');
   var hm=gv('hm'),gtb=gv('gamma_tb');
-  var Mtc_day=M0tc+Q0tc*hm; // momen tại đáy móng
+  var Mtc_day=M0tc; // bỏ qua Q (không tính Q·hm)
   var ptb=N0tc/(b*l)+gtb*hm;
   var pmax=ptb+6*Mtc_day/(b*l*l);
   var pmin=ptb-6*Mtc_day/(b*l*l);
   return {ptb:ptb,pmax:pmax,pmin:pmin,F:b*l,Mtc_day:Mtc_day};
 }
 
-/* ═══ CALC FSB ═══ */
+// ═══ ƯỚC TÍNH DIỆN TÍCH ĐÁY MÓNG: Fsb = N0tc/(R0-γ̄·hm) → gợi ý b, l ═══
 function calcFsb(){
   var N0tc=gv('N0tc'),R0=gv('R0_est'),gtb=gv('gamma_tb'),hm=gv('hm');
   var denom=R0-gtb*hm;
@@ -1003,7 +1009,7 @@ function updateSizes(){
   if(lbEl&&b&&l) lbEl.value=(l/b).toFixed(2);
 }
 
-/* ═══ BUILD TTGH1 ═══ */
+// ═══ KIỂM TRA TTGH1: duyệt tối đa 3 cặp b×l, tính SCT + áp lực đáy, tạo accordion ═══
 function buildTTGH1(){
   var bs=[gv('b1'),gv('b2'),gv('b3')];
   var ls=[gv('l1'),gv('l2'),gv('l3')];
@@ -1059,7 +1065,7 @@ function buildPA(b,l,pD,sD,idx){
   return '<div class="earth-box"><i class="ti ti-pencil" style="font-size:12px;vertical-align:-2px"></i> <b>Tính tay từng bước rồi điền vào ô.</b> Hệ thống kiểm tra tự động ±1 kPa.</div>'+
   // ptb
   '<div class="fml-box"><div class="ftitle">Bước 1: Tính áp lực tại đáy móng</div>'+
-  '<div class="frow">M<sup>tc</sup><sub>đáy</sub> = M₀<sup>tc</sup>+Q₀<sup>tc</sup>·hm = <em>'+gv('M0tc').toFixed(0)+'</em>+'+gv('Q0tc').toFixed(0)+'×'+gv('hm')+' = '+pD.Mtc_day.toFixed(2)+' kN·m</div>'+
+  '<div class="frow">M<sup>tc</sup><sub>đáy</sub> = M₀<sup>tc</sup> = <em>'+pD.Mtc_day.toFixed(2)+' kN·m</em> (bỏ qua Q)</div>'+
   '<div class="frow">p<sub>tb</sub> = N₀<sup>tc</sup>/(b·l) + γ̄·hm = <em>'+gv('N0tc').toFixed(0)+'</em>/('+b+'×'+l+') + '+gv('gamma_tb')+'×'+gv('hm')+' = ?</div>'+
   '<div class="frow">p<sub>max</sub> = p<sub>tb</sub> + 6·M<sup>tc</sup><sub>đáy</sub>/(b·l²) = ?</div>'+
   '</div>'+
@@ -1095,6 +1101,7 @@ function buildPA(b,l,pD,sD,idx){
   '</div></div>';
 }
 
+// ═══ BẢNG SO SÁNH CÁC PHƯƠNG ÁN: tổng hợp TTGH1 + kinh tế, tô xanh PA đạt và tiết kiệm ≤10% ═══
 function buildSummaryTable(){
   var html='<div style="overflow-x:auto"><table class="tbl"><thead><tr>'+
     '<th>Phương án</th><th>b×l (m)</th><th>F (m²)</th>'+
@@ -1120,7 +1127,7 @@ function buildSummaryTable(){
   document.getElementById('ttgh1-summary-table').innerHTML=html;
 }
 
-/* ═══ LÚN LAYERS ═══ */
+// ═══ TẠO FORM NHẬP THÔNG SỐ LỚP ĐẤT CHO TÍNH LÚN (γ, e₀, E₀, loại đất) ═══
 function buildLunLayers(){
   var html='';
   var soils=[
@@ -1140,7 +1147,7 @@ function buildLunLayers(){
   document.getElementById('lun-layers').innerHTML=html;
 }
 
-/* ═══ BUILD LÚN TABLE ═══ */
+// ═══ BẢNG PHÂN TẦNG TÍNH LÚN (TTGH2): chia đất thành hi=b/4, tính σbt, σgl=k₀·pgl, Si=0.8σgl·hi/E₀ ═══
 function buildLunTable(){
   var b=gv('b-lun'),l=gv('l-lun');
   if(!b||!l){alert('Nhập b và l đã chọn!');return;}
@@ -1204,6 +1211,7 @@ function buildLunTable(){
   document.getElementById('lun-body').innerHTML=html||'<tr><td colspan="11" style="padding:10px;color:#aaa;text-align:center">Không có phân tố trong vùng nén lún</td></tr>';
 }
 
+// ═══ NỘI SUY SONG TUYẾN HỆ SỐ K₀ từ K0_DATA theo z/b (hàng) và l/b (cột) ═══
 function interpK0(zb,lb){
   // find row
   var rows=K0_ZB;
@@ -1220,7 +1228,7 @@ function interpK0(zb,lb){
   return (v00*(1-s)+v01*s)*(1-t)+(v10*(1-s)+v11*s)*t;
 }
 
-/* ═══ CHECK FUNCTIONS ═══ */
+// ═══ chkFill: kiểm tra ô fill (dung sai tol); chkCI: kiểm tra phân tố lún Si; chkS: S ≤ [S] ═══
 function chkFill(id,ans,tol){
   var inp=document.getElementById(id);var chipId='chip-'+id;var chip=document.getElementById(chipId);
   if(!inp)return;
@@ -1264,6 +1272,7 @@ function chkS(){
 }
 function calcLun(){}
 
+// ═══ MCQ HELPERS: pickMCQ đánh dấu đáp án + cập nhật ANS; mco sinh thẻ lựa chọn HTML ═══
 function pickMCQ(grp,ci,correct){
   var pfx='mco-'+grp+'-';var ok=(ci===correct);
   document.querySelectorAll('[id^="'+pfx+'"]').forEach(function(el){el.classList.remove('ok','no');});
@@ -1277,7 +1286,7 @@ function mco(grp,ci,label,correct){
     '<span class="mkey">'+String.fromCharCode(65+ci)+'</span><span>'+label+'</span></div>';
 }
 
-/* ═══ KẾT LUẬN ═══ */
+// ═══ updKetLuan: xác nhận b×l chọn khớp PA đạt; updFinal: kết luận tổng TTGH1+TTGH2 ═══
 function updKetLuan(){
   var b=gv('b-chon'),l=gv('l-chon');
   if(!b||!l)return;
@@ -1302,7 +1311,7 @@ function updFinal(){
     '<div class="err-box"><b>✗ Kết luận:</b> Cần điều chỉnh kích thước.'+((!ok_t)?' p<sub>tb</sub>='+ptb+'kPa > [P]='+P+'kPa — cần tăng b×l.':'')+((!ok_s&&S)?'S='+S+'mm > [S]='+Sallow+'mm — cần tăng kích thước.':'')+'</div>';
 }
 
-/* ═══ PROGRESS ═══ */
+// ═══ updateProg: đếm ANS đúng/tổng, cập nhật thanh tiến trình + badge; scrollNext cuộn đến ô sai ═══
 function updateProg(){
   var total=0,done=0;
   Object.keys(ANS).forEach(function(k){if(ANS[k]!==null&&ANS[k]!==undefined){total++;if(ANS[k]===true)done++;}});
@@ -1317,7 +1326,7 @@ function scrollNext(){
   for(var i=0;i<all.length;i++){if(all[i].offsetParent){all[i].scrollIntoView({behavior:'smooth',block:'center'});all[i].focus();break;}}
 }
 
-/* ═══ KIỂM TRA LỚP 2 ═══ */
+// ═══ KIỂM TRA LỚP 2: σgl(z)+σbt(z) ≤ [P]lớp2 tại đỉnh lớp đất yếu phía dưới lớp 1 ═══
 function buildK0Lop2Table(){
   // Reuse K0 data, copy tbody from main k0 table
   var html='';
@@ -1402,7 +1411,7 @@ function showLop2HintAndWrap(){
   }
 }
 
-/* ═══ ĐỆM CÁT ═══ */
+// ═══ ĐỆM CÁT: mở rộng đáy qua lớp đệm b'=b+2·hd·tan30°; tính p đáy đệm; chkDemCat so với [P]TN ═══
 var DEM_ANS={bprime:0,lprime:0,pdem:0};
 function calcDemCat(){
   var hd=parseFloat(document.getElementById('hd').value)||0;
@@ -1445,7 +1454,7 @@ function chkDemCat(){
   ANS['dem-ok']=ok; updateProg();
 }
 
-/* ═══ INIT ═══ */
+// ═══ INIT: khởi tạo bảng Terzaghi + K₀, tạo form lớp lún, khôi phục tiến trình, tải nmong_p1 ═══
 window.onload=function(){
   buildTerzTable();buildK0Table();buildLunLayers();restoreProgress();
   // load from localStorage

@@ -725,14 +725,19 @@ textarea.conc-inp:focus{border-color:var(--P)}
 </div>
 
 <script>
-/* ═══ CONSTANTS ═══ */
+// =====================================================
+// PHẦN 1 — MODULE 03: Chiều cao móng & Cốt thép
+// VL = cường độ bê tông (Rb, Rbt kPa); THEP = cường độ thép (Rs Pa)
+// CACHE = lưu đáp án trung gian để chkNT/chkCT kiểm tra từng ô
+// ANS = kết quả từng câu; lưu vào localStorage key 'nmong_p1'
+// =====================================================
 var VL={B20:{Rb:11500,Rbt:900},B25:{Rb:14500,Rbt:1050},B30:{Rb:17000,Rbt:1200}};
 var THEP={AII:{Rs:280000},AIII:{Rs:365000}};
 var ANS={};
 var ANS_NT_OK=false;
 var CACHE={}; // computed correct answers
 
-/* ═══ UTILS ═══ */
+// ═══ UTILS: toast, gv/sv (đọc giá trị), goto, goMod04/goMongCoc (điều hướng), saveM03, togS (accordion) ═══
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
 function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
 function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
@@ -799,15 +804,16 @@ function updH0(){
   else document.getElementById('h0').value='';
 }
 
-/* ═══ NÉN THỦNG: TÍNH GỢI Ý ═══ */
+// ═══ NÉN THỦNG: tính Pđt (lực cắt tháp nén thủng) và Pcđt=Rbt·btb·h₀, so sánh để xác nhận h ═══
+// ═══ updVL: cập nhật Rbt, Rs khi đổi mác; updH0: h₀ = h − a_bv ═══
 function calcNenThuong(){
   var b=gv('b'),l=gv('l'),hm=gv('hm'),bc=gv('bc')/1000,lc=gv('lc')/1000;
-  var N=gv('N0tt'),M=gv('M0tt'),Q=gv('Q0tc')||0,h0=gv('h0');
+  var N=gv('N0tt'),M=gv('M0tt'),h0=gv('h0');
   var bt=sv('mac-bt');
   var Rbt=(VL[bt]||VL.B25).Rbt; // kPa
   if(!b||!l||!h0){alert('Nhập đủ b, l, h₀ và tải trọng!');return;}
 
-  var Mtday=M+Q*hm;
+  var Mtday=M; // bỏ qua Q (không tính Q·hm)
   var p0tb=N/(b*l);
   var p0max=p0tb+6*Mtday/(b*l*l);
   var p0min=p0tb-6*Mtday/(b*l*l);
@@ -843,7 +849,8 @@ function chkNenThuong(){
   if(CACHE.Pdt&&CACHE.Pcdt){ANS_NT_OK=gv('Pdt')<gv('Pcdt');}
 }
 
-/* ═══ CỐT THÉP ═══ */
+// ═══ CỐT THÉP: tính mômen tiết diện ngàm (phương l và phương b), Fa=M/(0.9·Rs·h₀)
+//     calcThepL/calcThepB: chọn số thanh n, kiểm tra khoảng cách a ∈ [150,250]mm ═══
 function calcCotThep(){
   var b=gv('b'),l=gv('l'),bc=gv('bc')/1000,lc=gv('lc')/1000;
   var h0=gv('h0');
@@ -855,7 +862,7 @@ function calcCotThep(){
 
   var lng=0.5*(l-lc);
   var p0ng=p0min+(p0max-p0min)*(l-lng)/l;
-  var Mng_l=(p0ng+p0max)/2*(lng*b)*(lng/2);
+  var Mng_l=b*lng*lng*(p0ng+2*p0max)/6; // tải phân bố hình thang: ∫₀^lng p(x)·x dx
   var Fal=Mng_l/(0.9*Rs/1000*h0)*10000; // cm²
 
   var bng=0.5*(b-bc);
@@ -917,7 +924,7 @@ function calcThepB(){
   ANS['mcq-spb']=ok;updateProg();
 }
 
-/* ═══ KẾT LUẬN ═══ */
+// ═══ KẾT LUẬN: tổng hợp h, h₀, kết quả nén thủng; kinh tế ≤20% là hợp lý ═══
 function updFinal(){
   var h=gv('h-final'),a=gv('abv');
   if(h){document.getElementById('h0-final').value=(h-a/1000).toFixed(3);}
@@ -930,7 +937,7 @@ function updFinal(){
   v.innerHTML='<b>'+(ok&&eok?'✓ Chiều cao móng hợp lý':'✗ Cần điều chỉnh')+':</b> P<sub>đt</sub>='+Pdt.toFixed(1)+'kN '+(ok?'&lt;':'&gt;')+' P<sub>cđt</sub>='+Pcdt.toFixed(1)+'kN · Kinh tế: '+econ.toFixed(1)+'%'+(eok?' ≤ 20% ✓':' > 20% — giảm h');
 }
 
-/* ═══ PROGRESS ═══ */
+// ═══ updateProg: đếm ANS đúng/tổng, cập nhật thanh tiến trình + badge; scrollNext cuộn đến ô sai ═══
 function updateProg(){
   var total=0,done=0;Object.keys(ANS).forEach(function(k){if(ANS[k]!==null&&ANS[k]!==undefined){total++;if(ANS[k]===true)done++;}});
   var pct=total?Math.round(done/total*100):0;
@@ -944,7 +951,7 @@ function scrollNext(){
   for(var i=0;i<all.length;i++){if(all[i].offsetParent){all[i].scrollIntoView({behavior:'smooth',block:'center'});all[i].focus();break;}}
 }
 
-/* ═══ INIT ═══ */
+// ═══ INIT: cập nhật vật liệu, tải N/M/b/l từ nmong_p1, khởi tạo ANS keys cho thanh tiến trình ═══
 window.onload=function(){
   updVL();
   try{
