@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đồ Án Nền Móng – ĐHXD Hà Nội</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --P:#5D4037;--Pdk:#3E2723;--Plt:#EFEBE9;--Pmd:#795548;
+  --A:#FF8F00;--Alt:#FFF8E1;--Adk:#E65100;
+  --G:#2E7D32;--Glt:#E8F5E9;--Gdk:#1B5E20;
+  --B:#1565C0;--Blt:#E3F2FD;
+  --V:#6A1B9A;--Vlt:#F3E5F5;--Vdk:#4A148C;
+  --sand:#D7CCC8;--bg:#F2EDE7;--sur:#fff;--brd:#D7CCC8;
+  --muted:#795548;--text:#1C0A00;
+  --sans:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:12px;--sh:0 2px 12px rgba(93,64,55,.08);--shmd:0 6px 28px rgba(93,64,55,.18)
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:var(--sans);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+
+/* ── CSS BIẾN MÀU & FONT: P=nâu, A=cam, G=xanh lá, B=xanh dương, V=tím ── */
+
+/* ── HEADER ── */
+.hdr{background:var(--Pdk);color:#fff;box-shadow:0 2px 16px rgba(30,10,5,.35)}
+.hdr-in{max-width:1060px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:56px;gap:14px}
+.hdr-ico{width:36px;height:36px;background:var(--A);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-ico i{font-size:20px;color:#fff}
+.hdr-brand h1{font-size:1rem;font-weight:700}
+.hdr-brand p{font-size:.68rem;opacity:.6;margin-top:1px}
+.hdr-badge{margin-left:auto;font-family:var(--mono);font-size:.7rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:4px 13px;border-radius:20px;color:rgba(255,255,255,.75)}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(112deg,var(--Pdk) 0%,#5D4037 55%,#6D4C41 100%);color:#fff;padding:56px 0 52px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-40px;top:-60px;width:340px;height:340px;border-radius:50%;background:rgba(255,143,0,.07)}
+.hero::after{content:'';position:absolute;left:-50px;bottom:-50px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.03)}
+.hero-in{max-width:1060px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:center}
+.hero-tag{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:var(--A);margin-bottom:10px}
+.hero-title{font-size:1.95rem;font-weight:700;line-height:1.22;margin-bottom:13px}
+.hero-title span{color:var(--A)}
+.hero-desc{font-size:.88rem;opacity:.78;line-height:1.7;max-width:460px;margin-bottom:22px}
+.hero-pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:5px 13px;font-size:.76rem}
+.pill i{font-size:13px;opacity:.85}
+.hero-illu{display:flex;justify-content:center;align-items:flex-end}
+
+/* ── MAIN ── */
+main{max-width:1060px;margin:0 auto;padding:36px 20px 90px}
+
+/* ── HOW TO ── */
+.sec-hd{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.sec-hd h2{font-size:1.05rem;font-weight:700;white-space:nowrap}
+.sec-hd::after{content:'';flex:1;height:1.5px;background:var(--brd)}
+
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:36px}
+.how-card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);padding:18px 16px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.how-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.how-card.ca::before{background:var(--A)}.how-card.cg::before{background:var(--G)}.how-card.cb::before{background:var(--B)}
+.how-num{font-family:var(--mono);font-size:.62rem;font-weight:700;color:#bbb;letter-spacing:1px;margin-bottom:10px}
+.how-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.how-ico.ia{background:var(--Alt)}.how-ico.ig{background:var(--Glt)}.how-ico.ib{background:var(--Blt)}
+.how-ico i{font-size:21px}
+.how-ico.ia i{color:var(--A)}.how-ico.ig i{color:var(--G)}.how-ico.ib i{color:var(--B)}
+.how-title{font-size:.9rem;font-weight:700;margin-bottom:5px}
+.how-desc{font-size:.78rem;color:var(--muted);line-height:1.55}
+
+/* ── 3 THẺ PHẦN CHÍNH (Phần 1/2/3): header màu khác nhau, list module, nút bắt đầu ── */
+.parts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:36px}
+.part-card{border-radius:var(--r);overflow:hidden;box-shadow:var(--shmd);cursor:pointer;transition:transform .18s,box-shadow .18s;display:flex;flex-direction:column}
+.part-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(93,64,55,.22)}
+.part-hd{padding:20px 20px 16px;color:#fff;flex-shrink:0}
+.part-hd.p1{background:linear-gradient(135deg,var(--P) 0%,var(--Pdk) 100%)}
+.part-hd.p2{background:linear-gradient(135deg,var(--G) 0%,var(--Gdk) 100%)}
+.part-hd.p3{background:linear-gradient(135deg,var(--V) 0%,var(--Vdk) 100%)}
+.part-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.63rem;font-weight:700;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.22);padding:3px 9px;border-radius:10px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.part-name{font-size:1.05rem;font-weight:700;margin-bottom:4px}
+.part-sub{font-size:.76rem;opacity:.75;line-height:1.4}
+.part-body{background:var(--sur);border:1px solid var(--brd);border-top:none;padding:16px;flex:1;display:flex;flex-direction:column;gap:8px}
+.part-modules{display:flex;flex-direction:column;gap:5px;flex:1}
+.mod-item{display:flex;align-items:center;gap:8px;font-size:.78rem;padding:6px 8px;border-radius:7px;background:#faf8f6;border:1px solid transparent;transition:all .12s;cursor:pointer}
+.mod-item:hover{background:var(--Plt);border-color:var(--sand)}
+.mod-item.mp1:hover{background:var(--Plt)}.mod-item.mp2:hover{background:var(--Glt)}.mod-item.mp3:hover{background:var(--Vlt)}
+.mod-num{font-family:var(--mono);font-size:.6rem;font-weight:700;width:28px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mod-num.np1{background:var(--Plt);color:var(--P)}.mod-num.np2{background:var(--Glt);color:var(--G)}.mod-num.np3{background:var(--Vlt);color:var(--V)}
+.mod-txt{flex:1;line-height:1.3}
+.mod-txt strong{display:block;font-weight:600;font-size:.79rem}
+.mod-txt span{font-size:.7rem;color:var(--muted)}
+.mod-arrow{font-size:12px;color:#ccc}
+.part-cta{margin-top:10px;padding-top:10px;border-top:1px solid var(--brd)}
+.cta-btn{width:100%;border:none;border-radius:8px;padding:10px;font-size:.84rem;font-weight:700;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:7px;transition:all .16s}
+.cta-btn.b1{background:var(--P);color:#fff}.cta-btn.b1:hover{background:var(--Pdk)}
+.cta-btn.b2{background:var(--G);color:#fff}.cta-btn.b2:hover{background:var(--Gdk)}
+.cta-btn.b3{background:var(--V);color:#fff}.cta-btn.b3:hover{background:var(--Vdk)}
+.part-status{font-size:.68rem;font-family:var(--mono);padding:3px 8px;border-radius:6px;text-align:center;margin-top:6px}
+.ps-new{background:var(--Plt);color:var(--Pmd)}.ps-prog{background:#FFF8E1;color:#BF360C}.ps-done{background:var(--Glt);color:var(--Gdk)}
+
+/* ── SHARED DATA BANNER ── */
+.shared-banner{background:var(--Blt);border:1.5px solid var(--B);border-radius:var(--r);padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:36px}
+.shared-banner i{font-size:22px;color:var(--B);flex-shrink:0}
+.shared-banner-txt h3{font-size:.88rem;font-weight:700;color:#0d2a52;margin-bottom:2px}
+.shared-banner-txt p{font-size:.78rem;color:#1a3a6a;line-height:1.5}
+.shared-btn{margin-left:auto;background:var(--B);color:#fff;border:none;border-radius:7px;padding:8px 15px;font-size:.76rem;font-weight:700;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:5px;flex-shrink:0;transition:all .15s}
+.shared-btn:hover{background:#0D47A1}
+
+/* ── FOOTER NOTE ── */
+.footer-note{text-align:center;font-size:.76rem;color:var(--muted);padding:16px;opacity:.7}
+
+/* ── MODAL: hộp thoại xác nhận dùng lại địa chất từ Phần 1 sang Phần 3 ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--sur);border-radius:var(--r);padding:24px;width:min(480px,90vw);box-shadow:var(--shmd);animation:fadeUp .2s ease}
+.modal h3{font-size:1rem;font-weight:700;margin-bottom:8px}
+.modal p{font-size:.82rem;color:var(--muted);margin-bottom:16px;line-height:1.55}
+.modal-btns{display:flex;gap:8px;flex-wrap:wrap}
+.modal-btns button{flex:1;border:none;border-radius:7px;padding:10px;font-size:.84rem;font-weight:700;cursor:pointer;font-family:var(--sans)}
+.mb-p{background:var(--P);color:#fff}.mb-g{background:var(--G);color:#fff}.mb-ghost{background:transparent;border:1.5px solid var(--brd);color:var(--muted)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.parts-grid .part-card{animation:slideUp .25s ease both}
+.parts-grid .part-card:nth-child(2){animation-delay:.08s}
+.parts-grid .part-card:nth-child(3){animation-delay:.16s}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="hdr-ico"><i class="ti ti-building-bridge"></i></div>
+    <div class="hdr-brand">
+      <h1>Đồ Án Nền Móng</h1>
+      <p>Bộ môn Cơ Học Đất – Nền Móng · Trường ĐH Xây Dựng Hà Nội</p>
+    </div>
+    <span class="hdr-badge">TS. Phạm Việt Anh · v2025</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-in">
+    <div>
+      <div class="hero-tag">Hệ thống hỗ trợ thực hành · Đồ án Nền Móng</div>
+      <h2 class="hero-title">Thiết kế <span>Nền Móng</span><br>từng bước, đúng quy trình</h2>
+      <p class="hero-desc">Nhập số liệu đề bài → Tự tính tay rồi điền kết quả → Hệ thống kiểm tra ngay ✓/✗. Ba phần hoàn toàn độc lập, địa chất nhập một lần dùng chung.</p>
+      <div class="hero-pills">
+        <span class="pill"><i class="ti ti-pencil"></i> Tự tính — hệ thống kiểm tra</span>
+        <span class="pill"><i class="ti ti-book-2"></i> Bám hướng dẫn đồ án 2022</span>
+        <span class="pill"><i class="ti ti-device-floppy"></i> Lưu tiến độ tự động</span>
+      </div>
+    </div>
+    <!-- Minh họa SVG 3 loại móng -->
+    <div class="hero-illu">
+      <svg viewBox="0 0 270 210" width="270" height="210" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hatch1" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+          </pattern>
+        </defs>
+
+        <!-- MẶT ĐẤT -->
+        <line x1="0" y1="62" x2="270" y2="62" stroke="rgba(255,255,255,.45)" stroke-width="1.2" stroke-dasharray="6,4"/>
+        <text x="3" y="59" font-size="7" fill="rgba(255,255,255,.55)" font-family="Plus Jakarta Sans" font-weight="600">Mặt đất</text>
+
+        <!-- ĐẤT NỀN (lớp 1 + lớp 2) -->
+        <rect x="0" y="62" width="270" height="80" fill="rgba(161,136,127,.22)"/>
+        <rect x="0" y="142" width="270" height="68" fill="rgba(109,76,65,.28)"/>
+        <line x1="0" y1="142" x2="270" y2="142" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="4" y="108" font-size="7" fill="rgba(255,255,255,.38)" font-family="Plus Jakarta Sans">Lớp 1</text>
+        <text x="4" y="162" font-size="7" fill="rgba(255,255,255,.38)" font-family="Plus Jakarta Sans">Lớp 2</text>
+
+        <!-- ═══ MÓNG ĐƠN (trái, x≈35) ═══ -->
+        <!-- Cột nổi trên mặt đất -->
+        <rect x="26" y="10" width="18" height="52" fill="rgba(255,255,255,.22)" stroke="rgba(255,255,255,.4)" stroke-width="1" rx="1"/>
+        <!-- Khối móng nằm trong đất -->
+        <polygon points="14,62 60,62 66,82 8,82" fill="rgba(255,255,255,.28)" stroke="rgba(255,255,255,.45)" stroke-width="1.2"/>
+        <rect x="8" y="82" width="58" height="22" fill="rgba(255,255,255,.35)" stroke="rgba(255,255,255,.55)" stroke-width="1.2" rx="1"/>
+        <!-- Cốt thép trong móng -->
+        <line x1="14" y1="98" x2="60" y2="98" stroke="rgba(255,143,0,.75)" stroke-width="1.5"/>
+        <!-- Dimension hm -->
+        <line x1="72" y1="62" x2="72" y2="104" stroke="rgba(255,143,0,.6)" stroke-width="1"/>
+        <line x1="68" y1="62" x2="76" y2="62" stroke="rgba(255,143,0,.6)" stroke-width="1"/>
+        <line x1="68" y1="104" x2="76" y2="104" stroke="rgba(255,143,0,.6)" stroke-width="1"/>
+        <text x="76" y="85" font-size="7" fill="rgba(255,143,0,.8)" font-weight="700" font-family="Plus Jakarta Sans">hm</text>
+        <!-- Mũi tên N0 -->
+        <line x1="35" y1="2" x2="35" y2="9" stroke="rgba(255,143,0,.9)" stroke-width="1.8"/>
+        <polygon points="35,10 31,3 39,3" fill="rgba(255,143,0,.9)"/>
+        <text x="40" y="8" font-size="7.5" fill="rgba(255,143,0,.95)" font-weight="700" font-family="Plus Jakarta Sans">N₀</text>
+        <!-- Label -->
+        <text x="37" y="207" text-anchor="middle" font-size="7.5" fill="rgba(255,200,150,.9)" font-weight="700" font-family="Plus Jakarta Sans">MÓNG ĐƠN</text>
+
+        <!-- ═══ MÓNG BĂNG (giữa, x≈110–190) ═══ -->
+        <!-- 2 cột nổi -->
+        <rect x="104" y="10" width="14" height="52" fill="rgba(76,175,80,.35)" stroke="rgba(76,175,80,.6)" stroke-width="1" rx="1"/>
+        <rect x="152" y="10" width="14" height="52" fill="rgba(76,175,80,.35)" stroke="rgba(76,175,80,.6)" stroke-width="1" rx="1"/>
+        <!-- Dầm nối 2 cột trên mặt đất (nét mờ) -->
+        <line x1="118" y1="20" x2="152" y2="20" stroke="rgba(76,175,80,.3)" stroke-width="2" stroke-dasharray="3,2"/>
+        <!-- Móng băng liên tục nằm trong đất -->
+        <rect x="96" y="62" width="78" height="16" fill="rgba(76,175,80,.3)" stroke="rgba(76,175,80,.55)" stroke-width="1.2" rx="1"/>
+        <rect x="96" y="78" width="78" height="28" fill="rgba(76,175,80,.38)" stroke="rgba(76,175,80,.65)" stroke-width="1.5" rx="1"/>
+        <!-- Cốt thép băng -->
+        <line x1="100" y1="100" x2="170" y2="100" stroke="rgba(255,143,0,.7)" stroke-width="1.5"/>
+        <line x1="100" y1="93" x2="170" y2="93" stroke="rgba(255,143,0,.45)" stroke-width="1"/>
+        <!-- Mũi tên N0 ×2 -->
+        <line x1="111" y1="2" x2="111" y2="9" stroke="rgba(76,175,80,.9)" stroke-width="1.6"/>
+        <polygon points="111,10 107,3 115,3" fill="rgba(76,175,80,.9)"/>
+        <line x1="159" y1="2" x2="159" y2="9" stroke="rgba(76,175,80,.9)" stroke-width="1.6"/>
+        <polygon points="159,10 155,3 163,3" fill="rgba(76,175,80,.9)"/>
+        <!-- Label "Băng" -->
+        <rect x="113" y="68" width="44" height="11" fill="rgba(76,175,80,.25)" rx="3"/>
+        <text x="135" y="77" text-anchor="middle" font-size="6.5" fill="rgba(76,175,80,.9)" font-weight="700" font-family="Plus Jakarta Sans">LIÊN TỤC</text>
+        <text x="135" y="207" text-anchor="middle" font-size="7.5" fill="rgba(150,220,150,.9)" font-weight="700" font-family="Plus Jakarta Sans">MÓNG BĂNG</text>
+
+        <!-- ═══ MÓNG CỌC (phải, x≈220) ═══ -->
+        <!-- Cột nổi -->
+        <rect x="212" y="10" width="18" height="52" fill="rgba(171,71,188,.35)" stroke="rgba(171,71,188,.6)" stroke-width="1" rx="1"/>
+        <!-- Đài cọc nằm trong đất lớp 1 -->
+        <rect x="198" y="62" width="46" height="24" fill="rgba(171,71,188,.4)" stroke="rgba(171,71,188,.7)" stroke-width="1.5" rx="1"/>
+        <!-- 2 cọc xuyên xuống lớp 2 -->
+        <rect x="207" y="86" width="10" height="80" fill="rgba(171,71,188,.5)" stroke="rgba(171,71,188,.65)" stroke-width="1"/>
+        <rect x="225" y="86" width="10" height="80" fill="rgba(171,71,188,.5)" stroke="rgba(171,71,188,.65)" stroke-width="1"/>
+        <!-- Mũi cọc nhọn -->
+        <polygon points="207,166 217,166 212,177" fill="rgba(171,71,188,.8)"/>
+        <polygon points="225,166 235,166 230,177" fill="rgba(171,71,188,.8)"/>
+        <!-- Cốt thép cọc -->
+        <line x1="210" y1="88" x2="210" y2="165" stroke="rgba(255,143,0,.5)" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="214" y1="88" x2="214" y2="165" stroke="rgba(255,143,0,.5)" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Dimension L cọc -->
+        <line x1="242" y1="86" x2="242" y2="166" stroke="rgba(171,71,188,.6)" stroke-width="1"/>
+        <line x1="238" y1="86" x2="246" y2="86" stroke="rgba(171,71,188,.6)" stroke-width="1"/>
+        <line x1="238" y1="166" x2="246" y2="166" stroke="rgba(171,71,188,.6)" stroke-width="1"/>
+        <text x="250" y="130" font-size="7" fill="rgba(171,71,188,.8)" font-weight="700" font-family="Plus Jakarta Sans">L</text>
+        <!-- Ma sát bên (mũi tên nhỏ) -->
+        <line x1="200" y1="115" x2="206" y2="115" stroke="rgba(255,143,0,.55)" stroke-width="1.2" marker-end="url(#arr_tau)"/>
+        <line x1="200" y1="135" x2="206" y2="135" stroke="rgba(255,143,0,.55)" stroke-width="1.2"/>
+        <text x="192" y="128" font-size="6.5" fill="rgba(255,143,0,.65)" font-family="Plus Jakarta Sans" transform="rotate(-90,192,128)">τᵢ</text>
+        <!-- N0 -->
+        <line x1="221" y1="2" x2="221" y2="9" stroke="rgba(171,71,188,.9)" stroke-width="1.8"/>
+        <polygon points="221,10 217,3 225,3" fill="rgba(171,71,188,.9)"/>
+        <text x="227" y="8" font-size="7.5" fill="rgba(171,71,188,.95)" font-weight="700" font-family="Plus Jakarta Sans">N₀</text>
+        <!-- Label -->
+        <text x="221" y="207" text-anchor="middle" font-size="7.5" fill="rgba(210,150,230,.9)" font-weight="700" font-family="Plus Jakarta Sans">MÓNG CỌC</text>
+
+        <!-- PHÂN CÁCH MỜ giữa 3 phần -->
+        <line x1="88" y1="10" x2="88" y2="200" stroke="rgba(255,255,255,.1)" stroke-width="1" stroke-dasharray="3,4"/>
+        <line x1="194" y1="10" x2="194" y2="200" stroke="rgba(255,255,255,.1)" stroke-width="1" stroke-dasharray="3,4"/>
+      </svg>
+    </div>    </div>
+  </div>
+</section>
+
+<main>
+
+  <!-- CÁCH SỬ DỤNG -->
+  <div class="sec-hd"><h2>Cách sử dụng</h2></div>
+  <div class="how-grid">
+    <div class="how-card ca">
+      <div class="how-num">BƯỚC 01</div>
+      <div class="how-ico ia"><i class="ti ti-file-text" style="color:var(--A)"></i></div>
+      <div class="how-title">Chọn phần cần làm</div>
+      <div class="how-desc">Chọn 1 trong 3 phần bên dưới. Mỗi phần hoàn toàn độc lập — không cần làm theo thứ tự. Địa chất nhập một lần ở Phần 1, Phần 2 và 3 có thể dùng lại.</div>
+    </div>
+    <div class="how-card cg">
+      <div class="how-num">BƯỚC 02</div>
+      <div class="how-ico ig"><i class="ti ti-calculator" style="color:var(--G)"></i></div>
+      <div class="how-title">Tự tính tay rồi điền</div>
+      <div class="how-desc">Mỗi module có lý thuyết, bảng tra, sơ đồ tính. Sinh viên dùng máy tính cầm tay tính rồi điền vào ô — hệ thống kiểm tra ✓/✗ ngay. Nút "Gợi ý" hiện đáp án khi cần.</div>
+    </div>
+    <div class="how-card cb">
+      <div class="how-num">BƯỚC 03</div>
+      <div class="how-ico ib"><i class="ti ti-device-floppy" style="color:var(--B)"></i></div>
+      <div class="how-title">Lưu & tiếp tục lần sau</div>
+      <div class="how-desc">Tiến độ lưu tự động vào trình duyệt. Đóng trang rồi mở lại vẫn còn số liệu. Mỗi phần có nút "Lưu tiến độ" riêng — không lo mất dữ liệu khi làm nhiều buổi.</div>
+    </div>
+  </div>
+
+  <!-- SHARED DATA BANNER -->
+  <div class="shared-banner">
+    <i class="ti ti-database"></i>
+    <div class="shared-banner-txt">
+      <h3>Địa chất dùng chung cho Phần 1 & Phần 2</h3>
+      <p>Số liệu địa chất nhập một lần ở Phần 1 (Móng Nông), Phần 2 (Móng Băng) sẽ tự động tải lại. Phần 3 (Móng Cọc) hỏi có muốn dùng lại không khi bắt đầu. Tải trọng mỗi phần nhập riêng.</p>
+    </div>
+    <button class="shared-btn" onclick="showGeoStatus()"><i class="ti ti-eye"></i> Xem địa chất</button>
+  </div>
+
+  <!-- 3 PHẦN CHÍNH -->
+  <div class="sec-hd"><h2>Chọn phần thực hành</h2></div>
+  <div class="parts-grid">
+
+    <!-- PHẦN 1: MÓNG NÔNG -->
+    <div class="part-card" id="card-p1">
+      <div class="part-hd p1">
+        <div class="part-badge"><i class="ti ti-number-1" style="font-size:11px"></i> Phần 1</div>
+        <div class="part-name">Móng Nông</div>
+        <div class="part-sub">Móng đơn dưới cột · Nền tự nhiên hoặc đệm cát</div>
+      </div>
+      <div class="part-body">
+        <div class="part-modules">
+          <div class="mod-item mp1" onclick="nav('phan1/module01_phuong_an.html')">
+            <span class="mod-num np1">M01</span>
+            <div class="mod-txt"><strong>Phương án & Địa chất</strong><span>Khai báo tải trọng · Phân tích địa chất · Chọn hm</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp1" onclick="nav('phan1/module02_kiem_tra_nen.html')">
+            <span class="mod-num np1">M02</span>
+            <div class="mod-txt"><strong>Kiểm tra nền</strong><span>TTGH1 Terzaghi · TTGH2 cộng lún · Đệm cát</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp1" onclick="nav('phan1/module03_chieu_cao_cot_thep.html')">
+            <span class="mod-num np1">M03</span>
+            <div class="mod-txt"><strong>Chiều cao & Cốt thép móng</strong><span>Nén thủng · Tính Fa · Bố trí thép</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp1" onclick="nav('phan1/module04_ban_ve.html')">
+            <span class="mod-num np1">M04</span>
+            <div class="mod-txt"><strong>Tổng hợp & Bản vẽ</strong><span>Kết luận · Bản vẽ mặt cắt · Thuyết minh</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+        </div>
+        <div class="part-cta">
+          <button class="cta-btn b1" onclick="startPart('p1','phan1/module01_phuong_an.html')">
+            <i class="ti ti-player-play"></i> Vào Phần 1
+          </button>
+          <div class="part-status ps-new" id="status-p1">Chưa bắt đầu</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHẦN 2: MÓNG BĂNG -->
+    <div class="part-card" id="card-p2">
+      <div class="part-hd p2">
+        <div class="part-badge"><i class="ti ti-number-2" style="font-size:11px"></i> Phần 2</div>
+        <div class="part-name">Móng Băng</div>
+        <div class="part-sub">Móng dầm liên tục dưới hàng cột · Nền tự nhiên</div>
+      </div>
+      <div class="part-body">
+        <div class="part-modules">
+          <div class="mod-item mp2" onclick="nav('phan2/module01_bang_phuong_an.html')">
+            <span class="mod-num np2">M01</span>
+            <div class="mod-txt"><strong>Phương án & Tải trọng</strong><span>Khai báo tải trọng băng · Địa chất từ P1</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp2" onclick="nav('phan2/module02_bang_nen.html')">
+            <span class="mod-num np2">M02</span>
+            <div class="mod-txt"><strong>Kiểm tra nền móng băng</strong><span>Tính pmax/pmin · TTGH1 · TTGH2 lún</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp2" onclick="nav('phan2/module03_bang_cot_thep.html')">
+            <span class="mod-num np2">M03</span>
+            <div class="mod-txt"><strong>Nội lực & Cốt thép</strong><span>Biểu đồ M, Q · Tính Fa dầm móng</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp2" onclick="nav('phan2/module04_bang_tong_hop.html')">
+            <span class="mod-num np2">M04</span>
+            <div class="mod-txt"><strong>Tổng hợp & Bản vẽ</strong><span>Kết luận · Bản vẽ móng băng · Thuyết minh</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+        </div>
+        <div class="part-cta">
+          <button class="cta-btn b2" onclick="startPart('p2','phan2/module01_bang_phuong_an.html')">
+            <i class="ti ti-player-play"></i> Vào Phần 2
+          </button>
+          <div class="part-status ps-new" id="status-p2">Chưa bắt đầu · <em style="opacity:.7">Đang phát triển</em></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHẦN 3: MÓNG CỌC -->
+    <div class="part-card" id="card-p3">
+      <div class="part-hd p3">
+        <div class="part-badge"><i class="ti ti-number-3" style="font-size:11px"></i> Phần 3</div>
+        <div class="part-name">Móng Cọc</div>
+        <div class="part-sub">Cọc ép/đóng BTCT · SCT Cọc · Đài cọc ·</div>
+      </div>
+      <div class="part-body">
+        <div class="part-modules">
+          <div class="mod-item mp3" onclick="nav('phan3/p3_module01_phuong_an.html')">
+            <span class="mod-num np3">M01</span>
+            <div class="mod-txt"><strong>Số liệu & Phương án</strong><span>Tải trọng · Địa chất 4 lớp · Chiều sâu đài · Đặc trưng cọc</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp3" onclick="nav('phan3/p3_module02_sct_coc.html')">
+            <span class="mod-num np3">M02</span>
+            <div class="mod-txt"><strong>SCT Cọc & Kiểm tra</strong><span>Tra bảng · SPT · Vật liệu · Bố trí · Sử dụng · Thi công</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp3" onclick="nav('phan3/p3_module03_dai_coc.html')">
+            <span class="mod-num np3">M03</span>
+            <div class="mod-txt"><strong>Đài cọc & Nền dưới mũi</strong><span>Nén thủng đài · Cốt thép đài · TTGH1+2 móng khối</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+          <div class="mod-item mp3" onclick="nav('phan3/p3_module04_tong_hop.html')">
+            <span class="mod-num np3">M04</span>
+            <div class="mod-txt"><strong>Tổng hợp & Bản vẽ</strong><span>Bảng kết quả · Sơ đồ móng cọc · Checklist B1–B13</span></div>
+            <i class="ti ti-chevron-right mod-arrow"></i>
+          </div>
+        </div>
+        <div class="part-cta">
+          <button class="cta-btn b3" onclick="startPart('p3','phan3/p3_module01_phuong_an.html')">
+            <i class="ti ti-player-play"></i> Vào Phần 3
+          </button>
+          <div class="part-status ps-new" id="status-p3">Chưa bắt đầu</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end parts-grid -->
+
+  <div class="footer-note">
+    TS. Phạm Việt Anh · Bộ môn Cơ Học Đất – Nền Móng · ĐHXD Hà Nội · v2025
+  </div>
+</main>
+
+<!-- MODAL: địa chất -->
+<div class="modal-bg" id="geo-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>Tình trạng địa chất chung</h3>
+    <p id="geo-modal-txt">Đang đọc dữ liệu...</p>
+    <div class="modal-btns">
+      <button class="mb-p" onclick="nav('phan1/module01_phuong_an.html')"><i class="ti ti-pencil"></i> Chỉnh sửa ở M01</button>
+      <button class="mb-ghost" onclick="closeModal()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: hỏi dùng lại địa chất P1 khi vào P3 -->
+<div class="modal-bg" id="reuse-modal" onclick="if(event.target===this)closeReuse()">
+  <div class="modal">
+    <h3>Dùng lại địa chất Phần 1?</h3>
+    <p>Phát hiện dữ liệu địa chất từ Phần 1. Móng cọc thường dùng cùng địa chất — bạn có muốn tải lại không?</p>
+    <div class="modal-btns">
+      <button class="mb-p" onclick="reuseGeo(true)"><i class="ti ti-check"></i> Dùng lại</button>
+      <button class="mb-ghost" onclick="reuseGeo(false)">Nhập mới</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================================================
+// INDEX — Trang chủ đồ án nền móng
+// gLS/sLS = đọc/ghi localStorage (key riêng từng phần: nmong_p1/p2/p3)
+// 3 phần độc lập; địa chất nhập một lần ở Phần 1, có thể dùng lại ở Phần 3
+// =====================================================
+
+// Tiện ích đọc/ghi localStorage dạng JSON
+function gLS(key){try{var r=localStorage.getItem(key);return r?JSON.parse(r):null;}catch(e){return null;}}
+function sLS(key,val){try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}}
+
+// nav() — điều hướng thẳng · startPart() — kiểm tra nếu P3 có thể dùng lại địa chất P1
+var PENDING_NAV='';
+function nav(url){window.location.href=url;}
+
+function startPart(part,url){
+  if(part==='p3'){
+    var p1=gLS('nmong_p1');
+    if(p1&&p1.soils&&p1.soils.length>0){
+      PENDING_NAV=url;
+      document.getElementById('reuse-modal').classList.add('open');
+      return;
+    }
+  }
+  nav(url);
+}
+function reuseGeo(yes){
+  document.getElementById('reuse-modal').classList.remove('open');
+  if(yes){
+    // Copy soils từ p1 sang p3
+    var p1=gLS('nmong_p1'),p3=gLS('nmong_p3')||{};
+    if(p1&&p1.soils){p3.soils=p1.soils;sLS('nmong_p3',p3);}
+  }
+  nav(PENDING_NAV);
+}
+function closeModal(){document.getElementById('geo-modal').classList.remove('open');}
+function closeReuse(){document.getElementById('reuse-modal').classList.remove('open');}
+
+// ═══ TRẠNG THÁI TIẾN ĐỘ: đọc localStorage từng phần, hiển thị chip Chưa/Đang/Hoàn thành ═══
+function updateStatuses(){
+  var parts=[
+    {key:'nmong_p1',id:'p1',mods:['m01_done','m02_saved','m03_saved','m04_saved']},
+    {key:'nmong_p2',id:'p2',mods:['m01_done','m02_saved','m03_saved','m04_saved']},
+    {key:'nmong_p3',id:'p3',mods:['m01_saved','m02_saved','m03_saved','m04_saved']},
+  ];
+  parts.forEach(function(p){
+    var d=gLS(p.key)||{};
+    var done=p.mods.filter(function(m){return !!d[m];}).length;
+    var el=document.getElementById('status-'+p.id);
+    if(!el)return;
+    if(done===0){
+      el.className='part-status ps-new';
+      el.textContent=p.id==='p2'?'Chưa bắt đầu · Đang phát triển':'Chưa bắt đầu';
+    } else if(done<p.mods.length){
+      el.className='part-status ps-prog';
+      el.textContent='Đang làm · '+done+'/'+p.mods.length+' module';
+      if(d.m01_time||d.m05_time) el.textContent+=' · '+(d.m01_time||d.m05_time||'');
+    } else {
+      el.className='part-status ps-done';
+      el.textContent='✓ Hoàn thành '+p.mods.length+'/'+p.mods.length+' module';
+    }
+  });
+  // Legacy: đọc key cũ 'nmong' nếu chưa migrate
+  var old=gLS('nmong');
+  if(old&&old.N0tt){
+    var p1el=document.getElementById('status-p1');
+    if(p1el&&p1el.textContent==='Chưa bắt đầu'){
+      p1el.className='part-status ps-prog';
+      p1el.textContent='Có dữ liệu cũ · Bấm vào M01 để tiếp tục';
+    }
+  }
+}
+
+// ═══ MODAL THÔNG TIN ĐỊA CHẤT: hiển thị danh sách lớp đất đã nhập ở Phần 1 ═══
+function showGeoStatus(){
+  var p1=gLS('nmong_p1')||gLS('nmong');
+  var modal=document.getElementById('geo-modal');
+  var txt=document.getElementById('geo-modal-txt');
+  if(p1&&p1.soils&&p1.soils.length>0){
+    var names=p1.soils.map(function(s,i){return (i+1)+'. '+(s.name||'Lớp '+(i+1));}).join(' · ');
+    txt.innerHTML='<b>✓ Đã có '+p1.soils.length+' lớp địa chất từ Phần 1:</b><br>'+names+'<br><br>Phần 2 tự động dùng lại. Phần 3 sẽ hỏi khi bắt đầu.';
+  } else {
+    txt.innerHTML='<b>Chưa có dữ liệu địa chất.</b><br>Vào Phần 1 · Module 01 để nhập số liệu địa chất. Sau đó Phần 2 và 3 có thể tùy chọn dùng lại.';
+  }
+  modal.classList.add('open');
+}
+
+// ═══ KHỞI TẠO: cập nhật trạng thái tiến độ từ localStorage khi tải trang ═══
+window.onload=function(){updateStatuses();};
+</script>
+</body>
+</html>

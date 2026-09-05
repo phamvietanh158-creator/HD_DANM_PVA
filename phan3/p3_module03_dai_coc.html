@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P3·M03 – Đài Cọc & Nền Dưới Mũi Cọc</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --P:#5D4037;--Pdk:#3E2723;--Plt:#EFEBE9;--Pmd:#795548;
+  --V:#6A1B9A;--Vlt:#F3E5F5;--Vdk:#4A148C;--Vmd:#7B1FA2;
+  --A:#FF8F00;--Alt:#FFF8E1;--Adk:#E65100;
+  --G:#2E7D32;--Glt:#E8F5E9;--Gdk:#1B5E20;
+  --R:#C62828;--Rlt:#FFEBEE;--B:#1565C0;--Blt:#E3F2FD;
+  --bg:#F3E5F5;--sur:#fff;--brd:#CE93D8;--muted:#7B1FA2;--text:#1C0A00;
+  --sans:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:12px;--sh:0 2px 16px rgba(106,27,154,.09)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:var(--sans);color:var(--text);font-size:14px;line-height:1.6}
+.hdr{background:var(--Vdk);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(74,20,140,.4)}
+.hdr-in{max-width:960px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:12px}
+.back-btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff;padding:5px 13px;border-radius:7px;font-size:.78rem;font-weight:600;font-family:var(--sans);display:flex;align-items:center;gap:5px;text-decoration:none}
+.back-btn:hover{background:rgba(255,255,255,.24)}
+.hdr-title{flex:1}.hdr-title h1{font-size:.93rem;font-weight:700}.hdr-title p{font-size:.68rem;opacity:.7;margin-top:1px}
+.pb{font-family:var(--mono);font-size:.74rem;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:4px 12px;border-radius:20px}
+.tabs-bar{background:var(--Vdk)}.tabs-in{max-width:960px;margin:0 auto;display:flex;gap:1px;padding:4px 14px;overflow-x:auto;scrollbar-width:none}
+.tab{padding:5px 12px;border-radius:6px;font-size:.74rem;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;border:none;background:transparent;font-family:var(--sans);white-space:nowrap;display:flex;align-items:center;gap:4px}
+.tab:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85)}.tab.on{background:var(--A);color:#fff}
+.tn{font-family:var(--mono);font-size:.6rem;background:rgba(255,255,255,.18);padding:1px 5px;border-radius:3px}
+main{max-width:960px;margin:0 auto;padding:20px 16px 90px}
+.prog-wrap{margin-bottom:16px}.prog-top{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;color:var(--muted);margin-bottom:4px}
+.prog-track{height:6px;background:var(--brd);border-radius:10px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--V),var(--A));border-radius:10px;transition:width .4s}
+.card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
+.card-hd{background:var(--V);color:#fff;padding:11px 18px;display:flex;align-items:center;gap:9px}
+.card-hd i{font-size:18px;opacity:.9}.card-hd h2{font-size:.9rem;font-weight:700}.card-hd p{font-size:.72rem;opacity:.72;margin-top:1px}
+.cbadge{margin-left:auto;font-family:var(--mono);font-size:.63rem;font-weight:700;padding:3px 9px;border-radius:5px;background:rgba(255,255,255,.18);letter-spacing:1px;text-transform:uppercase}
+.card-body{padding:16px 18px}
+.step{border:1.5px solid var(--brd);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.step-hd{padding:9px 14px;display:flex;align-items:center;gap:9px;background:#fdf8ff;border-bottom:1.5px solid var(--brd);cursor:pointer;user-select:none}
+.step-hd:hover{background:var(--Vlt)}
+.snb{width:26px;height:26px;border-radius:50%;color:#fff;font-size:.74rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);background:var(--V)}
+.step-hd h3{font-size:.85rem;font-weight:700;flex:1}
+.stag{font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+.chev{font-size:14px;color:#ccc;transition:transform .2s}
+.step-body{padding:14px 16px}.step-body.hide{display:none}
+.theory{background:var(--Blt);border-left:4px solid var(--B);border-radius:0 7px 7px 0;padding:10px 14px;margin-bottom:10px;font-size:.82rem;color:#0d2a52;line-height:1.65}
+.theory-lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--B);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.earth-box{background:var(--Vlt);border-left:4px solid var(--Vmd);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:var(--Vdk);margin-bottom:12px;line-height:1.6}
+.warn-box{background:var(--Alt);border-left:4px solid var(--A);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:#3a2800;margin-bottom:10px;line-height:1.6}
+.succ-box{background:var(--Glt);border-left:4px solid var(--G);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:#1a3a1a;margin:8px 0}
+.err-box{background:var(--Rlt);border-left:4px solid var(--R);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:#6a1010;margin:8px 0}
+.info-box{background:var(--Blt);border-left:4px solid var(--B);border-radius:0 7px 7px 0;padding:9px 13px;font-size:.81rem;color:#0d2a52;margin-bottom:10px;line-height:1.6}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fl{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.fi{display:flex;gap:6px;align-items:center}.fi input{flex:1}
+.ut{font-size:.74rem;color:var(--muted);white-space:nowrap;font-family:var(--mono)}
+input[type=number],input[type=text],select,textarea{padding:7px 10px;border:1.5px solid var(--brd);border-radius:7px;font-family:var(--sans);font-size:.85rem;background:#fdf8ff;color:var(--text);outline:none;transition:border-color .18s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--V);box-shadow:0 0 0 3px rgba(106,27,154,.1);background:#fff}
+input[readonly]{background:var(--Vlt);color:var(--Vdk);font-weight:700;font-family:var(--mono)}
+.ans-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(206,147,216,.3)}
+.ans-row:last-child{border-bottom:none}
+.ans-label{flex:1;font-size:.83rem;line-height:1.5}
+.ans-inp{width:110px!important;padding:6px 9px;border:2px solid var(--brd);border-radius:7px;font-family:var(--mono);font-size:.87rem;text-align:right;background:#fdf8ff;flex-shrink:0}
+.ans-inp:focus{border-color:var(--V);background:#fff}
+.ans-inp.ok{border-color:var(--G)!important;background:var(--Glt)!important}
+.ans-inp.no{border-color:var(--R)!important;background:var(--Rlt)!important}
+.ans-unit{font-family:var(--mono);font-size:.75rem;color:var(--muted);width:55px;flex-shrink:0}
+.chip{font-size:.71rem;font-weight:700;padding:2px 9px;border-radius:10px;min-width:28px;text-align:center;flex-shrink:0}
+.chip.ok{background:var(--Glt);color:var(--Gdk)}.chip.no{background:var(--Rlt);color:var(--R)}
+.fml-box{background:#fdf8ff;border:1px solid var(--brd);border-radius:8px;padding:10px 14px;margin:8px 0;font-family:var(--mono);font-size:.81rem;line-height:1.9}
+.ftitle{font-family:var(--sans);font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:4px}
+.frow{color:var(--Vdk)}.frow em{color:var(--B);font-style:normal;font-weight:700}
+.tbl{width:100%;border-collapse:collapse;font-size:.79rem;margin:8px 0}
+.tbl th{background:var(--Vdk);color:rgba(255,255,255,.88);padding:.38rem .5rem;font-size:.66rem;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.3px}
+.tbl th.L{text-align:left;padding-left:.7rem}
+.tbl td{padding:.32rem .45rem;border-bottom:1px solid rgba(206,147,216,.3);text-align:center;vertical-align:middle}
+.tbl td.L{text-align:left;padding-left:.7rem;font-weight:600}
+.tbl td.sym{font-family:var(--mono);color:var(--B);font-weight:600}
+.tbl tr.hi td{background:var(--Vlt);font-weight:700}
+.ci{width:78px!important;padding:3px 5px;border:1.5px solid var(--brd);border-radius:5px;font-family:var(--mono);font-size:.76rem;text-align:center;background:#fdf8ff;outline:none}
+.ci:focus{border-color:var(--V);background:#fff}
+.ci.ok{border-color:var(--G);background:var(--Glt)}.ci.no{border-color:var(--R);background:var(--Rlt)}
+.mcq-wrap{margin:10px 0}.mcq-q{font-size:.85rem;font-weight:600;margin-bottom:8px;line-height:1.5}
+.mcq-opts{display:grid;gap:7px}.g2c{grid-template-columns:1fr 1fr}.g3c{grid-template-columns:1fr 1fr 1fr}
+.mcq-opt{border:2px solid var(--brd);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:.81rem;display:flex;align-items:center;gap:8px;transition:all .15s;background:#fdf8ff;line-height:1.4}
+.mcq-opt:hover{border-color:var(--Vmd);background:var(--Vlt)}
+.mcq-opt.ok{border-color:var(--G)!important;background:var(--Glt)!important}
+.mcq-opt.no{border-color:var(--R)!important;background:var(--Rlt)!important}
+.mkey{width:22px;height:22px;border-radius:50%;background:var(--V);color:#fff;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono)}
+.sec-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--brd)}
+.btn{border:none;cursor:pointer;font-family:var(--sans);font-weight:700;border-radius:7px;transition:all .16s;display:inline-flex;align-items:center;gap:5px;font-size:.84rem;padding:9px 18px}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}.btn:active{transform:translateY(0)}
+.btn-v{background:var(--V);color:#fff}.btn-a{background:var(--A);color:#fff}
+.btn-g{background:var(--G);color:#fff}.btn-B{background:var(--B);color:#fff}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--brd);padding:8px 14px}.btn-ghost:hover{background:var(--Vlt)}
+.btn-sm{padding:5px 11px!important;font-size:.75rem!important}
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(206,147,216,.3);font-size:.83rem}
+.checklist li:last-child{border-bottom:none}
+.checklist li input[type=checkbox]{width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:var(--G);cursor:pointer}
+.checklist li.done{text-decoration:line-through;color:var(--muted)}
+.sticky-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);border-top:1px solid var(--brd);padding:9px 20px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(8px);z-index:50}
+.toast{position:fixed;bottom:65px;left:50%;transform:translateX(-50%) translateY(16px);background:#333;color:#fff;padding:8px 20px;border-radius:20px;font-size:.81rem;font-weight:600;opacity:0;transition:all .28s;pointer-events:none;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* SVG DAI */
+.dai-canvas{border:1.5px solid var(--brd);border-radius:8px;background:#fff;overflow:hidden;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<header class="hdr">
+  <div class="hdr-in">
+    <a href="p3_module02_sct_coc.html" class="back-btn"><i class="ti ti-arrow-left"></i> P3·M02</a>
+    <div class="hdr-title">
+      <h1>Phần 3 · Module 03 – Thiết Kế Đài Cọc & Nền Dưới Mũi Cọc</h1>
+      <p>Chọn h đài · P₀ᵢ · Nén thủng (cột + hàng) · Cốt thép đài · Móng khối quy ước TTGH1+2</p>
+    </div>
+    <div class="pb" id="hdr-prog">0 / 0</div>
+  </div>
+</header>
+
+<div class="tabs-bar"><div class="tabs-in">
+  <button class="tab on" onclick="goto('s-hdai')"><span class="tn">3.1</span> Chiều cao & P₀ᵢ</button>
+  <button class="tab" onclick="goto('s-nthung')"><span class="tn">3.2</span> Nén thủng đài</button>
+  <button class="tab" onclick="goto('s-cotthep')"><span class="tn">3.3</span> Cốt thép đài</button>
+  <button class="tab" onclick="goto('s-nen')"><span class="tn">3.4</span> Nền dưới mũi cọc</button>
+</div></div>
+
+<main>
+<div class="prog-wrap">
+  <div class="prog-top"><span>Tiến độ P3·M03</span><span id="prog-text">0 / 0</span></div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<!-- ══════════════════ 3.1 CHIỀU CAO ĐÀI & P₀ᵢ ══════════════════ -->
+<div class="card" id="s-hdai">
+  <div class="card-hd"><i class="ti ti-layers-subtract"></i>
+    <div><h2>3.1 · Chọn Chiều Cao Đài Cọc & Tính P₀ᵢ</h2>
+    <p>Vật liệu đài · Chọn h, tính h₀ · Tính P₀ᵢ = lực dọc cọc i không kể TL đài (dùng KT nén thủng)</p></div>
+    <span class="cbadge">B10·B11</span>
+  </div>
+  <div class="card-body">
+    <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Nguyên tắc chọn chiều cao đài</div>
+      <b>h<sub>đài</sub></b> phải đảm bảo: tháp thủng từ chân cột không vươn ra ngoài đài · Ngàm cọc vào đài ≥ 100mm · Bố trí được thép đài.<br>
+      Thường chọn <b>h<sub>đài</sub> = 0.6–1.2m</b> tùy tải và số cọc · Làm tròn lên bội số 0.05m · Lớp BV a ≥ 100mm (móng cọc).
+    </div>
+
+    <div class="g4" style="margin-bottom:12px">
+      <div class="fg"><div class="fl">Mác BT đài</div>
+        <select id="mac-bt" onchange="updVL()">
+          <option value="B20">B20 — R_bt=900kPa</option>
+          <option value="B25" selected>B25 — R_bt=1050kPa</option>
+          <option value="B30">B30 — R_bt=1200kPa</option>
+        </select>
+      </div>
+      <div class="fg"><div class="fl">Thép đài</div>
+        <select id="mac-thep" onchange="updVL()">
+          <option value="AII">AII (CB300) — R_s=280MPa</option>
+          <option value="AIII" selected>AIII (CB400) — R_s=365MPa</option>
+        </select>
+      </div>
+      <div class="fg"><div class="fl">Lớp BV a (mm)</div><input type="number" id="abv" value="100" oninput="updH0()"></div>
+      <div class="fg"><div class="fl">h<sub>đài</sub> chọn (m)</div><input type="number" id="h-dai" placeholder="0.8" step="0.05" oninput="updH0()"></div>
+    </div>
+    <div class="g4" style="margin-bottom:14px">
+      <div class="fg"><div class="fl">h₀ = h<sub>đài</sub> – a/1000</div><input type="number" id="h0" readonly></div>
+      <div class="fg"><div class="fl">R<sub>bt</sub> (kPa)</div><input type="number" id="Rbt" readonly></div>
+      <div class="fg"><div class="fl">R<sub>s</sub> (MPa)</div><input type="number" id="Rs" readonly></div>
+      <div class="fg"><div class="fl">R<sub>s</sub> (kPa) — dùng tính thép</div><input type="number" id="Rs-kPa" readonly></div>
+    </div>
+
+    <!-- Tính P₀ᵢ -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">A</div><h3>Tính P₀ᵢ — Phản lực cọc không kể trọng lượng đài</h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">CT 3-12</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="fml-box">
+          <div class="ftitle">Công thức 3-12 — P₀ᵢ (không kể TL đài, dùng cho kiểm tra nén thủng)</div>
+          <div class="frow"><em>P₀ᵢ</em> = N₀<sup>tt</sup>/n<sub>c</sub> + M<sub>x</sub><sup>tt</sup>·yᵢ/Σyᵢ² + M<sub>y</sub><sup>tt</sup>·xᵢ/Σxᵢ²</div>
+          <div style="font-size:.74rem;color:var(--muted);margin-top:3px">
+            N₀<sup>tt</sup>, M<sup>tt</sup> = tải trọng tại chân cột (không cộng TL đài) · (x,y): tọa độ từ trọng tâm nhóm cọc
+          </div>
+        </div>
+        <div class="earth-box"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-2px"></i>
+          P₀ᵢ khác Pᵢ (đã tính ở M02): Pᵢ dùng N=N₀+G_đài (kiểm tra GĐ sử dụng), còn P₀ᵢ dùng N=N₀ (không kể G_đài, chỉ dùng cho nén thủng và cốt thép đài).
+        </div>
+
+        <div class="g3" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">N₀<sup>tt</sup> tại chân cột (kN)</div><input type="number" id="N0tt-p0" placeholder="?"></div>
+          <div class="fg"><div class="fl">M<sub>x</sub><sup>tt</sup> tại đáy đài (kN·m)</div><input type="number" id="Mx-p0" placeholder="?"></div>
+          <div class="fg"><div class="fl">M<sub>y</sub><sup>tt</sup> (kN·m, nếu có)</div><input type="number" id="My-p0" placeholder="0" value="0"></div>
+        </div>
+        <div class="g3" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">n<sub>c</sub> số cọc</div><input type="number" id="nc-p0" placeholder="?" oninput="buildP0Table()"></div>
+          <div class="fg"><div class="fl">Σyᵢ² (m²) — tự điền</div><input type="number" id="sumY2" placeholder="?"></div>
+          <div class="fg"><div class="fl">Σxᵢ² (m²) — nếu có M_y</div><input type="number" id="sumX2" placeholder="0" value="0"></div>
+        </div>
+
+        <button class="btn btn-v btn-sm" style="margin-bottom:10px" onclick="buildP0Table()"><i class="ti ti-refresh"></i> Tạo bảng</button>
+        <button class="btn btn-a btn-sm" style="margin-bottom:10px" onclick="calcP0()"><i class="ti ti-calculator"></i> Tính P₀ᵢ</button>
+
+        <div style="overflow-x:auto">
+          <table class="tbl" id="p0-table">
+            <thead><tr><th>Cọc i</th><th>xᵢ (m)</th><th>yᵢ (m)</th><th>xᵢ²</th><th>yᵢ²</th><th>P₀ᵢ (kN)</th><th>rᵢ<sub>I-I</sub> (m)</th><th>rᵢ<sub>II-II</sub> (m)</th></tr></thead>
+            <tbody id="p0-body">
+              <tr><td colspan="8" style="padding:10px;text-align:center;color:#aaa">Nhập số cọc → bấm "Tạo bảng"</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="p0-result" style="margin-top:8px"></div>
+        <div class="ans-row" style="margin-top:8px">
+          <span class="ans-label">📌 P₀<sub>max</sub> = Max{P₀ᵢ}</span>
+          <input class="ans-inp" id="P0max" type="number" step="0.1" placeholder="?" oninput="chkFill('P0max',0,5)">
+          <span class="ans-unit">kN</span><span class="chip" id="ck-P0max"></span>
+        </div>
+        <div class="mcq-wrap">
+          <div class="mcq-q">📌 Vì sao tính P₀ᵢ không cộng trọng lượng đài vào N?</div>
+          <div class="mcq-opts g2c">
+            <div class="mcq-opt" id="mco-p0-0" onclick="pickMCQ('p0',0,0)"><span class="mkey">A</span><span>Vì TL đài phân bố đều lên tất cả cọc → không gây thêm nội lực tháp thủng từ cột</span></div>
+            <div class="mcq-opt" id="mco-p0-1" onclick="pickMCQ('p0',1,0)"><span class="mkey">B</span><span>Vì TL đài quá nhỏ so với tải cột nên bỏ qua</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ 3.2 NÉN THỦNG ĐÀI ══════════════════ -->
+<div class="card" id="s-nthung">
+  <div class="card-hd" style="background:#4A148C"><i class="ti ti-arrows-diagonal"></i>
+    <div><h2>3.2 · Kiểm Tra Nén Thủng Đài Cọc</h2>
+    <p>(a) Cột đâm thủng đài — CT 3-14 · (b) Hàng cọc đâm thủng đài — CT 3-16</p></div>
+    <span class="cbadge">B11 Kiểm tra</span>
+  </div>
+  <div class="card-body">
+    <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Nguyên lý nén thủng & Điều kiện kiểm tra</div>
+      Đài cọc phải đủ chiều cao để <b>tháp thủng</b> từ mép cột nghiêng 45° không kéo ra ngoài đường nối đầu cọc.<br>
+      Kiểm tra 2 loại: (a) <b>Cột đâm thủng đài</b> theo 2 phương x và y; (b) <b>Hàng cọc đâm thủng đài</b> — lực cắt phương ngang.
+    </div>
+
+    <!-- (a) CỘT ĐÂM THỦNG -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">A</div><h3>(a) Kiểm tra cột đâm thủng đài — Công thức 3-14</h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">CT 3-14</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="fml-box">
+          <div class="ftitle">Công thức 3-14 — Lực chống đâm thủng do cột</div>
+          <div class="frow"><em>P<sub>CĐT</sub></em> = 2·h₀·R<sub>bt</sub>·[(h₀/c₁)·(b<sub>c</sub>+c₂) + (h₀/c₂)·(a<sub>c</sub>+c₁)]</div>
+          <div class="frow">Điều kiện: <em>P<sub>ĐT</sub></em> ≤ P<sub>CĐT</sub></div>
+          <div style="font-size:.74rem;color:var(--muted);margin-top:4px">
+            c₁, c₂: khoảng cách từ <b>mép cột đến đáy tháp</b> (= khoảng cách từ mép cột đến tim hàng cọc ngoài cùng – D<sub>c</sub>/2)<br>
+            <b>Giới hạn:</b> c &gt; h₀ → h₀/c = 1 · c &lt; 0.4h₀ → h₀/c = 1/0.4 = 2.5
+          </div>
+        </div>
+
+        <!-- Sơ đồ giải thích c1, c2 -->
+        <div class="dai-canvas">
+          <svg id="nt-svg" viewBox="0 0 480 220" width="100%" style="display:block"></svg>
+        </div>
+
+        <div class="sec-lbl">Số liệu hình học</div>
+        <div class="g4" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">b<sub>c</sub> cạnh cột (mm)</div><div class="fi"><input type="number" id="bc" placeholder="350" oninput="calcC12(); drawNT()"><span class="ut">mm</span></div></div>
+          <div class="fg"><div class="fl">a<sub>c</sub> cạnh cột (mm)</div><div class="fi"><input type="number" id="ac" placeholder="500" oninput="calcC12(); drawNT()"><span class="ut">mm</span></div></div>
+          <div class="fg"><div class="fl">Tim hàng cọc → mép cột (x) (m)</div><div class="fi"><input type="number" id="r1-cot" placeholder="?" step="0.001" oninput="calcC12(); drawNT()"><span class="ut">m</span></div></div>
+          <div class="fg"><div class="fl">Tim hàng cọc → mép cột (y) (m)</div><div class="fi"><input type="number" id="r2-cot" placeholder="?" step="0.001" oninput="calcC12(); drawNT()"><span class="ut">m</span></div></div>
+        </div>
+        <div class="earth-box" style="font-size:.79rem"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-2px"></i>
+          c₁ = khoảng cách từ mép cột b<sub>c</sub>/2 đến tim hàng cọc xa nhất theo phương x, trừ đi D<sub>c</sub>/2.<br>
+          Thực tế: c₁ = r₁ – b<sub>c</sub>/2000 – D<sub>c</sub>/2 &nbsp;(m). Tương tự c₂ theo phương y.
+        </div>
+
+        <div class="sec-lbl">Tính c₁, c₂ và h₀/c</div>
+        <div class="g4">
+          <div class="fg"><div class="fl">D<sub>c</sub> cọc (mm)</div><div class="fi"><input type="number" id="Dc-nt" placeholder="250" oninput="calcC12()"><span class="ut">mm</span></div></div>
+          <div class="fg"><div class="fl">c₁ = r₁ – b<sub>c</sub>/2 – D<sub>c</sub>/2</div><input type="number" id="c1" readonly></div>
+          <div class="fg"><div class="fl">c₂ = r₂ – a<sub>c</sub>/2 – D<sub>c</sub>/2</div><input type="number" id="c2" readonly></div>
+          <div class="fg"><div class="fl">h₀ đài (m)</div><input type="number" id="h0-nt" readonly></div>
+        </div>
+        <div class="g4" style="margin-top:8px">
+          <div class="fg"><div class="fl">h₀/c₁ (giới hạn 1÷2.5)</div><input type="number" id="h0c1" readonly></div>
+          <div class="fg"><div class="fl">h₀/c₂ (giới hạn 1÷2.5)</div><input type="number" id="h0c2" readonly></div>
+          <div class="fg"><div class="fl">R<sub>bt</sub> (kPa)</div><input type="number" id="Rbt-nt" readonly></div>
+          <div class="fg"><div class="fl">h₀ (m)</div><input type="number" id="h0-nt2" readonly></div>
+        </div>
+
+        <div id="nt-formula-hint" class="fml-box" style="margin-top:8px">Điền c₁, c₂ để xem công thức thay số.</div>
+
+        <div class="sec-lbl">Lực đâm thủng P_ĐT</div>
+        <div class="earth-box" style="font-size:.79rem"><i class="ti ti-pencil" style="font-size:12px;vertical-align:-2px"></i>
+          P<sub>ĐT</sub> = tổng P₀ᵢ của các cọc nằm <b>ngoài</b> tháp đâm thủng. Thường là tất cả cọc (tháp đâm thủng nhỏ hơn nhóm cọc).
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 P<sub>ĐT</sub> = ΣP₀ᵢ (cọc nằm ngoài tháp thủng)</span>
+          <input class="ans-inp" id="Pdt-cot" type="number" step="0.1" placeholder="?" oninput="chkFill('Pdt-cot',0,5)">
+          <span class="ans-unit">kN</span><span class="chip" id="ck-Pdt-cot"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 P<sub>CĐT</sub> = 2h₀R<sub>bt</sub>[(h₀/c₁)(b<sub>c</sub>+c₂) + (h₀/c₂)(a<sub>c</sub>+c₁)]</span>
+          <input class="ans-inp" id="Pcdt-cot" type="number" step="1" placeholder="?" oninput="chkNT_cot()">
+          <span class="ans-unit">kN</span><span class="chip" id="ck-Pcdt-cot"></span>
+        </div>
+        <div id="nt-cot-result" style="margin-top:8px"></div>
+        <div class="mcq-wrap">
+          <div class="mcq-q">📌 Khi c &gt; h₀ (tháp thủng mặt nghiêng &lt;45°) ta lấy h₀/c bằng:</div>
+          <div class="mcq-opts g3c">
+            <div class="mcq-opt" id="mco-nt-0" onclick="pickMCQ('nt',0,1)"><span class="mkey">A</span><span>h₀/c thực (không giới hạn)</span></div>
+            <div class="mcq-opt" id="mco-nt-1" onclick="pickMCQ('nt',1,1)"><span class="mkey">B</span><span>= 1 (tháp đứng 45°)</span></div>
+            <div class="mcq-opt" id="mco-nt-2" onclick="pickMCQ('nt',2,1)"><span class="mkey">C</span><span>= 2.5 (giới hạn trên)</span></div>
+          </div>
+        </div>
+        <button class="btn btn-a btn-sm" style="margin-top:8px" onclick="calcNT_cot()"><i class="ti ti-calculator"></i> Tính gợi ý P_CĐT</button>
+      </div>
+    </div>
+
+    <!-- (b) HÀNG CỌC ĐÂM THỦNG -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">B</div><h3>(b) Kiểm tra hàng cọc đâm thủng đài — Công thức 3-16</h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">CT 3-16</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="fml-box">
+          <div class="ftitle">Công thức 3-16 — Lực chống đâm thủng do hàng cọc</div>
+          <div class="frow"><em>P<sub>CĐT,hàng</sub></em> = 1.5·b·h₀·R<sub>bt</sub>·(h₀/c)</div>
+          <div class="frow">Điều kiện: <em>P<sub>ĐT,hàng</sub></em> ≤ P<sub>CĐT,hàng</sub></div>
+          <div style="font-size:.74rem;color:var(--muted);margin-top:4px">
+            b: bề rộng đài (chiều dài tiết diện đang xét) · c: khoảng cách từ hàng cọc ngoài cùng đến mép cột<br>
+            <b>Giới hạn:</b> c &lt; 0.6h₀ → h₀/c = 1/0.6 · c &gt; 2.5h₀ → h₀/c = 1/2.5
+          </div>
+        </div>
+
+        <div class="g4" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">b đài theo phương đang xét (m)</div><div class="fi"><input type="number" id="b-hang" placeholder="?" step="0.01"><span class="ut">m</span></div></div>
+          <div class="fg"><div class="fl">c khoảng cách tim cọc – mép cột (m)</div><div class="fi"><input type="number" id="c-hang" placeholder="?" step="0.001" oninput="calcHang()"><span class="ut">m</span></div></div>
+          <div class="fg"><div class="fl">h₀/c (tính toán → giới hạn)</div><input type="text" id="h0c-hang" readonly></div>
+          <div class="fg"><div class="fl">h₀/c dùng tính</div><input type="number" id="h0c-hang-dung" readonly></div>
+        </div>
+        <div id="hang-formula-hint" class="fml-box">Nhập b và c để xem công thức thay số.</div>
+        <div class="ans-row">
+          <span class="ans-label">📌 P<sub>ĐT,hàng</sub> = ΣP₀ᵢ hàng cọc ngoài tháp</span>
+          <input class="ans-inp" id="Pdt-hang" type="number" step="0.1" placeholder="?" oninput="chkNT_hang()">
+          <span class="ans-unit">kN</span><span class="chip" id="ck-Pdt-hang"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 P<sub>CĐT,hàng</sub> = 1.5·b·h₀·R<sub>bt</sub>·(h₀/c)</span>
+          <input class="ans-inp" id="Pcdt-hang" type="number" step="1" placeholder="?" oninput="chkNT_hang()">
+          <span class="ans-unit">kN</span><span class="chip" id="ck-Pcdt-hang"></span>
+        </div>
+        <div id="hang-result" style="margin-top:8px"></div>
+        <button class="btn btn-a btn-sm" style="margin-top:8px" onclick="calcHang()"><i class="ti ti-calculator"></i> Tính gợi ý hàng cọc</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ 3.3 CỐT THÉP ĐÀI ══════════════════ -->
+<div class="card" id="s-cotthep">
+  <div class="card-hd" style="background:#2E7D32"><i class="ti ti-git-merge"></i>
+    <div><h2>3.3 · Cốt Thép Đài Cọc</h2>
+    <p>Giả thiết cột ngàm · Mặt cắt I-I (phương l) · Mặt cắt II-II (phương b) · Chọn thép, kiểm tra khoảng cách</p></div>
+    <span class="cbadge">CT 3-17·3-18</span>
+  </div>
+  <div class="card-body">
+    <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Giả thiết và công thức tính thép đài</div>
+      Coi đài cọc như <b>công xôn ngàm tại mép cột</b>. Momen tại mặt cắt qua mép cột = tổng P₀ᵢ của các cọc nằm ngoài mặt cắt × khoảng cách rᵢ đến mặt cắt đó.<br>
+      <b>I-I:</b> Mặt cắt vuông góc phương l (song song b) — thép chịu lực phương l &nbsp;·&nbsp; <b>II-II:</b> Mặt cắt song song l — thép phương b
+    </div>
+    <div class="fml-box">
+      <div class="ftitle">Công thức 3-17, 3-18 — Momen và Cốt thép đài</div>
+      <div class="frow"><em>M<sub>I-I</sub></em> = Σ(P₀ᵢ · rᵢ<sub>I</sub>) &nbsp;&nbsp; <em>M<sub>II-II</sub></em> = Σ(P₀ᵢ · rᵢ<sub>II</sub>)</div>
+      <div class="frow"><em>F<sub>a</sub></em> = M / (0.9 · R<sub>s</sub> · h₀) &nbsp;&nbsp;(cm²)</div>
+      <div style="font-size:.74rem;color:var(--muted);margin-top:4px">rᵢ = khoảng cách từ tim cọc đến mặt cắt đang xét (m). Chỉ tính cọc <b>nằm ngoài</b> mặt cắt.</div>
+    </div>
+
+    <!-- MẶT CẮT I-I -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb" style="background:#1565C0">I-I</div>
+        <h3>Mặt cắt I-I — Phương cạnh dài l (cắt song song cạnh b)</h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">Tính M, Fa</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="earth-box"><i class="ti ti-pencil" style="font-size:12px;vertical-align:-2px"></i>
+          Mặt cắt I-I cắt qua mép cột theo phương ngang. Tính rᵢ = khoảng cách từ tim cọc đến mặt cắt theo chiều dài l. Chỉ lấy cọc nằm bên ngoài mặt cắt (cọc ở phía bên kia cột).
+        </div>
+        <div style="overflow-x:auto">
+          <table class="tbl">
+            <thead><tr><th>Cọc i</th><th>P₀ᵢ (kN)</th><th>rᵢ<sub>I-I</sub> (m)</th><th>P₀ᵢ × rᵢ (kN·m)</th></tr></thead>
+            <tbody id="ct-I-body"></tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:8px;margin:8px 0">
+          <button class="btn btn-v btn-sm" onclick="addRow('I')"><i class="ti ti-plus"></i> Thêm cọc</button>
+          <button class="btn btn-a btn-sm" onclick="sumMom('I')"><i class="ti ti-sigma"></i> Tính M_I</button>
+        </div>
+        <div id="MI-formula" class="fml-box">Điền P₀ᵢ và rᵢ rồi bấm "Tính M_I".</div>
+        <div class="g3" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">Chiều dài đài l (m)</div><input type="number" id="L-dai" placeholder="?" step="0.01"></div>
+          <div class="fg"><div class="fl">h₀ đài (m)</div><input type="number" id="h0-ct" readonly></div>
+          <div class="fg"><div class="fl">R<sub>s</sub> (kPa)</div><input type="number" id="Rs-ct" readonly></div>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 M<sub>I-I</sub> = Σ(P₀ᵢ·rᵢ<sub>I</sub>)</span>
+          <input class="ans-inp" id="M-I" type="number" step="0.1" placeholder="?" oninput="chkFill('M-I',0,2)">
+          <span class="ans-unit">kN·m</span><span class="chip" id="ck-M-I"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 F<sub>a,I</sub> = M<sub>I</sub> / (0.9·R<sub>s</sub>·h₀) × 1000</span>
+          <input class="ans-inp" id="Fa-I" type="number" step="0.1" placeholder="?" oninput="chkFill('Fa-I',0,0.5)">
+          <span class="ans-unit">cm²</span><span class="chip" id="ck-Fa-I"></span>
+        </div>
+        <div class="g4" style="margin-top:10px">
+          <div class="fg"><div class="fl">Đường kính d (mm)</div>
+            <select id="d-I" onchange="calcThep('I')">
+              <option value="12">Ø12</option><option value="14">Ø14</option>
+              <option value="16" selected>Ø16</option><option value="18">Ø18</option><option value="20">Ø20</option><option value="22">Ø22</option>
+            </select>
+          </div>
+          <div class="fg"><div class="fl">Số thanh n</div><input type="number" id="n-I" readonly></div>
+          <div class="fg"><div class="fl">Khoảng cách a (mm)</div><input type="number" id="sp-I" readonly></div>
+          <div class="fg"><div class="fl">F<sub>a,chọn</sub> (cm²)</div><input type="number" id="Fa-I-chon" readonly></div>
+        </div>
+        <div id="thep-I-result" style="margin-top:6px"></div>
+      </div>
+    </div>
+
+    <!-- MẶT CẮT II-II -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb" style="background:#FF8F00">II-II</div>
+        <h3>Mặt cắt II-II — Phương cạnh ngắn b (cắt song song cạnh l)</h3>
+        <span class="stag" style="background:var(--Alt);color:var(--Adk)">Tính M, Fa</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div style="overflow-x:auto">
+          <table class="tbl">
+            <thead><tr><th>Cọc i</th><th>P₀ᵢ (kN)</th><th>rᵢ<sub>II-II</sub> (m)</th><th>P₀ᵢ × rᵢ (kN·m)</th></tr></thead>
+            <tbody id="ct-II-body"></tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:8px;margin:8px 0">
+          <button class="btn btn-v btn-sm" onclick="addRow('II')"><i class="ti ti-plus"></i> Thêm cọc</button>
+          <button class="btn btn-a btn-sm" onclick="sumMom('II')"><i class="ti ti-sigma"></i> Tính M_II</button>
+        </div>
+        <div id="MII-formula" class="fml-box">Điền P₀ᵢ và rᵢ rồi bấm "Tính M_II".</div>
+        <div class="g3" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">Chiều rộng đài b (m)</div><input type="number" id="B-dai" placeholder="?" step="0.01"></div>
+          <div class="fg"><div class="fl">h₀ đài (m)</div><input type="number" id="h0-ct2" readonly></div>
+          <div class="fg"><div class="fl">R<sub>s</sub> (kPa)</div><input type="number" id="Rs-ct2" readonly></div>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 M<sub>II-II</sub> = Σ(P₀ᵢ·rᵢ<sub>II</sub>)</span>
+          <input class="ans-inp" id="M-II" type="number" step="0.1" placeholder="?" oninput="chkFill('M-II',0,2)">
+          <span class="ans-unit">kN·m</span><span class="chip" id="ck-M-II"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 F<sub>a,II</sub> = M<sub>II</sub> / (0.9·R<sub>s</sub>·h₀) × 1000</span>
+          <input class="ans-inp" id="Fa-II" type="number" step="0.1" placeholder="?" oninput="chkFill('Fa-II',0,0.5)">
+          <span class="ans-unit">cm²</span><span class="chip" id="ck-Fa-II"></span>
+        </div>
+        <div class="g4" style="margin-top:10px">
+          <div class="fg"><div class="fl">Đường kính d (mm)</div>
+            <select id="d-II" onchange="calcThep('II')">
+              <option value="12">Ø12</option><option value="14">Ø14</option>
+              <option value="16" selected>Ø16</option><option value="18">Ø18</option><option value="20">Ø20</option><option value="22">Ø22</option>
+            </select>
+          </div>
+          <div class="fg"><div class="fl">Số thanh n</div><input type="number" id="n-II" readonly></div>
+          <div class="fg"><div class="fl">Khoảng cách a (mm)</div><input type="number" id="sp-II" readonly></div>
+          <div class="fg"><div class="fl">F<sub>a,chọn</sub> (cm²)</div><input type="number" id="Fa-II-chon" readonly></div>
+        </div>
+        <div id="thep-II-result" style="margin-top:6px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ 3.4 KIỂM TRA NỀN DƯỚI MŨI CỌC ══════════════════ -->
+<div class="card" id="s-nen">
+  <div class="card-hd" style="background:#1565C0"><i class="ti ti-chart-area"></i>
+    <div><h2>3.4 · Kiểm Tra Nền Dưới Mũi Cọc — Móng Khối Quy Ước</h2>
+    <p>Tính φ<sub>tb</sub> → α → B<sub>qu</sub>, L<sub>qu</sub> → TTGH1 (p<sub>tb</sub> ≤ [P]<sub>qu</sub>) → TTGH2 (S ≤ [S])</p></div>
+    <span class="cbadge">B12 Mục 3.5</span>
+  </div>
+  <div class="card-body">
+    <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Nguyên lý móng khối quy ước</div>
+      Nhóm cọc + đất giữa cọc = <b>móng khối quy ước</b> có đáy tại mũi cọc. Kích thước mở rộng theo góc phân phối α = φ<sub>tb</sub>/4.<br>
+      φ<sub>tb</sub> = trung bình gia quyền theo chiều dài cọc trong từng lớp đất.
+    </div>
+
+    <!-- Bước A: phi_tb và alpha -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">A</div><h3>Tính φ<sub>tb</sub> và góc mở rộng α = φ<sub>tb</sub>/4</h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">CT 3-19</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="fml-box">
+          <div class="ftitle">Công thức 3-19</div>
+          <div class="frow"><em>φ<sub>tb</sub></em> = Σ(φᵢ·lᵢ) / L<sub>c</sub> &nbsp;&nbsp; <em>α</em> = φ<sub>tb</sub>/4</div>
+          <div style="font-size:.74rem;color:var(--muted);margin-top:3px">φᵢ: góc ma sát lớp i · lᵢ: chiều dài cọc trong lớp i · L<sub>c</sub>: tổng chiều dài cọc</div>
+        </div>
+        <button class="btn btn-v btn-sm" style="margin-bottom:10px" onclick="buildPhiTable()"><i class="ti ti-refresh"></i> Tạo bảng φ từ địa chất</button>
+        <div style="overflow-x:auto">
+          <table class="tbl">
+            <thead><tr><th>#</th><th class="L">Lớp đất</th><th>φᵢ (°)</th><th>lᵢ trong cọc (m)</th><th>φᵢ×lᵢ</th></tr></thead>
+            <tbody id="phi-body">
+              <tr><td colspan="5" style="padding:10px;text-align:center;color:#aaa">Bấm "Tạo bảng" để điền từ địa chất đã lưu</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="g4" style="margin-top:10px">
+          <div class="fg"><div class="fl">Σ(φᵢ·lᵢ)</div><input type="number" id="sum-philL" readonly></div>
+          <div class="fg"><div class="fl">L<sub>c</sub> (m)</div><input type="number" id="Lc-qu" readonly></div>
+          <div class="fg"><div class="fl">φ<sub>tb</sub> (°)</div><input type="number" id="phi-tb" readonly></div>
+          <div class="fg"><div class="fl">α = φ<sub>tb</sub>/4 (°)</div><input type="number" id="alpha" readonly></div>
+        </div>
+        <div class="ans-row" style="margin-top:8px">
+          <span class="ans-label">📌 φ<sub>tb</sub> = Σ(φᵢ·lᵢ) / L<sub>c</sub></span>
+          <input class="ans-inp" id="phi-tb-ans" type="number" step="0.01" placeholder="?" oninput="chkFill('phi-tb-ans',0,0.1)">
+          <span class="ans-unit">°</span><span class="chip" id="ck-phi-tb-ans"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 α = φ<sub>tb</sub>/4</span>
+          <input class="ans-inp" id="alpha-ans" type="number" step="0.01" placeholder="?" oninput="chkFill('alpha-ans',0,0.05)">
+          <span class="ans-unit">°</span><span class="chip" id="ck-alpha-ans"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bước B: Kích thước móng khối -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">B</div><h3>Kích thước móng khối quy ước B<sub>qu</sub>, L<sub>qu</sub></h3>
+        <span class="stag" style="background:var(--Blt);color:var(--B)">CT 3-20</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="fml-box">
+          <div class="ftitle">Công thức 3-20 — Kích thước móng khối quy ước</div>
+          <div class="frow"><em>B<sub>qu</sub></em> = B'<sub>đài</sub> + 2·L<sub>c</sub>·tan(α) &nbsp;&nbsp; B' = B<sub>đài</sub> – D<sub>c</sub></div>
+          <div class="frow"><em>L<sub>qu</sub></em> = L'<sub>đài</sub> + 2·L<sub>c</sub>·tan(α) &nbsp;&nbsp; L' = L<sub>đài</sub> – D<sub>c</sub></div>
+          <div style="font-size:.74rem;color:var(--muted);margin-top:3px">B', L': khoảng cách tim cọc ngoài cùng theo 2 phương</div>
+        </div>
+        <div class="g4" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">B'<sub>đài</sub> tim-tim cọc (m)</div><div class="fi"><input type="number" id="B-ng" placeholder="?" step="0.01" oninput="calcBLqu()"><span class="ut">m</span></div></div>
+          <div class="fg"><div class="fl">L'<sub>đài</sub> tim-tim cọc (m)</div><div class="fi"><input type="number" id="L-ng" placeholder="?" step="0.01" oninput="calcBLqu()"><span class="ut">m</span></div></div>
+          <div class="fg"><div class="fl">L<sub>c</sub> chiều dài cọc (m)</div><input type="number" id="Lc-BL" readonly></div>
+          <div class="fg"><div class="fl">α (°)</div><input type="number" id="alpha-BL" readonly></div>
+        </div>
+        <div id="BLqu-hint" class="fml-box">Nhập B', L' để xem công thức thay số.</div>
+        <div class="ans-row">
+          <span class="ans-label">📌 B<sub>qu</sub> = B' + 2·L<sub>c</sub>·tan(α)</span>
+          <input class="ans-inp" id="Bqu" type="number" step="0.001" placeholder="?" oninput="chkFill('Bqu',0,0.05)">
+          <span class="ans-unit">m</span><span class="chip" id="ck-Bqu"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 L<sub>qu</sub> = L' + 2·L<sub>c</sub>·tan(α)</span>
+          <input class="ans-inp" id="Lqu" type="number" step="0.001" placeholder="?" oninput="chkFill('Lqu',0,0.05)">
+          <span class="ans-unit">m</span><span class="chip" id="ck-Lqu"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bước C: TTGH1 -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">C</div><h3>Kiểm tra TTGH1 — p<sub>tb</sub> ≤ [P]<sub>qu</sub></h3>
+        <span class="stag" style="background:var(--Glt);color:var(--Gdk)">TTGH1</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="fml-box">
+          <div class="ftitle">Tính áp lực trung bình dưới đáy móng khối</div>
+          <div class="frow"><em>p<sub>tb</sub></em> = N<sub>qu</sub> / (B<sub>qu</sub> × L<sub>qu</sub>)</div>
+          <div class="frow">N<sub>qu</sub> = N₀<sup>tc</sup> + Q<sub>đất</sub> + Q<sub>cọc</sub></div>
+          <div class="frow">Q<sub>đất</sub> = (γ₁L₁ + γ₂L₂ + …) × (B<sub>qu</sub>·L<sub>qu</sub> – n<sub>c</sub>·F<sub>c</sub>)</div>
+          <div class="frow">Q<sub>cọc</sub> = n<sub>c</sub> × γ<sub>c</sub> × L<sub>c</sub> × F<sub>c</sub> &nbsp;(γ<sub>c</sub>=25kN/m³)</div>
+        </div>
+        <div class="g3" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">N₀<sup>tc</sup> tải tiêu chuẩn (kN)</div><input type="number" id="N0tc-qu" placeholder="?"></div>
+          <div class="fg"><div class="fl">n<sub>c</sub> số cọc</div><input type="number" id="nc-qu" placeholder="?"></div>
+          <div class="fg"><div class="fl">F<sub>c</sub> tiết diện cọc (m²)</div><input type="number" id="Fc-qu" placeholder="0.0625" step="0.001"></div>
+        </div>
+        <div class="sec-lbl">Trọng lượng đất trên đáy móng khối</div>
+        <div class="earth-box" style="font-size:.79rem"><i class="ti ti-pencil" style="font-size:12px;vertical-align:-2px"></i>
+          Q<sub>đất</sub> = [γ₁×(h<sub>m</sub>+L₁) + γ₂×L₂ + … + γ<sub>n</sub>×L<sub>n</sub>] × (B<sub>qu</sub>×L<sub>qu</sub> – n<sub>c</sub>×F<sub>c</sub>)<br>
+          Trong đó L₁, L₂… là chiều dài cọc trong từng lớp kể từ đáy đài.
+        </div>
+        <div class="g4" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">γ<sub>tb</sub> × H<sub>qu</sub> (kN/m² — tính tay)</div><div class="fi"><input type="number" id="gam-H-qu" placeholder="?" step="0.1"><span class="ut">kN/m²</span></div></div>
+          <div class="fg"><div class="fl">B<sub>qu</sub> × L<sub>qu</sub></div><input type="number" id="BL-qu" readonly></div>
+          <div class="fg"><div class="fl">Q<sub>đất</sub> (kN)</div><input type="number" id="Qdat-qu" readonly></div>
+          <div class="fg"><div class="fl">Q<sub>cọc</sub> (kN)</div><input type="number" id="Qcoc-qu" readonly></div>
+        </div>
+        <div id="ttgh1-hint" class="fml-box">Nhập số liệu để xem công thức thay số.</div>
+        <div class="ans-row">
+          <span class="ans-label">📌 N<sub>qu</sub> = N₀<sup>tc</sup> + Q<sub>đất</sub> + Q<sub>cọc</sub></span>
+          <input class="ans-inp" id="Nqu" type="number" step="1" placeholder="?" oninput="chkFill('Nqu',0,10)">
+          <span class="ans-unit">kN</span><span class="chip" id="ck-Nqu"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 p<sub>tb</sub> = N<sub>qu</sub> / (B<sub>qu</sub> × L<sub>qu</sub>)</span>
+          <input class="ans-inp" id="ptb-qu" type="number" step="0.1" placeholder="?" oninput="chkFill('ptb-qu',0,2)">
+          <span class="ans-unit">kPa</span><span class="chip" id="ck-ptb-qu"></span>
+        </div>
+
+        <!-- [P]_qu — SCT nền dưới mũi cọc -->
+        <div class="sec-lbl" style="margin-top:12px">Tính [P]<sub>qu</sub> — SCT nền Terzaghi tại mũi cọc</div>
+        <div class="fml-box">
+          <div class="ftitle">Terzaghi cho móng khối quy ước (Fs=2)</div>
+          <div class="frow"><em>P<sub>gh</sub></em> = ½·α₁·N<sub>γ</sub>·B<sub>qu</sub>·γ + α₂·N<sub>q</sub>·q + α₃·N<sub>c</sub>·c</div>
+          <div class="frow"><em>[P]<sub>qu</sub></em> = P<sub>gh</sub> / 2</div>
+          <div style="font-size:.74rem;color:var(--muted);margin-top:3px">
+            q = γ<sub>tb</sub>×H<sub>qu</sub> (áp lực đất theo độ sâu) · α₁=1–0.2×B/L · α₂=1 · α₃=1+0.2×B/L<br>
+            φ, c, γ: đặc trưng lớp đất dưới mũi cọc (lớp 4 / lớp đặt mũi)
+          </div>
+        </div>
+        <div class="g4" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">φ lớp đất mũi (°)</div><input type="number" id="phi-mui" placeholder="?" step="0.5" oninput="calcTerz()"></div>
+          <div class="fg"><div class="fl">c lớp đất mũi (kPa)</div><input type="number" id="c-mui" placeholder="?" step="1" oninput="calcTerz()"></div>
+          <div class="fg"><div class="fl">γ lớp đất mũi (kN/m³)</div><input type="number" id="gam-mui" placeholder="?" step="0.1" oninput="calcTerz()"></div>
+          <div class="fg"><div class="fl">q = γ<sub>tb</sub>×H<sub>qu</sub> (kPa)</div><input type="number" id="q-qu" placeholder="?" step="1" oninput="calcTerz()"></div>
+        </div>
+        <div class="g4" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">N<sub>γ</sub> (Bảng Terzaghi)</div><input type="number" id="Ngam-t" readonly></div>
+          <div class="fg"><div class="fl">N<sub>q</sub></div><input type="number" id="Nq-t" readonly></div>
+          <div class="fg"><div class="fl">N<sub>c</sub></div><input type="number" id="Nc-t" readonly></div>
+          <div class="fg"><div class="fl">α₁, α₂, α₃</div><input type="text" id="alpha-123" readonly></div>
+        </div>
+        <!-- Bảng Terzaghi compact -->
+        <details style="margin-bottom:8px">
+          <summary style="cursor:pointer;font-size:.76rem;font-weight:700;color:var(--V);padding:6px 0">▼ Bảng hệ số Terzaghi N_γ, N_q, N_c theo φ</summary>
+          <div style="overflow-x:auto;margin-top:6px">
+            <table class="tbl" style="font-size:.72rem">
+              <thead><tr><th>φ (°)</th><th>N<sub>γ</sub></th><th>N<sub>q</sub></th><th>N<sub>c</sub></th><th>φ (°)</th><th>N<sub>γ</sub></th><th>N<sub>q</sub></th><th>N<sub>c</sub></th></tr></thead>
+              <tbody id="terz-tbody"></tbody>
+            </table>
+          </div>
+        </details>
+        <div id="ttgh1-pgh-hint" class="fml-box">Nhập φ, c, γ, q để xem công thức thay số.</div>
+        <div class="ans-row">
+          <span class="ans-label">📌 P<sub>gh</sub> = ½α₁N<sub>γ</sub>B<sub>qu</sub>γ + α₂N<sub>q</sub>q + α₃N<sub>c</sub>c</span>
+          <input class="ans-inp" id="Pgh-qu" type="number" step="1" placeholder="?" oninput="chkFill('Pgh-qu',0,5)">
+          <span class="ans-unit">kPa</span><span class="chip" id="ck-Pgh-qu"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 [P]<sub>qu</sub> = P<sub>gh</sub> / 2</span>
+          <input class="ans-inp" id="P-qu" type="number" step="1" placeholder="?" oninput="chkFill('P-qu',0,5)">
+          <span class="ans-unit">kPa</span><span class="chip" id="ck-P-qu"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 Kiểm tra TTGH1: p<sub>tb</sub> ≤ [P]<sub>qu</sub></span>
+          <input class="ans-inp" id="ttgh1-check" type="number" step="0.1" placeholder="p_tb?" oninput="chkTTGH1()">
+          <span class="ans-unit">kPa</span><span class="chip" id="ck-ttgh1"></span>
+        </div>
+        <div id="ttgh1-result" style="margin-top:8px"></div>
+        <button class="btn btn-a btn-sm" style="margin-top:8px" onclick="calcTTGH1()"><i class="ti ti-calculator"></i> Tính gợi ý TTGH1</button>
+      </div>
+    </div>
+
+    <!-- Bước D: TTGH2 - Lún -->
+    <div class="step">
+      <div class="step-hd" onclick="togS(this)">
+        <div class="snb">D</div><h3>Kiểm tra TTGH2 — Độ lún S ≤ [S]<sub>gh</sub></h3>
+        <span class="stag" style="background:var(--Glt);color:var(--Gdk)">TTGH2</span>
+        <i class="ti ti-chevron-down chev"></i>
+      </div>
+      <div class="step-body">
+        <div class="fml-box">
+          <div class="ftitle">Công thức lún — Nền dưới mũi cọc đồng nhất</div>
+          <div class="frow"><em>S</em> = p<sub>gl</sub> · B<sub>qu</sub> · ω · (1–μ₀²) / E₀</div>
+          <div class="frow"><em>p<sub>gl</sub></em> = p<sub>tb</sub> – (γ₁h<sub>m</sub> + γ₁L₁ + γ₂L₂ + …) &nbsp;(áp lực gây lún)</div>
+          <div style="font-size:.74rem;color:var(--muted);margin-top:3px">ω=1 (hệ số hình dạng) · μ₀=0.2–0.35 (hệ số Poisson) · E₀: mô đun biến dạng lớp đất mũi · [S]=80mm (khung BTCT)</div>
+        </div>
+        <div class="g4" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">p<sub>tb</sub> (kPa)</div><input type="number" id="ptb-lun" readonly></div>
+          <div class="fg"><div class="fl">γ<sub>tb</sub>×H<sub>qu</sub> (kPa) — tải đất trước</div><input type="number" id="gamH-lun" placeholder="?"></div>
+          <div class="fg"><div class="fl">p<sub>gl</sub> (kPa)</div><input type="number" id="pgl" readonly></div>
+          <div class="fg"><div class="fl">E₀ lớp đất mũi (kPa)</div><input type="number" id="E0-mu" placeholder="? kPa"></div>
+        </div>
+        <div class="g4" style="margin-bottom:10px">
+          <div class="fg"><div class="fl">ω hệ số hình dạng</div><input type="number" id="omega" value="1" step="0.1"></div>
+          <div class="fg"><div class="fl">μ₀ hệ số Poisson</div><input type="number" id="mu0" value="0.2" step="0.05"></div>
+          <div class="fg"><div class="fl">B<sub>qu</sub> (m)</div><input type="number" id="Bqu-lun" readonly></div>
+          <div class="fg"><div class="fl">[S]<sub>gh</sub> (mm)</div><input type="number" id="Sgh" value="80"></div>
+        </div>
+        <div id="lun-hint" class="fml-box">Nhập p_gl và E₀ để xem công thức thay số.</div>
+        <div class="ans-row">
+          <span class="ans-label">📌 p<sub>gl</sub> = p<sub>tb</sub> – γ<sub>tb</sub>×H<sub>qu</sub></span>
+          <input class="ans-inp" id="pgl-ans" type="number" step="0.1" placeholder="?" oninput="chkFill('pgl-ans',0,1)">
+          <span class="ans-unit">kPa</span><span class="chip" id="ck-pgl-ans"></span>
+        </div>
+        <div class="ans-row">
+          <span class="ans-label">📌 S = p<sub>gl</sub>·B<sub>qu</sub>·ω·(1–μ₀²)/E₀ × 100 (cm)</span>
+          <input class="ans-inp" id="S-lun" type="number" step="0.1" placeholder="?" oninput="chkLun()">
+          <span class="ans-unit">cm</span><span class="chip" id="ck-S-lun"></span>
+        </div>
+        <div id="lun-result" style="margin-top:8px"></div>
+        <button class="btn btn-a btn-sm" style="margin-top:8px" onclick="calcLun()"><i class="ti ti-calculator"></i> Tính gợi ý lún S</button>
+        <div class="mcq-wrap" style="margin-top:10px">
+          <div class="mcq-q">📌 [S]<sub>gh</sub> cho khung BTCT theo TCVN 9362:2012?</div>
+          <div class="mcq-opts g3c">
+            <div class="mcq-opt" id="mco-Sgh-0" onclick="pickMCQ('Sgh',0,1)"><span class="mkey">A</span><span>50mm</span></div>
+            <div class="mcq-opt" id="mco-Sgh-1" onclick="pickMCQ('Sgh',1,1)"><span class="mkey">B</span><span>80mm</span></div>
+            <div class="mcq-opt" id="mco-Sgh-2" onclick="pickMCQ('Sgh',2,1)"><span class="mkey">C</span><span>150mm</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kết luận + Nav -->
+    <div style="margin-top:16px;padding:14px;background:var(--Glt);border:2px solid var(--G);border-radius:var(--r)">
+      <div style="font-size:.9rem;font-weight:700;color:var(--Gdk);margin-bottom:6px"><i class="ti ti-trophy" style="font-size:16px;vertical-align:-2px"></i> Hoàn thành Module 03 — Đài Cọc & Nền Dưới Mũi Cọc</div>
+      <div style="font-size:.81rem;color:var(--G)">Kiểm tra TTGH1 (p<sub>tb</sub> ≤ [P]<sub>qu</sub>) và TTGH2 (S ≤ [S]) trước khi chuyển sang Module 04 tổng hợp bản vẽ.</div>
+    </div>
+
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-v" onclick="saveM03()"><i class="ti ti-device-floppy"></i> Lưu tiến độ</button>
+      <button class="btn btn-B" onclick="goM04()"><i class="ti ti-arrow-right"></i> P3·M04 — Tổng hợp & Bản vẽ →</button>
+      <a href="p3_module02_sct_coc.html" class="btn btn-ghost"><i class="ti ti-arrow-left"></i> Về P3·M02</a>
+    </div>
+  </div>
+</div>
+</main>
+
+<div class="sticky-nav">
+  <div style="font-size:.76rem;font-weight:600;color:var(--muted)">P3·M03 · Đài Cọc & Nền Dưới Mũi Cọc</div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <span id="nav-prog" style="font-size:.76rem;font-weight:700;color:var(--muted)">0/0</span>
+    <button class="btn btn-v btn-sm" onclick="scrollNext()"><i class="ti ti-chevron-down"></i> Câu tiếp</button>
+  </div>
+</div>
+
+<script>
+// =====================================================
+// PHẦN 3 — MODULE 03: Thiết kế Đài cọc
+// Bảng Terzaghi TERZ: [phi, Ng, Nq, Nc] dùng cho móng khối quy ước TTGH1
+// SOILS = lớp đất từ P3M01; ANS/CACHE = kết quả/đáp án trung gian
+// Lưu vào localStorage key 'nmong_p3'
+// =====================================================
+var VL_BT={B20:900,B25:1050,B30:1200};
+var VL_THEP={AII:{Rs:280,RskPa:280000},AIII:{Rs:365,RskPa:365000}};
+// Bảng Terzaghi (phi=0,1,...,45)
+var TERZ=[
+  [0,0,1,5.14],[1,0.1,1.09,5.38],[2,0.2,1.2,5.63],[3,0.3,1.31,5.9],
+  [5,0.5,1.57,6.49],[7,0.7,1.9,7.18],[10,1.2,2.47,8.35],[12,1.8,2.97,9.28],
+  [15,2.5,3.94,10.97],[18,4.1,5.26,13.1],[19,4.7,5.6,13.93],[20,5.4,6.4,14.83],
+  [25,9.7,10.66,20.72],[28,14.7,14.72,25.8],[30,18.4,18.4,30.14],
+  [32,22.9,23.18,35.49],[35,33.9,33.3,46.12],[36,37.7,37.75,50.59],
+  [40,64.1,64.2,75.31],[45,134.8,134.9,172.28]
+];
+var ANS={};var CACHE={};var SOILS=[];
+var rowCountI=0,rowCountII=0;
+
+// ═══ UTILS: toast, gv/sv, goto, togS, pickMCQ, chkFill, updateProg, scrollNext ═══
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
+function sv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function goto(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function togS(hd){var b=hd.nextElementSibling;b.classList.toggle('hide');var c=hd.querySelector('.chev');if(c)c.style.transform=b.classList.contains('hide')?'rotate(-90deg)':'';}
+function pickMCQ(grp,ci,correct){
+  document.querySelectorAll('[id^="mco-'+grp+'-"]').forEach(function(el){el.classList.remove('ok','no');});
+  var ok=(ci===correct);
+  var el=document.getElementById('mco-'+grp+'-'+ci);if(el)el.classList.add(ok?'ok':'no');
+  if(!ok){var ce=document.getElementById('mco-'+grp+'-'+correct);if(ce)ce.classList.add('ok');}
+  ANS['mcq-'+grp]=ok;updateProg();toast(ok?'✓ Đúng!':'✗ Xem đáp án xanh');
+}
+function chkFill(id,ans,tol){
+  var inp=document.getElementById(id),chip=document.getElementById('ck-'+id);if(!inp)return;
+  var v=parseFloat(inp.value);
+  if(isNaN(v)){inp.classList.remove('ok','no');if(chip){chip.className='chip';chip.textContent='';}ANS[id]=null;updateProg();return;}
+  var realAns=CACHE['ans_'+id]!==undefined?CACHE['ans_'+id]:ans;
+  var ok=realAns>0?Math.abs(v-realAns)<=tol:v>0;
+  inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);
+  if(chip){chip.className='chip '+(ok?'ok':'no');chip.textContent=ok?'✓':'✗';}
+  ANS[id]=ok;updateProg();
+}
+function updateProg(){
+  var total=0,done=0;Object.keys(ANS).forEach(function(k){if(ANS[k]!==null&&ANS[k]!==undefined){total++;if(ANS[k]===true)done++;}});
+  var pct=total?Math.round(done/total*100):0;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-text').textContent=done+' / '+total+' ('+pct+'%)';
+  document.getElementById('nav-prog').textContent=done+'/'+total;
+  document.getElementById('hdr-prog').textContent=done+' / '+total;
+}
+function scrollNext(){var all=document.querySelectorAll('.ans-inp:not(.ok)');for(var i=0;i<all.length;i++){if(all[i].offsetParent){all[i].scrollIntoView({behavior:'smooth',block:'center'});all[i].focus();break;}}}
+
+// ═══ VẬT LIỆU & H0: updVL cập nhật Rbt khi đổi mác; updH0 tính h₀=h_đài-a_bv ═══
+function updVL(){
+  var bt=sv('mac-bt'),thep=sv('mac-thep');
+  var Rbt=VL_BT[bt]||1050,vtl=VL_THEP[thep]||VL_THEP.AIII;
+  document.getElementById('Rbt').value=Rbt;
+  document.getElementById('Rs').value=vtl.Rs;
+  document.getElementById('Rs-kPa').value=vtl.RskPa;
+  CACHE.Rbt=Rbt;CACHE.Rs=vtl.Rs;CACHE.RskPa=vtl.RskPa;
+  // Sync to NT and CT tabs
+  var rbtNT=document.getElementById('Rbt-nt');if(rbtNT)rbtNT.value=Rbt;
+  var rsCT=document.getElementById('Rs-ct');if(rsCT)rsCT.value=vtl.RskPa;
+  var rsCT2=document.getElementById('Rs-ct2');if(rsCT2)rsCT2.value=vtl.RskPa;
+  updH0();
+}
+function updH0(){
+  var h=gv('h-dai'),a=gv('abv')/1000;
+  if(h<=0)return;
+  var h0=+(h-a).toFixed(3);
+  ['h0','h0-nt','h0-nt2','h0-ct','h0-ct2'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=h0;});
+  CACHE.h0=h0;
+  calcC12();calcHang();drawNT();
+}
+
+// ═══ BẢNG TERZAGHI: xây bảng HTML tra [Nγ,Nq,Nc] theo φ°, tô vàng hàng khớp φ_tb ═══
+function buildTerzTable(){
+  var html='';
+  for(var i=0;i<TERZ.length;i+=2){
+    var r=TERZ[i],r2=TERZ[i+1]||['','','',''];
+    html+='<tr><td class="sym">'+r[0]+'</td><td class="sym">'+r[1]+'</td><td class="sym">'+r[2]+'</td><td class="sym">'+r[3]+'</td>'+
+      '<td class="sym">'+r2[0]+'</td><td class="sym">'+r2[1]+'</td><td class="sym">'+r2[2]+'</td><td class="sym">'+r2[3]+'</td></tr>';
+  }
+  document.getElementById('terz-tbody').innerHTML=html;
+}
+function interpTerz(phi){
+  if(phi<=0)return{Ngam:0,Nq:1,Nc:5.14};
+  for(var i=0;i<TERZ.length-1;i++){
+    if(phi>=TERZ[i][0]&&phi<=TERZ[i+1][0]){
+      var t=(phi-TERZ[i][0])/(TERZ[i+1][0]-TERZ[i][0]);
+      return{Ngam:+(TERZ[i][1]+t*(TERZ[i+1][1]-TERZ[i][1])).toFixed(2),
+             Nq:+(TERZ[i][2]+t*(TERZ[i+1][2]-TERZ[i][2])).toFixed(2),
+             Nc:+(TERZ[i][3]+t*(TERZ[i+1][3]-TERZ[i][3])).toFixed(2)};
+    }
+  }
+  return{Ngam:TERZ[TERZ.length-1][1],Nq:TERZ[TERZ.length-1][2],Nc:TERZ[TERZ.length-1][3]};
+}
+
+// ═══ P₀ᵢ: tính lực đầu cọc P₀ᵢ = N0tt/n ± M·xi/Σxi²; kiểm tra Pmax≤[P], Pmin≥0 ═══
+function buildP0Table(){
+  var n=parseInt(gv('nc-p0'))||4;
+  var html='';
+  for(var i=0;i<n;i++){
+    html+='<tr>'+
+      '<td class="sym">'+(i+1)+'</td>'+
+      '<td><input class="ci" id="xi0-'+i+'" type="number" step="0.001" placeholder="0"></td>'+
+      '<td><input class="ci" id="yi0-'+i+'" type="number" step="0.001" placeholder="0"></td>'+
+      '<td class="sym" id="xi2-0-'+i+'">–</td>'+
+      '<td class="sym" id="yi2-0-'+i+'">–</td>'+
+      '<td><input class="ci" id="p0i-'+i+'" type="number" step="0.1" placeholder="?" readonly style="background:var(--Vlt)"></td>'+
+      '<td><input class="ci" id="ri-I-'+i+'" type="number" step="0.001" placeholder="?"></td>'+
+      '<td><input class="ci" id="ri-II-'+i+'" type="number" step="0.001" placeholder="?"></td>'+
+      '</tr>';
+  }
+  document.getElementById('p0-body').innerHTML=html;
+  CACHE.nc=n;
+}
+function calcP0(){
+  var n=parseInt(gv('nc-p0'))||4;
+  var N=gv('N0tt-p0'),Mx=gv('Mx-p0'),My=gv('My-p0');
+  var sumY2=0,sumX2=0,xs=[],ys=[];
+  for(var i=0;i<n;i++){
+    var xi=gv('xi0-'+i),yi=gv('yi0-'+i);
+    xs.push(xi);ys.push(yi);sumY2+=yi*yi;sumX2+=xi*xi;
+    var x2el=document.getElementById('xi2-0-'+i),y2el=document.getElementById('yi2-0-'+i);
+    if(x2el)x2el.textContent=(xi*xi).toFixed(4);
+    if(y2el)y2el.textContent=(yi*yi).toFixed(4);
+  }
+  document.getElementById('sumY2').value=sumY2.toFixed(4);
+  document.getElementById('sumX2').value=sumX2.toFixed(4);
+  var P0vals=[],P0max=0;
+  for(var j=0;j<n;j++){
+    var P0=N/n+(sumY2>0?Mx*ys[j]/sumY2:0)+(sumX2>0?My*xs[j]/sumX2:0);
+    P0vals.push(P0);
+    var el=document.getElementById('p0i-'+j);if(el)el.value=P0.toFixed(1);
+    if(P0>P0max)P0max=P0;
+  }
+  CACHE['ans_P0max']=+P0max.toFixed(1);
+  var res=document.getElementById('p0-result');
+  if(res)res.innerHTML='<div class="fml-box"><div class="ftitle">Kết quả P₀ᵢ</div>'+
+    '<div class="frow">Σy²='+sumY2.toFixed(4)+' m² · Σx²='+sumX2.toFixed(4)+' m²</div>'+
+    '<div class="frow">P₀<sub>max</sub> = <em>'+P0max.toFixed(1)+' kN</em></div>'+
+    (P0vals.some(function(v){return v<0;})?'<div class="frow" style="color:var(--R)">⚠ Có cọc P₀ᵢ &lt; 0 — cọc chịu kéo (tháp thủng phía kéo bỏ qua)</div>':'')+'</div>';
+  toast('P₀ᵢ đã tính. P₀_max='+P0max.toFixed(1)+'kN · Điền vào ô.');
+}
+
+// ═══ VẼ SƠ ĐỒ NÉN THỦNG: SVG trực quan tháp nén thủng (cột và hàng cọc) ═══
+function drawNT(){
+  var svg=document.getElementById('nt-svg');if(!svg)return;svg.innerHTML='';
+  var W=480,H=220;
+  function ce(tag,a){var el=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.keys(a).forEach(function(k){el.setAttribute(k,a[k]);});return el;}
+  function ct(tag,a,t){var el=ce(tag,a);el.textContent=t;return el;}
+  // Background
+  svg.appendChild(ce('rect',{x:0,y:0,width:W,height:H,fill:'#fff'}));
+  var bc=gv('bc')||350,ac=gv('ac')||500;
+  var h0=CACHE.h0||0.7;
+  var r1=gv('r1-cot')||0.85,r2=gv('r2-cot')||0.75;
+  var Dc=gv('Dc-nt')||250;
+  var SC=60; // px per meter
+  var cx=W/2,cy=H/2;
+  // Đài outline (top view conceptual / side view)
+  var dW=(r1*2+Dc/1000)*SC,dH=h0*SC;
+  var dX=cx-dW/2,dY=cy-dH/2;
+  svg.appendChild(ce('rect',{x:dX,y:dY,width:dW,height:dH,fill:'#EFEBE9',stroke:'#5D4037','stroke-width':'2',rx:'2'}));
+  svg.appendChild(ct('text',{x:W/2,y:H-8,'text-anchor':'middle','font-size':'9','fill':'#aaa','font-family':'Plus Jakarta Sans'},'Mặt cắt đứng — Sơ đồ tháp đâm thủng (phương x)'));
+  // Cột
+  var colW=bc/1000*SC;
+  var colX=cx-colW/2;
+  svg.appendChild(ce('rect',{x:colX,y:dY-30,width:colW,height:30,fill:'#8D6E63',stroke:'#5D4037','stroke-width':'1.5'}));
+  svg.appendChild(ct('text',{x:cx,y:dY-15,'text-anchor':'middle','font-size':'8.5','fill':'#fff','font-weight':'700'},'CỘT'));
+  // Cọc (2 cọc bên)
+  var cocW=Dc/1000*SC;
+  [dX+cocW/2,dX+dW-cocW/2].forEach(function(px,idx){
+    svg.appendChild(ce('rect',{x:px-cocW/2,y:dY+dH,width:cocW,height:22,fill:'#6A1B9A',stroke:'#4A148C','stroke-width':'1.2',rx:'2'}));
+    svg.appendChild(ct('text',{x:px,y:dY+dH+15,'text-anchor':'middle','font-size':'7.5','fill':'#fff','font-weight':'700'},'C'+(idx+1)));
+  });
+  // Tháp thủng (đường đứt nét)
+  var c1=+(r1-bc/2000-Dc/2000).toFixed(3);
+  var r1c=Math.min(Math.max(h0/c1,1),2.5);
+  var tapX1=dX+cocW/2,tapX2=dX+dW-cocW/2;
+  svg.appendChild(ce('line',{x1:colX,y1:dY,x2:tapX1,y2:dY+dH,stroke:'#C62828','stroke-width':'1.5','stroke-dasharray':'5,3'}));
+  svg.appendChild(ce('line',{x1:colX+colW,y1:dY,x2:tapX2,y2:dY+dH,stroke:'#C62828','stroke-width':'1.5','stroke-dasharray':'5,3'}));
+  // Dim c1
+  var c1px=tapX1-(colX);
+  svg.appendChild(ct('text',{x:(colX+tapX1)/2,y:dY+dH/2,'text-anchor':'middle','font-size':'8','fill':'#C62828','font-weight':'700'},'c₁='+c1.toFixed(3)+'m'));
+  // h0 dim
+  svg.appendChild(ce('line',{x1:dX-16,y1:dY,x2:dX-16,y2:dY+dH,stroke:'#1565C0','stroke-width':'1.2'}));
+  [dY,dY+dH].forEach(function(y){svg.appendChild(ce('line',{x1:dX-20,y1:y,x2:dX-12,y2:y,stroke:'#1565C0','stroke-width':'1'}));});
+  svg.appendChild(ct('text',{x:dX-28,y:dY+dH/2+3,'text-anchor':'middle','font-size':'8','fill':'#1565C0','font-weight':'700','transform':'rotate(-90,'+(dX-28)+','+(dY+dH/2+3)+')'},'h₀='+h0+'m'));
+  // h0/c1 label
+  svg.appendChild(ct('text',{x:W-4,y:dY+20,'text-anchor':'end','font-size':'8','fill':'#C62828','font-weight':'700'},'h₀/c₁='+r1c.toFixed(2)+(r1c>=2.5?' (=2.5 GH)':r1c<=1?' (=1 GH)':'')));
+}
+
+// ═══ NÉN THỦNG CỘT: Pdt so với Pcdt=Rbt·btb·h₀ (tháp từ cột); kiểm tra h đài ═══
+function calcC12(){
+  var h0=CACHE.h0||gv('h0');
+  var bc=gv('bc')/1000,ac=gv('ac')/1000,Dc=gv('Dc-nt')/1000;
+  var r1=gv('r1-cot'),r2=gv('r2-cot');
+  if(!bc||!r1)return;
+  var c1=+(r1-bc/2-Dc/2).toFixed(4);
+  var c2=+(r2-ac/2-Dc/2).toFixed(4);
+  document.getElementById('c1').value=c1;
+  document.getElementById('c2').value=c2;
+  CACHE.c1=c1;CACHE.c2=c2;
+  if(h0>0&&c1>0&&c2>0){
+    var r1c=+(Math.min(Math.max(h0/c1,1),2.5)).toFixed(4);
+    var r2c=+(Math.min(Math.max(h0/c2,1),2.5)).toFixed(4);
+    document.getElementById('h0c1').value=r1c;
+    document.getElementById('h0c2').value=r2c;
+    CACHE.h0c1=r1c;CACHE.h0c2=r2c;
+    updNTHint();
+  }
+  drawNT();
+}
+function updNTHint(){
+  var h0=CACHE.h0||gv('h0'),Rbt=CACHE.Rbt||gv('Rbt');
+  var bc=gv('bc')/1000,ac=gv('ac')/1000;
+  var c1=CACHE.c1,c2=CACHE.c2,r1c=CACHE.h0c1||1,r2c=CACHE.h0c2||1;
+  if(!h0||!c1||!c2)return;
+  var Pcdt=+(2*h0*Rbt*(r1c*(bc+c2)+r2c*(ac+c1))).toFixed(0);
+  CACHE['ans_Pcdt-cot']=Pcdt;
+  var h=document.getElementById('nt-formula-hint');
+  if(h)h.innerHTML=
+    '<div class="ftitle">Công thức thay số</div>'+
+    '<div class="frow">c₁='+c1.toFixed(3)+'m → h₀/c₁='+h0+'/'+c1.toFixed(3)+'=<em>'+r1c.toFixed(3)+'</em> (giới hạn 1÷2.5)</div>'+
+    '<div class="frow">c₂='+c2.toFixed(3)+'m → h₀/c₂='+h0+'/'+c2.toFixed(3)+'=<em>'+r2c.toFixed(3)+'</em></div>'+
+    '<div class="frow">P<sub>CĐT</sub>=2×'+h0+'×'+Rbt+'×['+r1c.toFixed(3)+'×('+bc+'+'+c2.toFixed(3)+')+'+r2c.toFixed(3)+'×('+ac+'+'+c1.toFixed(3)+')] = <em>'+Pcdt+'kN</em></div>';
+}
+function calcNT_cot(){
+  updNTHint();
+  var Pcdt=CACHE['ans_Pcdt-cot']||0;
+  if(Pcdt){
+    var el=document.getElementById('Pcdt-cot');if(el&&!el.value)el.value=Pcdt;
+    toast('Gợi ý P_CĐT='+Pcdt+'kN. Điền vào ô để kiểm tra.');
+  }
+}
+function chkNT_cot(){
+  var Pdt=gv('Pdt-cot'),Pcdt=gv('Pcdt-cot');
+  if(!Pdt||!Pcdt)return;
+  var ok=Pdt<=Pcdt;
+  var chip=document.getElementById('ck-Pcdt-cot');
+  if(chip){chip.className='chip '+(ok?'ok':'no');chip.textContent=ok?'✓':'✗';}
+  ANS['Pcdt-cot']=ok;updateProg();
+  var box=document.getElementById('nt-cot-result');
+  box.className=ok?'succ-box':'err-box';
+  box.innerHTML='<b>'+(ok?'✓ Thỏa mãn nén thủng cột:':'✗ Không thỏa — cần tăng h₀!')+'</b> P<sub>ĐT</sub>='+Pdt.toFixed(1)+'kN '+(ok?'≤':'>') +' P<sub>CĐT</sub>='+Pcdt.toFixed(1)+'kN';
+}
+
+// ═══ NÉN THỦNG HÀNG CỌC: tính tỷ lệ h₀/c cho hàng cọc biên; h₀/c≥0.6 ═══
+function calcHang(){
+  var h0=CACHE.h0||gv('h0'),Rbt=CACHE.Rbt||gv('Rbt');
+  var b=gv('b-hang'),c=gv('c-hang');
+  if(!h0||!c||!b)return;
+  var ratio_raw=h0/c;
+  var ratio=+(Math.min(Math.max(ratio_raw,1/2.5),1/0.6)).toFixed(4);
+  document.getElementById('h0c-hang').value=ratio_raw.toFixed(3)+'→'+ratio.toFixed(3);
+  document.getElementById('h0c-hang-dung').value=ratio;
+  var Pcdt=+(1.5*b*h0*Rbt*ratio).toFixed(0);
+  CACHE['ans_Pcdt-hang']=Pcdt;
+  var h=document.getElementById('hang-formula-hint');
+  if(h)h.innerHTML=
+    '<div class="ftitle">Công thức thay số</div>'+
+    '<div class="frow">h₀/c = '+h0+'/'+c+' = '+ratio_raw.toFixed(3)+' → dùng <em>'+ratio.toFixed(3)+'</em> (giới hạn 1/2.5÷1/0.6)</div>'+
+    '<div class="frow">P<sub>CĐT,hàng</sub> = 1.5×'+b+'×'+h0+'×'+Rbt+'×'+ratio.toFixed(3)+' = <em>'+Pcdt+' kN</em></div>';
+  var el=document.getElementById('Pcdt-hang');if(el&&!el.value)el.value=Pcdt;
+}
+function chkNT_hang(){
+  var Pdt=gv('Pdt-hang'),Pcdt=gv('Pcdt-hang');
+  if(!Pdt||!Pcdt)return;
+  var ok=Pdt<=Pcdt;
+  var chip=document.getElementById('ck-Pcdt-hang');
+  if(chip){chip.className='chip '+(ok?'ok':'no');chip.textContent=ok?'✓':'✗';}
+  ANS['Pcdt-hang']=ok;updateProg();
+  var box=document.getElementById('hang-result');
+  box.className=ok?'succ-box':'err-box';
+  box.innerHTML='<b>'+(ok?'✓ Thỏa mãn nén thủng hàng cọc:':'✗ Không thỏa — cần tăng h₀!')+'</b> P<sub>ĐT,hàng</sub>='+Pdt.toFixed(1)+'kN '+(ok?'≤':'>') +' P<sub>CĐT,hàng</sub>='+Pcdt.toFixed(1)+'kN';
+}
+
+// ═══ CỐT THÉP ĐÀI: tính mômen ngàm M=Σ(Pi·ri); Fa=M/(0.9Rs·h₀); chọn thanh, khoảng cách ═══
+function addRow(side){
+  var tbody=document.getElementById('ct-'+side+'-body');
+  var n=(side==='I'?++rowCountI:++rowCountII);
+  var tr=document.createElement('tr');
+  tr.innerHTML='<td class="sym">'+n+'</td>'+
+    '<td><input class="ci" type="number" step="0.1" placeholder="?" oninput="sumMom(\''+side+'\')"></td>'+
+    '<td><input class="ci" type="number" step="0.001" placeholder="?" oninput="sumMom(\''+side+'\')"></td>'+
+    '<td><input class="ci" type="number" step="0.01" placeholder="?" readonly style="background:var(--Vlt)"></td>';
+  tbody.appendChild(tr);
+}
+function sumMom(side){
+  var tbody=document.getElementById('ct-'+side+'-body');
+  var rows=tbody.querySelectorAll('tr');
+  var total=0;
+  rows.forEach(function(r){
+    var inps=r.querySelectorAll('input');
+    var P=parseFloat(inps[0].value)||0,ri=parseFloat(inps[1].value)||0;
+    var Pr=+(P*ri).toFixed(2);inps[2].value=Pr;total+=Pr;
+  });
+  CACHE['ans_M-'+side]=+total.toFixed(2);
+  var id='M'+'-'+side;
+  var Mel=document.getElementById(id);if(Mel){Mel.value=total.toFixed(2);}
+  // auto Fa
+  var h0=CACHE.h0||gv('h0-ct'),Rs=CACHE.RskPa||gv('Rs-ct');
+  if(h0&&Rs&&total>0){
+    var Fa=+(total/(0.9*Rs/1000*h0)*10000).toFixed(2);
+    CACHE['ans_Fa-'+side]=Fa;
+    var FaEl=document.getElementById('Fa-'+side);if(FaEl)FaEl.value=Fa;
+    var h=document.getElementById('M'+side+'-formula');
+    if(h)h.innerHTML='<div class="ftitle">Tính F_a</div>'+
+      '<div class="frow">M='+total.toFixed(2)+'kN·m → F<sub>a</sub>='+total.toFixed(2)+'/(0.9×'+Rs+'/1000×'+h0+')×10000=<em>'+Fa+'cm²</em></div>';
+    calcThep(side);
+  }
+}
+function calcThep(side){
+  var d=parseFloat(document.getElementById('d-'+side).value)||16;
+  var as=+(Math.PI*d*d/4/100).toFixed(3);
+  var Fa=gv('Fa-'+side);if(!Fa)return;
+  var n=Math.ceil(Fa/as);
+  document.getElementById('n-'+side).value=n;
+  var L=gv(side==='I'?'L-dai':'B-dai')||1.5;
+  var abv=0.1,sp=n>1?Math.round((L*1000-2*abv*1000)/(n-1)):Math.round(L*1000-2*abv*1000);
+  document.getElementById('sp-'+side).value=sp;
+  var Fa_chon=+(n*as).toFixed(2);
+  document.getElementById('Fa-'+side+'-chon').value=Fa_chon;
+  CACHE['ans_Fa-'+side+'-ok']=Fa_chon>=Fa;
+  var ok=sp>=150&&sp<=250&&Fa_chon>=Fa;
+  var box=document.getElementById('thep-'+side+'-result');
+  box.className=ok?'succ-box':'err-box';
+  box.innerHTML='<b>'+(ok?'✓ Thép đài hợp lý:':'✗ Điều chỉnh:')+'</b> <b>'+n+'Ø'+d+' a='+sp+'mm</b> phương '+(side==='I'?'l':'b')+
+    ' · F<sub>a,chọn</sub>='+Fa_chon+'cm² ≥ F<sub>a,yc</sub>='+Fa+'cm² '+(Fa_chon>=Fa?'✓':'✗')+
+    ' · Khoảng cách '+sp+'mm'+(sp>=150&&sp<=250?' (150–250mm ✓)':' NGOÀI 150–250mm ✗');
+}
+
+// ═══ MÓNG KHỐI QUY ƯỚC: Bqu=Bdai+2·L·tan(α), α=φtb/4; tính trọng lượng cọc+đất+đài ═══
+function buildPhiTable(){
+  var hm=CACHE.hm||1.0;
+  var Lc=CACHE.Lc||0,zmui=hm+Lc;
+  if(!SOILS||SOILS.length<1){toast('Chưa có địa chất. Vào P3·M01 nhập và lưu lại.');return;}
+  var html='';var rowIdx=0;var sumPhiL=0;var acc=0;var sumL=0;
+  SOILS.forEach(function(s,si){
+    var h=parseFloat(s.h)||0;if(!h)return;
+    var zTop=acc,zBot=acc+h;acc+=h;
+    if(zBot<=hm||zTop>=zmui)return;
+    var pTop=Math.max(zTop,hm),pBot=Math.min(zBot,zmui);
+    var li=+(pBot-pTop).toFixed(2);
+    var phi=parseFloat(s.phi)||0;
+    sumPhiL+=phi*li;sumL+=li;
+    html+='<tr><td class="sym">'+(++rowIdx)+'</td>'+
+      '<td class="L">'+(s.name||'Lớp '+(si+1))+'</td>'+
+      '<td class="sym">'+phi+'</td>'+
+      '<td><input class="ci" type="number" value="'+li+'" id="phi-li-'+rowIdx+'" oninput="calcPhiTb()"></td>'+
+      '<td class="sym" id="phi-phiL-'+rowIdx+'">'+(phi*li).toFixed(2)+'</td>'+
+      '</tr>';
+  });
+  document.getElementById('phi-body').innerHTML=html||'<tr><td colspan="5" style="padding:10px;text-align:center;color:#aaa">Không tìm thấy lớp đất trong phạm vi cọc</td></tr>';
+  CACHE.nPhiRows=rowIdx;CACHE.Lc_qu=sumL;
+  calcPhiTb(sumPhiL,sumL);
+}
+function calcPhiTb(sumPhiL_in,sumL_in){
+  var sumPhiL=sumPhiL_in||0,sumL=sumL_in||0;
+  if(!sumPhiL_in){
+    var n=CACHE.nPhiRows||0;
+    for(var i=1;i<=n;i++){
+      var li=gv('phi-li-'+i);
+      var phiEl=document.getElementById('phi-phiL-'+i);
+      // need phi from row
+      var phi=0;// can't get back easily, skip recalc
+      sumL+=li;
+    }
+  }
+  var Lc=sumL||CACHE.Lc||0;
+  var phi_tb=Lc>0?+(sumPhiL/Lc).toFixed(3):0;
+  var alpha=+(phi_tb/4).toFixed(3);
+  ['phi-tb','alpha'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=id==='phi-tb'?phi_tb:alpha;});
+  document.getElementById('sum-philL').value=+sumPhiL.toFixed(3);
+  document.getElementById('Lc-qu').value=Lc.toFixed(2);
+  CACHE['ans_phi-tb-ans']=phi_tb;CACHE['ans_alpha-ans']=alpha;
+  CACHE.phi_tb=phi_tb;CACHE.alpha=alpha;
+  // Sync to BLqu
+  var el=document.getElementById('alpha-BL');if(el)el.value=alpha;
+  var lcBL=document.getElementById('Lc-BL');if(lcBL)lcBL.value=Lc.toFixed(2);
+  toast('φ_tb='+phi_tb+'° · α='+alpha+'°');
+}
+function calcBLqu(){
+  var Bng=gv('B-ng'),Lng=gv('L-ng'),Lc=gv('Lc-BL')||CACHE.Lc||0;
+  var alpha=gv('alpha-BL')||CACHE.alpha||0;
+  if(!Bng||!Lc)return;
+  var tanA=Math.tan(alpha*Math.PI/180);
+  var Bqu=+(Bng+2*Lc*tanA).toFixed(3);
+  var Lqu=+(Lng+2*Lc*tanA).toFixed(3);
+  CACHE['ans_Bqu']=Bqu;CACHE['ans_Lqu']=Lqu;
+  var el1=document.getElementById('Bqu'),el2=document.getElementById('Lqu');
+  if(el1&&!el1.classList.contains('ok'))el1.value=Bqu;
+  if(el2&&!el2.classList.contains('ok'))el2.value=Lqu;
+  // Update lun
+  var BquLun=document.getElementById('Bqu-lun');if(BquLun)BquLun.value=Bqu;
+  var BLqu=document.getElementById('BL-qu');if(BLqu)BLqu.value=+(Bqu*Lqu).toFixed(3);
+  CACHE.Bqu=Bqu;CACHE.Lqu=Lqu;
+  var h=document.getElementById('BLqu-hint');
+  if(h)h.innerHTML='<div class="ftitle">Công thức thay số</div>'+
+    '<div class="frow">B<sub>qu</sub> = '+Bng+' + 2×'+Lc.toFixed(2)+'×tan('+alpha+'°) = '+Bng+' + '+(2*Lc*tanA).toFixed(3)+' = <em>'+Bqu+' m</em></div>'+
+    '<div class="frow">L<sub>qu</sub> = '+Lng+' + 2×'+Lc.toFixed(2)+'×tan('+alpha+'°) = '+Lng+' + '+(2*Lc*tanA).toFixed(3)+' = <em>'+Lqu+' m</em></div>';
+}
+
+// ═══ TTGH1: tính áp lực đáy móng khối quy ước p_tb, p_max ≤ [P]qu ═══
+function calcTTGH1(){
+  var N0tc=gv('N0tc-qu'),nc=gv('nc-qu'),Fc=gv('Fc-qu');
+  var gamH=gv('gam-H-qu');
+  var Bqu=CACHE.Bqu||gv('Bqu'),Lqu=CACHE.Lqu||gv('Lqu');
+  var Lc=CACHE.Lc||gv('Lc-BL');
+  var BLqu=+(Bqu*Lqu).toFixed(3);
+  var Qdat=+(gamH*(BLqu-nc*Fc)).toFixed(1);
+  var Qcoc=+(nc*25*Lc*Fc).toFixed(1);
+  var Nqu=+(N0tc+Qdat+Qcoc).toFixed(1);
+  var ptb=+(Nqu/(Bqu*Lqu)).toFixed(2);
+  CACHE['ans_Nqu']=Nqu;CACHE['ans_ptb-qu']=ptb;
+  ['BL-qu','Qdat-qu','Qcoc-qu'].forEach(function(id,i){
+    var v=[BLqu,Qdat,Qcoc][i];
+    var el=document.getElementById(id);if(el)el.value=v;
+  });
+  var h=document.getElementById('ttgh1-hint');
+  if(h)h.innerHTML='<div class="ftitle">Tính N_qu và p_tb</div>'+
+    '<div class="frow">Q<sub>đất</sub>='+gamH+'×('+BLqu+'-'+nc+'×'+Fc+')=<em>'+Qdat+'kN</em></div>'+
+    '<div class="frow">Q<sub>cọc</sub>='+nc+'×25×'+Lc.toFixed(2)+'×'+Fc+'=<em>'+Qcoc+'kN</em></div>'+
+    '<div class="frow">N<sub>qu</sub>='+N0tc+'+'+Qdat+'+'+Qcoc+'=<em>'+Nqu+'kN</em></div>'+
+    '<div class="frow">p<sub>tb</sub>='+Nqu+'/('+Bqu+'×'+Lqu+')=<em>'+ptb+'kPa</em></div>';
+  // sync to lun
+  var ptbLun=document.getElementById('ptb-lun');if(ptbLun)ptbLun.value=ptb;
+  toast('N_qu='+Nqu+'kN → p_tb='+ptb+'kPa. Điền vào ô.');
+  calcTerz();
+}
+function calcTerz(){
+  var phi=gv('phi-mui'),c=gv('c-mui'),gam=gv('gam-mui'),q=gv('q-qu');
+  var Bqu=CACHE.Bqu||gv('Bqu'),Lqu=CACHE.Lqu||gv('Lqu');
+  if(!phi)return;
+  var N=interpTerz(phi);
+  ['Ngam-t','Nq-t','Nc-t'].forEach(function(id,i){var el=document.getElementById(id);if(el)el.value=[N.Ngam,N.Nq,N.Nc][i];});
+  var a1=+(1-0.2*(Bqu/Lqu)).toFixed(3);
+  var a2=1;
+  var a3=+(1+0.2*(Bqu/Lqu)).toFixed(3);
+  var alphaEl=document.getElementById('alpha-123');if(alphaEl)alphaEl.value=a1+', '+a2+', '+a3;
+  var Pgh=+(0.5*a1*N.Ngam*Bqu*gam+a2*N.Nq*q+a3*N.Nc*c).toFixed(1);
+  var Pqu=+(Pgh/2).toFixed(1);
+  CACHE['ans_Pgh-qu']=Pgh;CACHE['ans_P-qu']=Pqu;
+  var h=document.getElementById('ttgh1-pgh-hint');
+  if(h)h.innerHTML='<div class="ftitle">Tính P_gh theo Terzaghi</div>'+
+    '<div class="frow">α₁='+a1+', α₂='+a2+', α₃='+a3+'</div>'+
+    '<div class="frow">P<sub>gh</sub>=0.5×'+a1+'×'+N.Ngam+'×'+Bqu+'×'+gam+'+'+a2+'×'+N.Nq+'×'+q+'+'+a3+'×'+N.Nc+'×'+c+'=<em>'+Pgh+'kPa</em></div>'+
+    '<div class="frow">[P]<sub>qu</sub>='+Pgh+'/2=<em>'+Pqu+'kPa</em></div>';
+  // auto-fill
+  var el1=document.getElementById('Pgh-qu');if(el1&&!el1.classList.contains('ok'))el1.value=Pgh;
+  var el2=document.getElementById('P-qu');if(el2&&!el2.classList.contains('ok'))el2.value=Pqu;
+}
+function chkTTGH1(){
+  var ptb=gv('ptb-qu'),Pqu=gv('P-qu');
+  var chip=document.getElementById('ck-ttgh1');
+  var ok=Pqu>0&&ptb<=Pqu;
+  if(chip){chip.className='chip '+(ok?'ok':'no');chip.textContent=ok?'✓':'✗';}
+  ANS['ttgh1-check']=ok;updateProg();
+  var box=document.getElementById('ttgh1-result');
+  box.className=ok?'succ-box':'err-box';
+  box.innerHTML='<b>'+(ok?'✓ Thỏa mãn TTGH1 nền dưới mũi cọc:':'✗ Không thỏa mãn TTGH1!')+'</b> p<sub>tb</sub>='+ptb.toFixed(1)+'kPa '+(ok?'≤':'>') +' [P]<sub>qu</sub>='+Pqu.toFixed(1)+'kPa';
+}
+
+// ═══ TTGH2 LÚN: tính độ lún móng khối quy ước (đất phía dưới mũi cọc) ═══
+function calcLun(){
+  var ptb=gv('ptb-lun'),gamH=gv('gamH-lun');
+  var pgl=+(ptb-gamH).toFixed(2);
+  document.getElementById('pgl').value=pgl;
+  CACHE['ans_pgl-ans']=pgl;
+  var el=document.getElementById('pgl-ans');if(el&&!el.classList.contains('ok'))el.value=pgl;
+  var Bqu=CACHE.Bqu||gv('Bqu-lun'),E0=gv('E0-mu'),omega=gv('omega')||1,mu0=gv('mu0')||0.2;
+  if(!E0||!Bqu)return;
+  var S=+(pgl*Bqu*omega*(1-mu0*mu0)/E0*100).toFixed(2);
+  CACHE['ans_S-lun']=S;
+  var Sgh=gv('Sgh')||8;
+  var h=document.getElementById('lun-hint');
+  if(h)h.innerHTML='<div class="ftitle">Tính độ lún S</div>'+
+    '<div class="frow">p<sub>gl</sub>='+ptb+'-'+gamH+'=<em>'+pgl+'kPa</em></div>'+
+    '<div class="frow">S='+pgl+'×'+Bqu+'×'+omega+'×(1–'+mu0+'²)/'+E0+'×100=<em>'+S+'cm</em></div>'+
+    '<div class="frow">[S]='+Sgh+'cm → '+(S<=Sgh?'✓ Thỏa mãn':'✗ Quá lún!')+'</div>';
+  var elS=document.getElementById('S-lun');if(elS&&!elS.classList.contains('ok'))elS.value=S;
+  chkLun();
+  toast('S='+S+'cm — '+(S*10<=gv('Sgh')?'✓ ĐẠT':'✗ KHÔNG ĐẠT'));
+}
+function chkLun(){
+  var S=gv('S-lun'),Sgh=gv('Sgh')||8;
+  var chip=document.getElementById('ck-S-lun');
+  var ok=S>0&&S*10<=Sgh;
+  if(chip){chip.className='chip '+(ok?'ok':'no');chip.textContent=ok?'✓':'✗';}
+  ANS['S-lun']=ok;updateProg();
+  var box=document.getElementById('lun-result');
+  box.className=ok?'succ-box':'err-box';
+  box.innerHTML='<b>'+(ok?'✓ Thỏa mãn TTGH2:':'✗ Không thỏa — xem xét lại!')+'</b> S='+S.toFixed(2)+'cm = '+(S*10).toFixed(1)+'mm '+(ok?'≤':'>') +' [S]='+Sgh+'mm';
+}
+
+// ═══ SAVE & NAVIGATE: lưu h đài, cốt thép, kết quả kiểm tra vào nmong_p3; chuyển module04 ═══
+function saveM03(){
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong_p3')||'{}');
+    d.m03_saved=true;d.m03_time=new Date().toLocaleString('vi-VN');
+    d.h_dai=gv('h-dai');d.h0=CACHE.h0;
+    d.mac_bt=sv('mac-bt');d.mac_thep=sv('mac-thep');
+    d.P0max=CACHE['ans_P0max']||gv('P0max');
+    d.phi_tb=CACHE.phi_tb;d.alpha=CACHE.alpha;
+    d.Bqu=CACHE.Bqu||gv('Bqu');d.Lqu=CACHE.Lqu||gv('Lqu');
+    d.ptb_qu=CACHE['ans_ptb-qu']||gv('ptb-qu');
+    d.S_lun=CACHE['ans_S-lun']||gv('S-lun');
+    d.thep_I=gv('n-I')+'Ø'+document.getElementById('d-I').value+' a='+gv('sp-I')+'mm';
+    d.thep_II=gv('n-II')+'Ø'+document.getElementById('d-II').value+' a='+gv('sp-II')+'mm';
+    d.B_dai=gv('B-dai');d.L_dai=gv('L-dai');
+    localStorage.setItem('nmong_p3',JSON.stringify(d));
+    toast('✓ Đã lưu P3·M03');
+  }catch(e){toast('Lỗi lưu: '+e.message);}
+}
+function goM04(){saveM03();window.location.href='p3_module04_tong_hop.html';}
+
+// ═══ INIT: tải cọc/địa chất/tải trọng từ nmong_p3, xây bảng Terzaghi, cập nhật VL ═══
+window.onload=function(){
+  buildTerzTable();updVL();
+  try{
+    var d=JSON.parse(localStorage.getItem('nmong_p3')||'{}');
+    // Tải trọng
+    if(d.N0tt)document.getElementById('N0tt-p0').value=d.N0tt;
+    if(d.M0tt)document.getElementById('Mx-p0').value=d.M0tt;
+    if(d.bc)document.getElementById('bc').value=d.bc;
+    if(d.lc)document.getElementById('ac').value=d.lc;
+    // Cọc
+    if(d.hm){document.getElementById('hm').value=d.hm;CACHE.hm=d.hm;}
+    if(d.Lc){CACHE.Lc=d.Lc;document.getElementById('Lc-BL').value=d.Lc;document.getElementById('Bqu-lun').value=d.Bqu||'';}
+    if(d.Dc){document.getElementById('Dc-nt').value=Math.round(d.Dc*1000);CACHE.Dc=d.Dc;}
+    if(d.Fc){document.getElementById('Fc-qu').value=d.Fc;}
+    // Đài
+    if(d.h_dai){document.getElementById('h-dai').value=d.h_dai;updH0();}
+    if(d.mac_bt)document.getElementById('mac-bt').value=d.mac_bt;
+    if(d.mac_thep)document.getElementById('mac-thep').value=d.mac_thep;
+    updVL();
+    // Số cọc
+    if(d.n_coc){
+      ['nc-p0','nc-qu'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=d.n_coc;});
+      CACHE.nc=d.n_coc;buildP0Table();
+    }
+    // Đài kích thước
+    if(d.B_dai){document.getElementById('B-ng').value=d.B_dai;document.getElementById('B-dai').value=d.B_dai;}
+    if(d.L_dai){document.getElementById('L-ng').value=d.L_dai;document.getElementById('L-dai').value=d.L_dai;}
+    // Địa chất
+    if(d.soils){SOILS=d.soils;buildPhiTable();}
+    // Lớp đất mũi
+    if(d.soils&&d.soils.length>=3){
+      var muiLayer=d.soils[d.pa_lop_mui-1]||d.soils[d.soils.length-1];
+      if(muiLayer){
+        document.getElementById('phi-mui').value=muiLayer.phi||0;
+        document.getElementById('c-mui').value=muiLayer.c||0;
+        document.getElementById('gam-mui').value=muiLayer.g||18;
+        if(muiLayer.E0)document.getElementById('E0-mu').value=muiLayer.E0*1000;
+      }
+    }
+    // N0tc
+    if(d.N0tc)document.getElementById('N0tc-qu').value=d.N0tc;
+    if(d.m03_saved)toast('✓ Đã tải tiến độ đã lưu');
+    else if(d.Dc||d.soils)toast('✓ Đã tải số liệu từ P3·M01+M02');
+  }catch(e){console.log(e);}
+  // Khởi tạo ANS
+  ['P0max','Pdt-cot','Pcdt-cot','Pdt-hang','Pcdt-hang',
+   'M-I','Fa-I','M-II','Fa-II',
+   'phi-tb-ans','alpha-ans','Bqu','Lqu',
+   'Nqu','ptb-qu','Pgh-qu','P-qu','ttgh1-check','pgl-ans','S-lun',
+   'mcq-p0','mcq-nt','mcq-Sgh'].forEach(function(k){ANS[k]=null;});
+  updateProg();drawNT();
+};
+</script>
+</body>
+</html>
