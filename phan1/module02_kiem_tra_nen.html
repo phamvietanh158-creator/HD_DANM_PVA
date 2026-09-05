@@ -1448,16 +1448,34 @@ window.onload=function(){
     if(d.hm_sb)document.getElementById('hm').value=d.hm_sb;
     if(d.mnn)document.getElementById('mnn').value=d.mnn;
     if(d.soils){
-      var s1=d.soils[1]||d.soils[0];
-      if(s1){
-        if(s1.phi)document.getElementById('phi1').value=s1.phi;
-        if(s1.c!==undefined)document.getElementById('c1').value=s1.c;
-        if(s1.g)document.getElementById('gam1').value=s1.g;
-        if(s1.E0)document.getElementById('E01').value=s1.E0;
+      // Chọn lớp chịu tải đúng theo lop_dat từ module01
+      var lopIdx=Math.max(0,(d.lop_dat||2)-1); // 0-indexed: lop_dat=2 → idx=1
+      var bearing=d.soils[lopIdx]||d.soils[1]||d.soils[0];
+      var aboveIdx=lopIdx>0?lopIdx-1:-1;
+      var aboveLay=aboveIdx>=0?d.soils[aboveIdx]:null;
+      if(bearing){
+        if(bearing.phi!==undefined)document.getElementById('phi1').value=bearing.phi;
+        if(bearing.c!==undefined)document.getElementById('c1').value=bearing.c;
+        if(bearing.g)document.getElementById('gam1').value=bearing.g;
+        if(bearing.E0)document.getElementById('E01').value=bearing.E0;
       }
-      var s0=d.soils[0];
-      if(s0&&s0.g)document.getElementById('gam0').value=s0.g;
-      if(s0&&s0.h)document.getElementById('h1_val').value=s0.h;
+      if(aboveLay&&aboveLay.g){
+        document.getElementById('gam0').value=aboveLay.g;
+        if(aboveLay.h)document.getElementById('h1_val').value=aboveLay.h;
+      } else {
+        // Đáy móng nằm trong lớp 1 → lớp trên = chính lớp đó, h1=0
+        if(bearing&&bearing.g)document.getElementById('gam0').value=bearing.g;
+        document.getElementById('h1_val').value=0;
+      }
+      // Auto-điền đệm cát: phi-tn/c-tn = lớp TN ngay dưới cushion
+      if(d.hdc&&d.hdc>0){
+        var hdEl=document.getElementById('hd');if(hdEl)hdEl.value=d.hdc;
+        // Lớp TN dưới đệm = lớp bearing (lop_dat)
+        if(bearing){
+          var phiTn=document.getElementById('phi-tn');if(phiTn&&bearing.phi!==undefined)phiTn.value=bearing.phi;
+          var cTn=document.getElementById('c-tn');if(cTn&&bearing.c!==undefined)cTn.value=bearing.c;
+        }
+      }
     }
     if(d.ctype){
       var Sallow=d.ctype.indexOf('thep')>=0?120:80;

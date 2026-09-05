@@ -388,8 +388,9 @@ select.conc-sel{padding:8px 10px;border:1.5px solid var(--brd);border-radius:7px
           <div class="conc-row"><span class="conc-label">Phương án được chọn:</span>
             <select class="conc-sel" id="pa-chon" style="margin-top:4px" onchange="updConc()"><option value="">-- Chọn --</option><option>Phương án 1</option><option>Phương án 2</option></select>
           </div>
-          <div class="ans-row" style="margin-top:8px"><span class="ans-label">Chiều sâu đặt móng chính thức <b>h<sub>m</sub></b></span><input class="ans-inp" id="hm-final" type="number" placeholder="?" oninput="updConc()"><span class="ans-unit">m</span><span class="chip" id="chip-hm"></span></div>
-          <div class="ans-row"><span class="ans-label">Lớp đất đặt móng (số thứ tự lớp)</span><input class="ans-inp" id="lop-dat" type="number" placeholder="2" style="width:70px!important"><span class="ans-unit"></span></div>
+          <div class="ans-row" style="margin-top:8px"><span class="ans-label">Chiều sâu đặt móng chính thức <b>h<sub>m</sub></b></span><input class="ans-inp" id="hm-final" type="number" placeholder="?" oninput="autoLop()"><span class="ans-unit">m</span><span class="chip" id="chip-hm"></span></div>
+          <div class="ans-row"><span class="ans-label">Lớp đất đặt móng (tự tính)</span><input class="ans-inp" id="lop-dat" type="number" placeholder="?" style="width:70px!important;background:var(--Plt);font-family:var(--mono);color:var(--Pdk);font-weight:700" readonly><span class="ans-unit"></span></div>
+          <div class="ans-row" id="hdc-row" style="display:none"><span class="ans-label">Chiều dày đệm cát h<sub>đ</sub> (PA đệm cát)</span><input class="ans-inp" id="hdc" type="number" placeholder="VD: 1.5" step="0.1" oninput="updConc()"><span class="ans-unit">m</span></div>
           <div class="conc-row" style="margin-top:8px"><span class="conc-label">Lý do chọn (tóm tắt):</span><textarea class="conc-inp" id="pa-lydo" style="margin-top:4px" placeholder="VD: Chọn PA1 móng nông trên nền tự nhiên. hm=1.8m đặt vào đầu lớp 2 cát vừa chặt vừa. Lý do: lớp 1 mỏng (1.8m) đất yếu, lớp 2 SPT N=26 đủ sức chịu tải, tải trọng nhỏ..."></textarea></div>
         </div>
         <div class="succ-box" id="conc-final" style="display:none"><i class="ti ti-check" style="font-size:13px;vertical-align:-2px"></i> <span id="conc-txt"></span></div>
@@ -976,10 +977,40 @@ function chkNVT(){
   c.className='chip '+(ok?'ok':'no'); c.textContent=ok?'✓':'✗ n='+ans.toFixed(2);
   ANS['nvt']=ok; updateProg();
 }
+function autoLop(){
+  // Tính lop-dat từ hm và SOILS, không gọi updConc để tránh vòng lặp
+  var hm=gv('hm-final');
+  if(hm>0&&SOILS[0]&&SOILS[0].h>0){
+    var h0=SOILS[0].h;
+    var h1=(SOILS[1]&&SOILS[1].h>0)?SOILS[1].h:999;
+    var lop=hm<=h0?1:(hm<=(h0+h1)?2:3);
+    var el=document.getElementById('lop-dat');if(el)el.value=lop;
+  }
+  refreshConc();
+}
 function updConc(){
   var pa=sv('pa-chon'),hm=gv('hm-final');
+  // Auto-điền hm-final từ PA đã đề xuất (chỉ khi chưa có)
+  if(pa&&!hm){
+    var hmSrc=pa==='Phương án 1'?gv('pa1h'):(pa==='Phương án 2'?gv('pa2h'):0);
+    if(hmSrc>0){var hmEl=document.getElementById('hm-final');if(hmEl){hmEl.value=hmSrc;hm=hmSrc;}}
+  }
+  // Tính lop-dat và cập nhật UI kết luận
+  if(hm>0&&SOILS[0]&&SOILS[0].h>0){
+    var h0=SOILS[0].h,h1=(SOILS[1]&&SOILS[1].h>0)?SOILS[1].h:999;
+    var lop=hm<=h0?1:(hm<=(h0+h1)?2:3);
+    var lopEl=document.getElementById('lop-dat');if(lopEl)lopEl.value=lop;
+  }
+  refreshConc();
+}
+function refreshConc(){
+  var pa=sv('pa-chon'),hm=gv('hm-final');
+  var demCat=pa&&(pa.toLowerCase().indexOf('đệm')>=0||pa.toLowerCase().indexOf('dem')>=0);
+  var hdcRow=document.getElementById('hdc-row');if(hdcRow)hdcRow.style.display=demCat?'flex':'none';
   if(pa&&hm){
-    document.getElementById('conc-txt').textContent=pa+' · h_m = '+hm+' m · Lớp đất số '+(sv('lop-dat')||'?');
+    var lopTxt=sv('lop-dat')||'?';
+    var hdcTxt=demCat&&gv('hdc')?' · h_đ='+gv('hdc')+'m':'';
+    document.getElementById('conc-txt').textContent=pa+' · h_m='+hm+'m · Lớp '+lopTxt+hdcTxt;
     document.getElementById('conc-final').style.display='block';
   }
 }
@@ -1278,12 +1309,14 @@ function goModule02(){
       var gk=g/(1+0.01*W), e0=del*9.81/gk-1;
       var gbh=(del+e0)*9.81/(1+e0), gdn=(del-1)*9.81/(1+e0);
       var isGood=isDinh?((A<7)?(B<=1):(B<0.5)):(parseFloat(s.spt)>10);
-      return {name:s.name||'Lớp '+(i+1),h:s.h,isDinh:isDinh,
+      return {sh:s.sh,name:s.name||'Lớp '+(i+1),h:s.h,isDinh:isDinh,
               gk:+gk.toFixed(3),e0:+e0.toFixed(4),gbh:+gbh.toFixed(3),gdn:+gdn.toFixed(3),
-              phi:s.phi,c:s.c,E0:s.E0,isGood:isGood,g:s.g,W:s.W,del:s.del};
+              phi:s.phi,c:s.c,E0:s.E0,isGood:isGood,g:s.g,W:s.W,del:s.del,ep:s.ep||null};
     });
     d.hm=parseFloat(document.getElementById('hm-final').value)||0;
     d.lop_dat=parseInt(document.getElementById('lop-dat').value)||2;
+    d.hdc=gv('hdc')||0;
+    d.pa_chon=sv('pa-chon');
     // Lưu tải trọng và kích thước cột từ form để các module sau đọc lại
     ['N0tt','M0tt','Q0tt','N0tc','M0tc','Q0tc','bc','lc'].forEach(function(k){
       var el=document.getElementById(k); if(el&&el.value)d[k]=parseFloat(el.value)||0;
@@ -1321,10 +1354,25 @@ window.onload=function(){
     ['N0tt','M0tt','Q0tt','N0tc','M0tc','Q0tc','bc','lc'].forEach(function(k){if(d[k])document.getElementById(k).value=d[k];});
     if(d.mnn)document.getElementById('mnn').value=d.mnn;
     autoN();
-    if(d.soils){d.soils.forEach(function(s,i){if(i<3&&s&&s.sh){
-      var shEl=document.getElementById('sh'+i),hEl=document.getElementById('h'+i),nmEl=document.getElementById('nm'+i);
-      if(shEl)shEl.value=s.sh; if(hEl)hEl.value=s.h; if(nmEl)nmEl.value=s.name||'';
-    }});}
+    var soilsHaveSh=d.soils&&d.soils.some(function(s){return s&&s.sh;});
+    if(soilsHaveSh){
+      d.soils.forEach(function(s,i){if(i<3&&s&&s.sh){
+        var shEl=document.getElementById('sh'+i),hEl=document.getElementById('h'+i),nmEl=document.getElementById('nm'+i);
+        if(shEl)shEl.value=s.sh; if(hEl)hEl.value=s.h; if(nmEl)nmEl.value=s.name||'';
+        traLop(i);
+      }});
+    } else if(d.de_so&&DB_DE[d.de_so]){
+      // Restore trực tiếp từ DB_DE nếu soils chưa có trong localStorage
+      var deDat=DB_DE[d.de_so];
+      deDat.soils.forEach(function(s,i){
+        var shEl=document.getElementById('sh'+i),hEl=document.getElementById('h'+i),nmEl=document.getElementById('nm'+i);
+        if(shEl)shEl.value=s.sh; if(hEl)hEl.value=s.h; if(nmEl)nmEl.value=s.name||'';
+        traLop(i);
+      });
+    }
+    if(d.hm){var hmEl=document.getElementById('hm-final');if(hmEl)hmEl.value=d.hm;autoLop();}
+    if(d.hdc){var hdcEl=document.getElementById('hdc');if(hdcEl)hdcEl.value=d.hdc;}
+    if(d.pa_chon){var paEl=document.getElementById('pa-chon');if(paEl)paEl.value=d.pa_chon;updConc();}
   }catch(e){}
 };
 </script>
