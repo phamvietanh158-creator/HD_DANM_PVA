@@ -824,6 +824,8 @@ var K0_COLS=[1.0,1.2,1.4,1.6,1.8,2.0,3.0,999];
 var ANS={};
 var SIZES=[]; // [{b,l}]
 var RESULTS=[]; // [{ptb,pmax,pmin,P,ok_tech,ok_econ,pct}]
+var M02_SOILS=null; // soil array from module01
+var M02_LOP_IDX=0;  // 0-indexed bearing layer
 
 // Component bảng tra chuẩn (dùng lại từ M01)
 function mkLookupTable(title,ref,location,howto,tableHtml,note){
@@ -1014,6 +1016,7 @@ function buildTTGH1(){
     var ok_tech=pData.ptb<=sctData.P && pData.pmax<=1.2*sctData.P;
     var econ_pct=(sctData.P-pData.ptb)/sctData.P*100;
     var ok_econ=econ_pct<=10;
+    sctData.econ_pct=econ_pct; // make available to buildPA()
     RESULTS.push({b:bs[i],l:ls[i],ptb:pData.ptb,pmax:pData.pmax,pmin:pData.pmin,P:sctData.P,
       pgh:sctData.pgh,Ng:sctData.Ng,Nq:sctData.Nq,Nc:sctData.Nc,q:sctData.q,xi:sctData.xi,
       ok_tech:ok_tech,ok_econ:ok_econ,econ_pct:econ_pct,Mtc_day:pData.Mtc_day});
@@ -1111,10 +1114,28 @@ function buildSummaryTable(){
 // ═══ TẠO FORM NHẬP THÔNG SỐ LỚP ĐẤT CHO TÍNH LÚN (γ, e₀, E₀, loại đất) ═══
 function buildLunLayers(){
   var html='';
-  var soils=[
-    {name:'Lớp 2 — Cát vừa',type:'roi',g:19.3,E0:51,e0:''},
-    {name:'Lớp 3 — Sét cứng',type:'dinh',g:19.4,E0:10.32,e0:0.773}
-  ];
+  // Build soil list: layers at and below the bearing layer
+  var soils=[];
+  if(M02_SOILS&&M02_SOILS.length){
+    for(var si=M02_LOP_IDX;si<M02_SOILS.length;si++){
+      var s=M02_SOILS[si]; if(!s)continue;
+      var isDinh=s.isDinh;
+      soils.push({
+        name:s.name||('Lớp '+(si+1)),
+        type:isDinh?'dinh':'roi',
+        g:s.g||s.gk||19,
+        E0:s.E0||0,
+        e0:s.e0||''
+      });
+    }
+  }
+  // Fallback if no soil data
+  if(!soils.length){
+    soils=[
+      {name:'Lớp đặt móng',type:'roi',g:19,E0:0,e0:''},
+      {name:'Lớp dưới',type:'dinh',g:19,E0:0,e0:''}
+    ];
+  }
   soils.forEach(function(s,i){
     html+='<div style="display:flex;gap:10px;align-items:center;padding:8px 12px;border:1.5px solid var(--brd);border-radius:8px;margin-bottom:8px;background:#faf8f6">';
     html+='<div style="flex:1;font-size:.84rem;font-weight:600">'+s.name+'</div>';
@@ -1437,10 +1458,10 @@ function chkDemCat(){
 
 // ═══ INIT: khởi tạo bảng Terzaghi + K₀, tạo form lớp lún, khôi phục tiến trình, tải nmong_p1 ═══
 window.onload=function(){
-  buildTerzTable();buildK0Table();buildLunLayers();restoreProgress();
+  buildTerzTable();buildK0Table();restoreProgress();
   // load from localStorage
   try{
-    var raw=localStorage.getItem('nmong_p1'); if(!raw)return;
+    var raw=localStorage.getItem('nmong_p1'); if(!raw){buildLunLayers();return;}
     var d=JSON.parse(raw);
     if(d.N0tc)document.getElementById('N0tc').value=d.N0tc;
     if(d.M0tc)document.getElementById('M0tc').value=d.M0tc;
@@ -1450,6 +1471,7 @@ window.onload=function(){
     if(d.soils){
       // Chọn lớp chịu tải đúng theo lop_dat từ module01
       var lopIdx=Math.max(0,(d.lop_dat||2)-1); // 0-indexed: lop_dat=2 → idx=1
+      M02_SOILS=d.soils; M02_LOP_IDX=lopIdx; // expose globally for buildLunLayers
       var bearing=d.soils[lopIdx]||d.soils[1]||d.soils[0];
       var aboveIdx=lopIdx>0?lopIdx-1:-1;
       var aboveLay=aboveIdx>=0?d.soils[aboveIdx]:null;
@@ -1481,9 +1503,10 @@ window.onload=function(){
       var Sallow=d.ctype.indexOf('thep')>=0?120:80;
       document.getElementById('S-allow').value=Sallow;
     }
+    buildLunLayers(); // called after M02_SOILS is set
     calcFsb();
     toast('Đã tải số liệu từ Module 01');
-  }catch(e){}
+  }catch(e){buildLunLayers();}
 };
 </script>
 </body>
