@@ -260,28 +260,9 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
     </div>
 
     <div class="divider"></div>
-    <div class="sec-lbl"><i class="ti ti-layout" style="font-size:14px"></i> C. Chọn sơ bộ kích thước đáy móng</div>
-    <div class="theory"><div class="theory-lbl"><i class="ti ti-book" style="font-size:12px"></i> Công thức ước tính sơ bộ diện tích đáy móng</div>
-      <div style="font-family:var(--mono);font-size:.84rem;line-height:2">
-        <b>F<sub>sb</sub> = N₀<sup>tc</sup> / (R<sub>0</sub> − γ̄·h<sub>m</sub>)</b><br>
-        Trong đó R₀ ≈ 100–200 kPa (ước tính sức chịu tải sơ bộ theo loại đất).<br>
-        Chọn tỷ lệ <b>l/b ≈ 1.2–2.0</b> (móng hình chữ nhật), từ F<sub>sb</sub> tính b và l.
-      </div>
-    </div>
-    <div class="warn-box"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-2px"></i>
-      <b>Yêu cầu đồ án:</b> Kiểm tra ít nhất <b>3 kích thước đáy móng</b> khác nhau. Lập bảng tổng hợp để chọn kích thước hợp lý (thỏa mãn cả TTGH1 và TTGH2, điều kiện kinh tế ≤10%).
-    </div>
-
-    <div class="g3" style="margin-bottom:10px">
-      <div class="fg"><div class="fl">R₀ sơ bộ (ước tính)</div><div class="fi"><input type="number" id="R0_est" value="180" oninput="calcFsb()"><span class="ut">kPa</span></div></div>
-      <div class="fg"><div class="fl">Tỷ lệ l/b</div><div class="fi"><input type="number" id="lb_ratio" value="1.5" step="0.1" oninput="calcFsb()"><span class="ut"></span></div></div>
-      <div class="fg"><div class="fl">F sơ bộ = N₀<sup>tc</sup>/(R₀−γ̄·h<sub>m</sub>)</div><div class="fi"><input type="number" id="Fsb" readonly><span class="ut">m²</span></div></div>
-    </div>
-    <p style="font-size:.82rem;font-weight:600;margin-bottom:8px">Nhập 3 kích thước đáy móng cần kiểm tra:</p>
-    <div class="theory" style="margin-bottom:10px">
-      <div class="theory-lbl"><i class="ti ti-bulb" style="font-size:12px"></i> Quy trình chọn b×l theo PDF hướng dẫn</div>
-      Chọn <b>1 cặp b×l</b> → Kiểm tra TTGH1 → Nếu không thỏa: điều chỉnh b×l → Bấm "Kiểm tra" lại.<br>
-      <b>Thường gặp:</b> Nếu p<sub>tb</sub> &gt; [P] → tăng b×l. Nếu kinh tế &gt; 10% → giảm b×l. Nếu p<sub>max</sub> &gt; 1.2[P] → tăng l (giảm lệch tâm).
+    <div class="sec-lbl"><i class="ti ti-layout" style="font-size:14px"></i> C. Nhập kích thước đáy móng cần kiểm tra</div>
+    <div class="info-box"><i class="ti ti-bulb" style="font-size:13px;vertical-align:-2px"></i>
+      Chọn <b>b × l</b> dựa trên ước tính sơ bộ: <b>F ≈ N₀<sup>tc</sup> / [P]<sub>sơ bộ</sub></b> (với [P] ≈ 100–200 kPa tùy đất). Nhập b và l → bấm <b>"Kiểm tra TTGH1"</b> để xem kết quả. Nếu không thỏa → chỉnh b, l rồi bấm lại.
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:end">
       <div class="fg">
@@ -293,8 +274,8 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
         <div class="fi"><input type="number" id="l1" placeholder="VD: 1.4" step="0.1" oninput="updateSizes()"><span class="ut">m</span></div>
       </div>
       <div class="fg">
-        <div class="fl">Tỉ lệ l/b</div>
-        <div class="fi"><input type="number" id="lb_ratio" value="1.4" step="0.1" readonly style="background:var(--Plt);font-family:var(--mono)" id="lb-display"><span class="ut">–</span></div>
+        <div class="fl">Tỉ lệ l/b (tự tính)</div>
+        <div class="fi"><input type="number" id="lb-display" placeholder="–" readonly style="background:var(--Plt);font-family:var(--mono);color:var(--Pdk);font-weight:700"><span class="ut">–</span></div>
       </div>
     </div>
     <div class="info-box" style="margin-bottom:4px"><i class="ti ti-refresh" style="font-size:13px;vertical-align:-2px"></i>
@@ -1005,7 +986,7 @@ function calcFsb(){
 }
 function updateSizes(){
   var b=gv('b1'),l=gv('l1');
-  var lbEl=document.getElementById('lb_ratio');
+  var lbEl=document.getElementById('lb-display');
   if(lbEl&&b&&l) lbEl.value=(l/b).toFixed(2);
 }
 
@@ -1088,7 +1069,7 @@ function buildPA(b,l,pD,sD,idx){
     '<span class="ans-unit">kPa</span><span class="chip" id="ck-P-'+idx+'"></span></div>'+
   // MCQ kiểm tra điều kiện
   '<div class="mcq-wrap" style="margin-top:10px">'+
-  '<div class="mcq-q">📌 Kiểm tra: p<sub>tb</sub>='+pD.ptb.toFixed(1)+'kPa vs [P]='+sD.P.toFixed(1)+'kPa và p<sub>max</sub>='+pD.pmax.toFixed(1)+'kPa vs 1.2[P]='+（1.2*sD.P).toFixed(1)+'kPa</div>'+
+  '<div class="mcq-q">📌 Kiểm tra: p<sub>tb</sub>='+pD.ptb.toFixed(1)+'kPa vs [P]='+sD.P.toFixed(1)+'kPa và p<sub>max</sub>='+pD.pmax.toFixed(1)+'kPa vs 1.2[P]='+(1.2*sD.P).toFixed(1)+'kPa</div>'+
   '<div class="mcq-opts g2c">'+
     mco('tech-'+idx,0,'✓ Thỏa mãn — cả ptb ≤ [P] và pmax ≤ 1.2[P]',sD.P>=pD.ptb&&1.2*sD.P>=pD.pmax?0:1)+
     mco('tech-'+idx,1,'✗ Không thỏa mãn',sD.P>=pD.ptb&&1.2*sD.P>=pD.pmax?0:1)+
@@ -1346,7 +1327,7 @@ function calcLop2Check(){
   var pgl=ANS['pgl-ans']||gv('pgl');
   if(!zbVal||!pgl) return;
   // k0 answer at this z/b
-  var k0_ans=getK0(zbVal,lb);
+  var k0_ans=interpK0(zbVal,lb);
   // highlight row
   document.querySelectorAll('[id^="k0lop2-"]').forEach(function(r){r.classList.remove('highlight');});
   var bestZb=K0_ZB.reduce(function(a,c){return Math.abs(c-zbVal)<Math.abs(a-zbVal)?c:a;});
@@ -1398,7 +1379,7 @@ function showLop2HintAndWrap(){
   if(b&&l&&hm){
     var z_lop2=Math.max(0,h1-hm); // khoảng cách từ đáy móng đến đỉnh lớp 2
     var zb_lop2=z_lop2>0?+(z_lop2/b).toFixed(3):0;
-    var k0_lop2=getK0(zb_lop2,lb);
+    var k0_lop2=interpK0(zb_lop2,lb);
     var sgl_lop2=+(k0_lop2*pgl).toFixed(2);
     var hint=document.getElementById('lop2-calc-hint');
     if(hint) hint.innerHTML=

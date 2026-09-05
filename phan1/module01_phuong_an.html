@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
@@ -200,6 +200,35 @@ select.conc-sel{padding:8px 10px;border:1.5px solid var(--brd);border-radius:7px
 <div class="prog-wrap">
   <div class="prog-top"><span>Tiến độ Module 01</span><span id="prog-text">0 / 0</span></div>
   <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<!-- ══════════ CHỌN ĐỀ ══════════ -->
+<div class="card" id="s00" style="border-color:#455A64">
+  <div class="card-hd" style="background:#455A64"><i class="ti ti-number-123"></i>
+    <div><h2>Chọn Đề Bài</h2><p>Nhập số đề → tự động điền toàn bộ số liệu địa chất và tải trọng</p></div>
+    <span class="cbadge">Bước 0</span>
+  </div>
+  <div class="card-body">
+    <div class="earth-box" style="background:#ECEFF1;border-color:#607D8B">
+      <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px"></i>
+      Chọn đúng số đề của bạn → hệ thống tự điền tải trọng và 3 lớp địa chất vào Bước 1.1 bên dưới.
+      Vẫn có thể chỉnh sửa từng ô sau đó. Nếu đề chưa có trong DB → tự nhập thủ công.
+    </div>
+    <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-top:12px">
+      <div class="fg" style="min-width:170px">
+        <div class="fl">Số đề bài (1 – 210)</div>
+        <div class="fi">
+          <input type="number" id="de-so" min="1" max="210" placeholder="VD: 176" style="width:110px"
+                 onkeydown="if(event.key==='Enter')loadDe()">
+          <span class="ut">/ 210</span>
+        </div>
+      </div>
+      <button class="btn" style="background:#455A64;color:#fff" onclick="loadDe()">
+        <i class="ti ti-download"></i> Tải số liệu đề
+      </button>
+    </div>
+    <div id="de-status" style="margin-top:10px;font-size:.82rem"></div>
+  </div>
 </div>
 
 <!-- ══════════ 1.1 SỐ LIỆU ══════════ -->
@@ -963,6 +992,257 @@ function scrollNext(){
   for(var i=0;i<all.length;i++){if(all[i].offsetParent){all[i].scrollIntoView({behavior:'smooth',block:'center'});all[i].focus();break;}}
 }
 
+// ═══ DB ĐỀ BÀI: mỗi entry là số liệu đầu vào của 1 đề ═══
+// Cấu trúc: {N0tt, M0tt, Q0tt, N0tc, M0tc, Q0tc, bc, lc, mnn,
+//            soils:[{sh, h, name}, ...]}  (3 lớp đất)
+var DB_DE={
+  1:{N0tt:663,M0tt:86,Q0tt:14,N0tc:577,M0tc:75,Q0tc:12,bc:350,lc:300,mnn:6,soils:[{sh:22,h:1.2,name:'Sét-d.nhão'},{sh:50,h:3,name:'Á cát-n.cứng'},{sh:95,h:0,name:'C.vừa-ch.vừa'}]},
+  2:{N0tt:727,M0tt:98,Q0tt:18,N0tc:632,M0tc:85,Q0tc:16,bc:400,lc:300,mnn:6.8,soils:[{sh:11,h:2.9,name:'Sét-nhão'},{sh:52,h:2.5,name:'Á cát-n.cứng'},{sh:107,h:0,name:'C.thô-chặt'}]},
+  3:{N0tt:701,M0tt:95,Q0tt:16,N0tc:610,M0tc:83,Q0tc:14,bc:350,lc:300,mnn:5.6,soils:[{sh:77,h:4.5,name:'C.bụi-ch.vừa'},{sh:33,h:3.3,name:'Sét-d.mềm'},{sh:50,h:0,name:'Á cát-n.cứng'}]},
+  4:{N0tt:762,M0tt:103,Q0tt:19,N0tc:663,M0tc:90,Q0tc:17,bc:400,lc:300,mnn:5.7,soils:[{sh:1,h:2.3,name:'Á cát-nhão'},{sh:94,h:3.6,name:'C.vừa-ch.vừa'},{sh:62,h:0,name:'Á cát-cứng'}]},
+  5:{N0tt:769,M0tt:100,Q0tt:20,N0tc:669,M0tc:87,Q0tc:17,bc:400,lc:300,mnn:5.8,soils:[{sh:31,h:3.9,name:'Á sét-d.mềm'},{sh:79,h:3.2,name:'C.bụi-ch.vừa'},{sh:61,h:0,name:'Á cát-cứng'}]},
+  6:{N0tt:637,M0tt:80,Q0tt:15,N0tc:554,M0tc:70,Q0tc:13,bc:350,lc:250,mnn:6.5,soils:[{sh:15,h:1.5,name:'Á cát-d.nhão'},{sh:30,h:2.6,name:'Á sét-d.mềm'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  7:{N0tt:574,M0tt:69,Q0tt:11,N0tc:499,M0tc:60,Q0tc:10,bc:350,lc:250,mnn:4.5,soils:[{sh:26,h:1.6,name:'Á cát-d.mềm'},{sh:59,h:4,name:'Sét-n.cứng'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  8:{N0tt:591,M0tt:77,Q0tt:15,N0tc:514,M0tc:67,Q0tc:13,bc:350,lc:250,mnn:6.1,soils:[{sh:3,h:1.8,name:'Á cát-nhão'},{sh:35,h:2.4,name:'Sét-d.mềm'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  9:{N0tt:514,M0tt:67,Q0tt:17,N0tc:447,M0tc:58,Q0tc:15,bc:300,lc:250,mnn:5.6,soils:[{sh:44,h:4.4,name:'Á sét-d.cứng'},{sh:25,h:2.6,name:'Á cát-d.mềm'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  10:{N0tt:583,M0tt:70,Q0tt:17,N0tc:507,M0tc:61,Q0tc:15,bc:350,lc:250,mnn:5.4,soils:[{sh:60,h:3.9,name:'Sét-n.cứng'},{sh:25,h:2.4,name:'Á cát-d.mềm'},{sh:97,h:0,name:'C.vừa-chặt'}]},
+  11:{N0tt:730,M0tt:97,Q0tt:18,N0tc:635,M0tc:84,Q0tc:16,bc:400,lc:300,mnn:5.6,soils:[{sh:26,h:2.6,name:'Á cát-d.mềm'},{sh:57,h:4.1,name:'Sét-n.cứng'},{sh:105,h:0,name:'C.thô-chặt'}]},
+  12:{N0tt:429,M0tt:49,Q0tt:9,N0tc:373,M0tc:43,Q0tc:8,bc:250,lc:220,mnn:4.5,soils:[{sh:3,h:1.5,name:'Á cát-nhão'},{sh:45,h:3.9,name:'Sét-d.cứng'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  13:{N0tt:771,M0tt:108,Q0tt:19,N0tc:670,M0tc:94,Q0tc:17,bc:400,lc:300,mnn:5,soils:[{sh:9,h:1.9,name:'Sét-nhão'},{sh:87,h:3.2,name:'C.nhỏ-ch.vừa'},{sh:54,h:0,name:'Á sét-n.cứng'}]},
+  14:{N0tt:701,M0tt:91,Q0tt:15,N0tc:610,M0tc:79,Q0tc:13,bc:350,lc:300,mnn:5.2,soils:[{sh:13,h:1.7,name:'Á cát-d.nhão'},{sh:80,h:3.5,name:'C.bụi-ch.vừa'},{sh:65,h:0,name:'Á sét-cứng'}]},
+  15:{N0tt:482,M0tt:48,Q0tt:12,N0tc:419,M0tc:42,Q0tc:10,bc:300,lc:250,mnn:6,soils:[{sh:44,h:4.3,name:'Á sét-d.cứng'},{sh:15,h:2,name:'Á cát-d.nhão'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  16:{N0tt:699,M0tt:98,Q0tt:17,N0tc:608,M0tc:85,Q0tc:15,bc:350,lc:300,mnn:5.8,soils:[{sh:95,h:3.6,name:'C.vừa-ch.vừa'},{sh:27,h:2.9,name:'Á cát-d.mềm'},{sh:55,h:0,name:'Á sét-n.cứng'}]},
+  17:{N0tt:682,M0tt:89,Q0tt:15,N0tc:593,M0tc:77,Q0tc:13,bc:350,lc:300,mnn:4.8,soils:[{sh:31,h:1,name:'Á sét-d.mềm'},{sh:51,h:3.9,name:'Á cát-n.cứng'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  18:{N0tt:676,M0tt:88,Q0tt:15,N0tc:588,M0tc:77,Q0tc:13,bc:350,lc:300,mnn:6.1,soils:[{sh:79,h:4.1,name:'C.bụi-ch.vừa'},{sh:32,h:3.4,name:'Á sét-d.mềm'},{sh:59,h:0,name:'Sét-n.cứng'}]},
+  19:{N0tt:628,M0tt:78,Q0tt:15,N0tc:546,M0tc:68,Q0tc:13,bc:350,lc:250,mnn:5,soils:[{sh:17,h:1.8,name:'Á sét-d.nhão'},{sh:36,h:2.4,name:'Sét-d.mềm'},{sh:94,h:0,name:'C.vừa-ch.vừa'}]},
+  20:{N0tt:678,M0tt:95,Q0tt:15,N0tc:590,M0tc:83,Q0tc:13,bc:350,lc:300,mnn:5,soils:[{sh:19,h:1.5,name:'Á sét-d.nhão'},{sh:49,h:3.2,name:'Á cát-n.cứng'},{sh:100,h:0,name:'C.vừa-chặt'}]},
+  21:{N0tt:512,M0tt:61,Q0tt:11,N0tc:445,M0tc:53,Q0tc:10,bc:300,lc:250,mnn:4.9,soils:[{sh:38,h:3.4,name:'Á cát-d.cứng'},{sh:78,h:3.6,name:'C.bụi-ch.vừa'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  22:{N0tt:681,M0tt:75,Q0tt:18,N0tc:592,M0tc:65,Q0tc:16,bc:350,lc:300,mnn:6.3,soils:[{sh:52,h:3.7,name:'Á cát-n.cứng'},{sh:35,h:3.2,name:'Sét-d.mềm'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  23:{N0tt:692,M0tt:97,Q0tt:20,N0tc:602,M0tc:84,Q0tc:17,bc:350,lc:300,mnn:7.3,soils:[{sh:26,h:3.9,name:'Á cát-d.mềm'},{sh:93,h:2.9,name:'C.vừa-ch.vừa'},{sh:67,h:0,name:'Á sét-cứng'}]},
+  24:{N0tt:687,M0tt:100,Q0tt:17,N0tc:597,M0tc:87,Q0tc:15,bc:350,lc:300,mnn:5.4,soils:[{sh:79,h:3.7,name:'C.bụi-ch.vừa'},{sh:25,h:2.9,name:'Á cát-d.mềm'},{sh:57,h:0,name:'Sét-n.cứng'}]},
+  25:{N0tt:565,M0tt:62,Q0tt:16,N0tc:491,M0tc:54,Q0tc:14,bc:350,lc:250,mnn:6,soils:[{sh:37,h:3.2,name:'Á cát-d.cứng'},{sh:34,h:2.5,name:'Sét-d.mềm'},{sh:105,h:0,name:'C.thô-chặt'}]},
+  26:{N0tt:667,M0tt:97,Q0tt:16,N0tc:580,M0tc:84,Q0tc:14,bc:350,lc:300,mnn:5.5,soils:[{sh:96,h:3.4,name:'C.vừa-ch.vừa'},{sh:15,h:2.5,name:'Á cát-d.nhão'},{sh:60,h:0,name:'Sét-n.cứng'}]},
+  27:{N0tt:623,M0tt:69,Q0tt:17,N0tc:542,M0tc:60,Q0tc:15,bc:350,lc:250,mnn:6.1,soils:[{sh:54,h:4.6,name:'Á sét-n.cứng'},{sh:33,h:2.4,name:'Sét-d.mềm'},{sh:108,h:0,name:'C.thô-chặt'}]},
+  28:{N0tt:676,M0tt:95,Q0tt:17,N0tc:588,M0tc:83,Q0tc:15,bc:350,lc:300,mnn:5.6,soils:[{sh:28,h:2.8,name:'Á cát-d.mềm'},{sh:47,h:3.2,name:'Sét-d.cứng'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  29:{N0tt:664,M0tt:90,Q0tt:18,N0tc:577,M0tc:78,Q0tc:16,bc:350,lc:300,mnn:6.3,soils:[{sh:33,h:3.5,name:'Sét-d.mềm'},{sh:51,h:3.2,name:'Á cát-n.cứng'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  30:{N0tt:670,M0tt:94,Q0tt:19,N0tc:583,M0tc:82,Q0tc:17,bc:350,lc:300,mnn:7.2,soils:[{sh:33,h:3.7,name:'Sét-d.mềm'},{sh:52,h:3.9,name:'Á cát-n.cứng'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  31:{N0tt:685,M0tt:92,Q0tt:16,N0tc:596,M0tc:80,Q0tc:14,bc:350,lc:300,mnn:6.4,soils:[{sh:14,h:2.9,name:'Á cát-d.nhão'},{sh:77,h:3.4,name:'C.bụi-ch.vừa'},{sh:71,h:0,name:'Sét-cứng'}]},
+  32:{N0tt:543,M0tt:65,Q0tt:16,N0tc:472,M0tc:57,Q0tc:14,bc:300,lc:250,mnn:5.6,soils:[{sh:57,h:3.8,name:'Sét-n.cứng'},{sh:30,h:3.1,name:'Á sét-d.mềm'},{sh:106,h:0,name:'C.thô-chặt'}]},
+  33:{N0tt:433,M0tt:56,Q0tt:10,N0tc:377,M0tc:49,Q0tc:9,bc:250,lc:220,mnn:5,soils:[{sh:40,h:3,name:'Á cát-d.cứng'},{sh:77,h:4.2,name:'C.bụi-ch.vừa'},{sh:67,h:0,name:'Á sét-cứng'}]},
+  34:{N0tt:602,M0tt:75,Q0tt:14,N0tc:523,M0tc:65,Q0tc:12,bc:350,lc:250,mnn:5.5,soils:[{sh:19,h:1.6,name:'Á sét-d.nhão'},{sh:26,h:2.5,name:'Á cát-d.mềm'},{sh:97,h:0,name:'C.vừa-chặt'}]},
+  35:{N0tt:713,M0tt:100,Q0tt:17,N0tc:620,M0tc:87,Q0tc:15,bc:350,lc:300,mnn:5.8,soils:[{sh:80,h:4.2,name:'C.bụi-ch.vừa'},{sh:13,h:2,name:'Á cát-d.nhão'},{sh:53,h:0,name:'Á sét-n.cứng'}]},
+  36:{N0tt:717,M0tt:100,Q0tt:19,N0tc:623,M0tc:87,Q0tc:17,bc:350,lc:300,mnn:5.8,soils:[{sh:3,h:2.4,name:'Á cát-nhão'},{sh:55,h:3.4,name:'Á sét-n.cứng'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  37:{N0tt:435,M0tt:44,Q0tt:11,N0tc:378,M0tc:38,Q0tc:10,bc:250,lc:220,mnn:5.2,soils:[{sh:41,h:4.5,name:'Á sét-d.cứng'},{sh:36,h:2.5,name:'Sét-d.mềm'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  38:{N0tt:705,M0tt:95,Q0tt:15,N0tc:613,M0tc:83,Q0tc:13,bc:350,lc:300,mnn:6,soils:[{sh:17,h:1.3,name:'Á sét-d.nhão'},{sh:88,h:3.3,name:'C.nhỏ-ch.vừa'},{sh:69,h:0,name:'Sét-cứng'}]},
+  39:{N0tt:435,M0tt:50,Q0tt:9,N0tc:378,M0tc:43,Q0tc:8,bc:250,lc:220,mnn:4.8,soils:[{sh:43,h:3.3,name:'Á sét-d.cứng'},{sh:94,h:3.4,name:'C.vừa-ch.vừa'},{sh:72,h:0,name:'Sét-cứng'}]},
+  40:{N0tt:642,M0tt:90,Q0tt:15,N0tc:558,M0tc:78,Q0tc:13,bc:350,lc:300,mnn:5.6,soils:[{sh:77,h:3.6,name:'C.bụi-ch.vừa'},{sh:27,h:3.1,name:'Á cát-d.mềm'},{sh:54,h:0,name:'Á sét-n.cứng'}]},
+  41:{N0tt:791,M0tt:103,Q0tt:17,N0tc:688,M0tc:90,Q0tc:15,bc:400,lc:300,mnn:5.3,soils:[{sh:17,h:2.6,name:'Á sét-d.nhão'},{sh:86,h:2.8,name:'C.nhỏ-ch.vừa'},{sh:72,h:0,name:'Sét-cứng'}]},
+  42:{N0tt:674,M0tt:94,Q0tt:17,N0tc:586,M0tc:82,Q0tc:15,bc:350,lc:300,mnn:5,soils:[{sh:79,h:3.8,name:'C.bụi-ch.vừa'},{sh:42,h:2.8,name:'Á sét-d.cứng'},{sh:64,h:0,name:'Á cát-cứng'}]},
+  43:{N0tt:708,M0tt:106,Q0tt:18,N0tc:616,M0tc:92,Q0tc:16,bc:350,lc:300,mnn:5.4,soils:[{sh:87,h:3.5,name:'C.nhỏ-ch.vừa'},{sh:26,h:2.8,name:'Á cát-d.mềm'},{sh:58,h:0,name:'Sét-n.cứng'}]},
+  44:{N0tt:629,M0tt:69,Q0tt:17,N0tc:547,M0tc:60,Q0tc:15,bc:350,lc:250,mnn:5.7,soils:[{sh:54,h:4.2,name:'Á sét-n.cứng'},{sh:36,h:3.2,name:'Sét-d.mềm'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  45:{N0tt:531,M0tt:66,Q0tt:13,N0tc:462,M0tc:57,Q0tc:11,bc:300,lc:250,mnn:7.5,soils:[{sh:15,h:3.5,name:'Á cát-d.nhão'},{sh:55,h:3.8,name:'Á sét-n.cứng'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  46:{N0tt:753,M0tt:98,Q0tt:17,N0tc:655,M0tc:85,Q0tc:15,bc:400,lc:300,mnn:6,soils:[{sh:10,h:2.7,name:'Sét-nhão'},{sh:56,h:3.9,name:'Á sét-n.cứng'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  47:{N0tt:471,M0tt:61,Q0tt:10,N0tc:410,M0tc:53,Q0tc:9,bc:250,lc:220,mnn:4.2,soils:[{sh:28,h:1.5,name:'Á cát-d.mềm'},{sh:44,h:4.6,name:'Á sét-d.cứng'},{sh:96,h:0,name:'C.vừa-ch.vừa'}]},
+  48:{N0tt:712,M0tt:103,Q0tt:16,N0tc:619,M0tc:90,Q0tc:14,bc:350,lc:300,mnn:5.9,soils:[{sh:93,h:3.8,name:'C.vừa-ch.vừa'},{sh:35,h:3,name:'Sét-d.mềm'},{sh:52,h:0,name:'Á cát-n.cứng'}]},
+  49:{N0tt:467,M0tt:47,Q0tt:8,N0tc:406,M0tc:41,Q0tc:7,bc:250,lc:220,mnn:4.9,soils:[{sh:45,h:3.9,name:'Sét-d.cứng'},{sh:88,h:3.1,name:'C.nhỏ-ch.vừa'},{sh:49,h:0,name:'Á cát-n.cứng'}]},
+  50:{N0tt:701,M0tt:95,Q0tt:19,N0tc:610,M0tc:83,Q0tc:17,bc:350,lc:300,mnn:6.9,soils:[{sh:25,h:3.8,name:'Á cát-d.mềm'},{sh:86,h:2.5,name:'C.nhỏ-ch.vừa'},{sh:69,h:0,name:'Sét-cứng'}]},
+  51:{N0tt:656,M0tt:85,Q0tt:17,N0tc:570,M0tc:74,Q0tc:15,bc:350,lc:300,mnn:6,soils:[{sh:35,h:3.9,name:'Sét-d.mềm'},{sh:56,h:3.7,name:'Á sét-n.cứng'},{sh:63,h:0,name:'Á cát-cứng'}]},
+  52:{N0tt:591,M0tt:71,Q0tt:17,N0tc:514,M0tc:62,Q0tc:15,bc:350,lc:250,mnn:6.3,soils:[{sh:55,h:4.4,name:'Á sét-n.cứng'},{sh:14,h:2,name:'Á cát-d.nhão'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  53:{N0tt:678,M0tt:95,Q0tt:16,N0tc:590,M0tc:83,Q0tc:14,bc:350,lc:300,mnn:4.7,soils:[{sh:35,h:1.5,name:'Sét-d.mềm'},{sh:52,h:3.3,name:'Á cát-n.cứng'},{sh:106,h:0,name:'C.thô-chặt'}]},
+  54:{N0tt:749,M0tt:105,Q0tt:19,N0tc:651,M0tc:91,Q0tc:17,bc:400,lc:300,mnn:6.2,soils:[{sh:2,h:2.7,name:'Á cát-nhão'},{sh:59,h:3.5,name:'Sét-n.cứng'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  55:{N0tt:451,M0tt:59,Q0tt:10,N0tc:392,M0tc:51,Q0tc:9,bc:250,lc:220,mnn:4.1,soils:[{sh:47,h:3.1,name:'Sét-d.cứng'},{sh:50,h:3.6,name:'Á cát-n.cứng'},{sh:100,h:0,name:'C.vừa-chặt'}]},
+  56:{N0tt:746,M0tt:108,Q0tt:19,N0tc:649,M0tc:94,Q0tc:17,bc:400,lc:300,mnn:5,soils:[{sh:5,h:1.6,name:'Á sét-nhão'},{sh:86,h:3,name:'C.nhỏ-ch.vừa'},{sh:58,h:0,name:'Sét-n.cứng'}]},
+  57:{N0tt:464,M0tt:65,Q0tt:16,N0tc:403,M0tc:57,Q0tc:14,bc:250,lc:220,mnn:5.8,soils:[{sh:40,h:3.8,name:'Á cát-d.cứng'},{sh:29,h:3.2,name:'Á sét-d.mềm'},{sh:93,h:0,name:'C.vừa-ch.vừa'}]},
+  58:{N0tt:651,M0tt:88,Q0tt:17,N0tc:566,M0tc:77,Q0tc:15,bc:350,lc:300,mnn:6.8,soils:[{sh:24,h:1.1,name:'Sét-d.nhão'},{sh:27,h:2.8,name:'Á cát-d.mềm'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  59:{N0tt:538,M0tt:78,Q0tt:15,N0tc:468,M0tc:68,Q0tc:13,bc:300,lc:250,mnn:7,soils:[{sh:7,h:1.6,name:'Á sét-nhão'},{sh:27,h:2.5,name:'Á cát-d.mềm'},{sh:96,h:0,name:'C.vừa-ch.vừa'}]},
+  60:{N0tt:684,M0tt:92,Q0tt:16,N0tc:595,M0tc:80,Q0tc:14,bc:350,lc:300,mnn:4.7,soils:[{sh:10,h:1.2,name:'Sét-nhão'},{sh:79,h:2.9,name:'C.bụi-ch.vừa'},{sh:50,h:0,name:'Á cát-n.cứng'}]},
+  61:{N0tt:613,M0tt:86,Q0tt:21,N0tc:533,M0tc:75,Q0tc:18,bc:350,lc:250,mnn:6,soils:[{sh:49,h:3.2,name:'Á cát-n.cứng'},{sh:22,h:2.7,name:'Sét-d.nhão'},{sh:108,h:0,name:'C.thô-chặt'}]},
+  62:{N0tt:431,M0tt:52,Q0tt:8,N0tc:375,M0tc:45,Q0tc:7,bc:250,lc:220,mnn:4.5,soils:[{sh:16,h:1.4,name:'Á cát-d.nhão'},{sh:47,h:4.3,name:'Sét-d.cứng'},{sh:93,h:0,name:'C.vừa-ch.vừa'}]},
+  63:{N0tt:676,M0tt:84,Q0tt:15,N0tc:588,M0tc:73,Q0tc:13,bc:350,lc:300,mnn:5.5,soils:[{sh:5,h:2.4,name:'Á sét-nhão'},{sh:95,h:3.5,name:'C.vừa-ch.vừa'},{sh:70,h:0,name:'Sét-cứng'}]},
+  64:{N0tt:763,M0tt:103,Q0tt:17,N0tc:663,M0tc:90,Q0tc:15,bc:400,lc:300,mnn:5.2,soils:[{sh:88,h:4.1,name:'C.nhỏ-ch.vừa'},{sh:14,h:2.6,name:'Á cát-d.nhão'},{sh:54,h:0,name:'Á sét-n.cứng'}]},
+  65:{N0tt:447,M0tt:54,Q0tt:9,N0tc:389,M0tc:47,Q0tc:8,bc:250,lc:220,mnn:4.8,soils:[{sh:4,h:1.8,name:'Á cát-nhão'},{sh:41,h:4.1,name:'Á sét-d.cứng'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  66:{N0tt:462,M0tt:51,Q0tt:13,N0tc:402,M0tc:44,Q0tc:11,bc:250,lc:220,mnn:5.7,soils:[{sh:37,h:3.7,name:'Á cát-d.cứng'},{sh:33,h:2.4,name:'Sét-d.mềm'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  67:{N0tt:571,M0tt:74,Q0tt:12,N0tc:497,M0tc:64,Q0tc:10,bc:350,lc:250,mnn:4.5,soils:[{sh:20,h:1.1,name:'Á sét-d.nhão'},{sh:39,h:3.9,name:'Á cát-d.cứng'},{sh:94,h:0,name:'C.vừa-ch.vừa'}]},
+  68:{N0tt:408,M0tt:53,Q0tt:9,N0tc:355,M0tc:46,Q0tc:8,bc:250,lc:220,mnn:4.4,soils:[{sh:42,h:3.1,name:'Á sét-d.cứng'},{sh:49,h:2.9,name:'Á cát-n.cứng'},{sh:107,h:0,name:'C.thô-chặt'}]},
+  69:{N0tt:449,M0tt:56,Q0tt:10,N0tc:390,M0tc:49,Q0tc:9,bc:250,lc:220,mnn:4.8,soils:[{sh:37,h:3.2,name:'Á cát-d.cứng'},{sh:77,h:4,name:'C.bụi-ch.vừa'},{sh:57,h:0,name:'Sét-n.cứng'}]},
+  70:{N0tt:571,M0tt:66,Q0tt:16,N0tc:497,M0tc:57,Q0tc:14,bc:350,lc:250,mnn:5.8,soils:[{sh:60,h:4.1,name:'Sét-n.cứng'},{sh:15,h:1.9,name:'Á cát-d.nhão'},{sh:67,h:0,name:'Á sét-cứng'}]},
+  71:{N0tt:467,M0tt:56,Q0tt:9,N0tc:406,M0tc:49,Q0tc:8,bc:250,lc:220,mnn:5,soils:[{sh:24,h:1.7,name:'Sét-d.nhão'},{sh:43,h:4.3,name:'Á sét-d.cứng'},{sh:108,h:0,name:'C.thô-chặt'}]},
+  72:{N0tt:726,M0tt:98,Q0tt:17,N0tc:631,M0tc:85,Q0tc:15,bc:400,lc:300,mnn:4.3,soils:[{sh:85,h:3.3,name:'C.nhỏ-ch.vừa'},{sh:58,h:3.6,name:'Sét-n.cứng'},{sh:61,h:0,name:'Á cát-cứng'}]},
+  73:{N0tt:502,M0tt:55,Q0tt:14,N0tc:437,M0tc:48,Q0tc:12,bc:300,lc:250,mnn:6.2,soils:[{sh:40,h:3.5,name:'Á cát-d.cứng'},{sh:31,h:2,name:'Á sét-d.mềm'},{sh:94,h:0,name:'C.vừa-ch.vừa'}]},
+  74:{N0tt:736,M0tt:110,Q0tt:18,N0tc:640,M0tc:96,Q0tc:16,bc:400,lc:300,mnn:5.2,soils:[{sh:21,h:1.4,name:'Sét-d.nhão'},{sh:93,h:2.7,name:'C.vừa-ch.vừa'},{sh:61,h:0,name:'Á cát-cứng'}]},
+  75:{N0tt:674,M0tt:94,Q0tt:19,N0tc:586,M0tc:82,Q0tc:17,bc:350,lc:300,mnn:5,soils:[{sh:34,h:4.1,name:'Sét-d.mềm'},{sh:96,h:2.8,name:'C.vừa-ch.vừa'},{sh:59,h:0,name:'Sét-n.cứng'}]},
+  76:{N0tt:528,M0tt:74,Q0tt:15,N0tc:459,M0tc:64,Q0tc:13,bc:300,lc:250,mnn:6.5,soils:[{sh:15,h:4.1,name:'Á cát-d.nhão'},{sh:85,h:3.4,name:'C.nhỏ-ch.vừa'},{sh:60,h:0,name:'Sét-n.cứng'}]},
+  77:{N0tt:671,M0tt:87,Q0tt:21,N0tc:583,M0tc:76,Q0tc:18,bc:350,lc:300,mnn:6.2,soils:[{sh:51,h:3.6,name:'Á cát-n.cứng'},{sh:18,h:2.4,name:'Á sét-d.nhão'},{sh:100,h:0,name:'C.vừa-chặt'}]},
+  78:{N0tt:761,M0tt:95,Q0tt:17,N0tc:662,M0tc:83,Q0tc:15,bc:400,lc:300,mnn:6,soils:[{sh:25,h:2.7,name:'Á cát-d.mềm'},{sh:80,h:2.7,name:'C.bụi-ch.vừa'},{sh:54,h:0,name:'Á sét-n.cứng'}]},
+  79:{N0tt:527,M0tt:61,Q0tt:10,N0tc:458,M0tc:53,Q0tc:9,bc:300,lc:250,mnn:4.1,soils:[{sh:32,h:1.2,name:'Á sét-d.mềm'},{sh:40,h:3.4,name:'Á cát-d.cứng'},{sh:105,h:0,name:'C.thô-chặt'}]},
+  80:{N0tt:482,M0tt:63,Q0tt:16,N0tc:419,M0tc:55,Q0tc:14,bc:300,lc:250,mnn:5.5,soils:[{sh:39,h:3.6,name:'Á cát-d.cứng'},{sh:30,h:3,name:'Á sét-d.mềm'},{sh:97,h:0,name:'C.vừa-chặt'}]},
+  81:{N0tt:739,M0tt:96,Q0tt:17,N0tc:643,M0tc:83,Q0tc:15,bc:400,lc:300,mnn:5.8,soils:[{sh:7,h:2.8,name:'Á sét-nhão'},{sh:39,h:3,name:'Á cát-d.cứng'},{sh:95,h:0,name:'C.vừa-ch.vừa'}]},
+  82:{N0tt:693,M0tt:97,Q0tt:17,N0tc:603,M0tc:84,Q0tc:15,bc:350,lc:300,mnn:5,soils:[{sh:1,h:1.3,name:'Á cát-nhão'},{sh:85,h:3.3,name:'C.nhỏ-ch.vừa'},{sh:57,h:0,name:'Sét-n.cứng'}]},
+  83:{N0tt:761,M0tt:95,Q0tt:17,N0tc:662,M0tc:83,Q0tc:15,bc:400,lc:300,mnn:6.5,soils:[{sh:9,h:2.6,name:'Sét-nhão'},{sh:38,h:4,name:'Á cát-d.cứng'},{sh:93,h:0,name:'C.vừa-ch.vừa'}]},
+  84:{N0tt:701,M0tt:88,Q0tt:18,N0tc:610,M0tc:77,Q0tc:16,bc:350,lc:300,mnn:5.3,soils:[{sh:30,h:3.9,name:'Á sét-d.mềm'},{sh:50,h:3.7,name:'Á cát-n.cứng'},{sh:106,h:0,name:'C.thô-chặt'}]},
+  85:{N0tt:783,M0tt:106,Q0tt:19,N0tc:681,M0tc:92,Q0tc:17,bc:400,lc:300,mnn:6.1,soils:[{sh:8,h:2.2,name:'Á sét-nhão'},{sh:40,h:3.8,name:'Á cát-d.cứng'},{sh:106,h:0,name:'C.thô-chặt'}]},
+  86:{N0tt:613,M0tt:80,Q0tt:15,N0tc:533,M0tc:70,Q0tc:13,bc:350,lc:250,mnn:7.2,soils:[{sh:1,h:1.3,name:'Á cát-nhão'},{sh:34,h:2.1,name:'Sét-d.mềm'},{sh:96,h:0,name:'C.vừa-ch.vừa'}]},
+  87:{N0tt:791,M0tt:119,Q0tt:19,N0tc:688,M0tc:103,Q0tc:17,bc:400,lc:300,mnn:5.5,soils:[{sh:33,h:1.1,name:'Sét-d.mềm'},{sh:96,h:2.9,name:'C.vừa-ch.vừa'},{sh:66,h:0,name:'Á sét-cứng'}]},
+  88:{N0tt:584,M0tt:73,Q0tt:18,N0tc:508,M0tc:63,Q0tc:16,bc:350,lc:250,mnn:5.5,soils:[{sh:55,h:3.8,name:'Á sét-n.cứng'},{sh:26,h:2.8,name:'Á cát-d.mềm'},{sh:65,h:0,name:'Á sét-cứng'}]},
+  89:{N0tt:665,M0tt:86,Q0tt:17,N0tc:578,M0tc:75,Q0tc:15,bc:350,lc:300,mnn:6.2,soils:[{sh:20,h:1.3,name:'Á sét-d.nhão'},{sh:25,h:2.6,name:'Á cát-d.mềm'},{sh:106,h:0,name:'C.thô-chặt'}]},
+  90:{N0tt:688,M0tt:89,Q0tt:22,N0tc:598,M0tc:77,Q0tc:19,bc:350,lc:300,mnn:5.4,soils:[{sh:52,h:3.8,name:'Á cát-n.cứng'},{sh:17,h:2.2,name:'Á sét-d.nhão'},{sh:96,h:0,name:'C.vừa-ch.vừa'}]},
+  91:{N0tt:524,M0tt:68,Q0tt:12,N0tc:456,M0tc:59,Q0tc:10,bc:300,lc:250,mnn:4.7,soils:[{sh:37,h:4.1,name:'Á cát-d.cứng'},{sh:86,h:3.2,name:'C.nhỏ-ch.vừa'},{sh:67,h:0,name:'Á sét-cứng'}]},
+  92:{N0tt:742,M0tt:100,Q0tt:18,N0tc:645,M0tc:87,Q0tc:16,bc:400,lc:300,mnn:6.3,soils:[{sh:9,h:2.5,name:'Sét-nhão'},{sh:96,h:2.9,name:'C.vừa-ch.vừa'},{sh:59,h:0,name:'Sét-n.cứng'}]},
+  93:{N0tt:744,M0tt:112,Q0tt:19,N0tc:647,M0tc:97,Q0tc:17,bc:400,lc:300,mnn:6.5,soils:[{sh:22,h:2.8,name:'Sét-d.nhão'},{sh:79,h:3.1,name:'C.bụi-ch.vừa'},{sh:57,h:0,name:'Sét-n.cứng'}]},
+  94:{N0tt:756,M0tt:91,Q0tt:16,N0tc:657,M0tc:79,Q0tc:14,bc:400,lc:300,mnn:6.5,soils:[{sh:35,h:2.9,name:'Sét-d.mềm'},{sh:54,h:4.1,name:'Á sét-n.cứng'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  95:{N0tt:497,M0tt:60,Q0tt:10,N0tc:432,M0tc:52,Q0tc:9,bc:300,lc:250,mnn:5.1,soils:[{sh:44,h:3.8,name:'Á sét-d.cứng'},{sh:93,h:2.7,name:'C.vừa-ch.vừa'},{sh:63,h:0,name:'Á cát-cứng'}]},
+  96:{N0tt:682,M0tt:85,Q0tt:16,N0tc:593,M0tc:74,Q0tc:14,bc:350,lc:300,mnn:6.3,soils:[{sh:30,h:2.7,name:'Á sét-d.mềm'},{sh:58,h:3.6,name:'Sét-n.cứng'},{sh:106,h:0,name:'C.thô-chặt'}]},
+  97:{N0tt:714,M0tt:93,Q0tt:19,N0tc:621,M0tc:81,Q0tc:17,bc:350,lc:300,mnn:5.9,soils:[{sh:32,h:4.1,name:'Á sét-d.mềm'},{sh:39,h:3.6,name:'Á cát-d.cứng'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  98:{N0tt:635,M0tt:92,Q0tt:18,N0tc:552,M0tc:80,Q0tc:16,bc:350,lc:250,mnn:7.3,soils:[{sh:31,h:3.7,name:'Á sét-d.mềm'},{sh:78,h:3.3,name:'C.bụi-ch.vừa'},{sh:58,h:0,name:'Sét-n.cứng'}]},
+  99:{N0tt:733,M0tt:103,Q0tt:17,N0tc:637,M0tc:90,Q0tc:15,bc:400,lc:300,mnn:6.5,soils:[{sh:19,h:3,name:'Á sét-d.nhão'},{sh:46,h:3.8,name:'Sét-d.cứng'},{sh:100,h:0,name:'C.vừa-chặt'}]},
+  100:{N0tt:619,M0tt:84,Q0tt:16,N0tc:538,M0tc:73,Q0tc:14,bc:350,lc:250,mnn:6.1,soils:[{sh:13,h:1,name:'Á cát-d.nhão'},{sh:34,h:3.2,name:'Sét-d.mềm'},{sh:100,h:0,name:'C.vừa-chặt'}]},
+  101:{N0tt:413,M0tt:50,Q0tt:8,N0tc:359,M0tc:43,Q0tc:7,bc:250,lc:220,mnn:5.7,soils:[{sh:48,h:4.1,name:'Sét-d.cứng'},{sh:95,h:3.9,name:'C.vừa-ch.vừa'},{sh:106,h:0,name:'C.thô-chặt'}]},
+  102:{N0tt:765,M0tt:107,Q0tt:22,N0tc:665,M0tc:93,Q0tc:19,bc:400,lc:300,mnn:6.1,soils:[{sh:35,h:4.1,name:'Sét-d.mềm'},{sh:80,h:2.6,name:'C.bụi-ch.vừa'},{sh:62,h:0,name:'Á cát-cứng'}]},
+  103:{N0tt:722,M0tt:90,Q0tt:15,N0tc:628,M0tc:78,Q0tc:13,bc:400,lc:300,mnn:5.7,soils:[{sh:86,h:3.9,name:'C.nhỏ-ch.vừa'},{sh:30,h:2.3,name:'Á sét-d.mềm'},{sh:59,h:0,name:'Sét-n.cứng'}]},
+  104:{N0tt:635,M0tt:89,Q0tt:14,N0tc:552,M0tc:77,Q0tc:12,bc:350,lc:250,mnn:5,soils:[{sh:15,h:1.8,name:'Á cát-d.nhão'},{sh:53,h:4.2,name:'Á sét-n.cứng'},{sh:107,h:0,name:'C.thô-chặt'}]},
+  105:{N0tt:602,M0tt:72,Q0tt:14,N0tc:523,M0tc:63,Q0tc:12,bc:350,lc:250,mnn:6.3,soils:[{sh:10,h:1.3,name:'Sét-nhão'},{sh:25,h:2.6,name:'Á cát-d.mềm'},{sh:94,h:0,name:'C.vừa-ch.vừa'}]},
+  106:{N0tt:435,M0tt:54,Q0tt:10,N0tc:378,M0tc:47,Q0tc:9,bc:250,lc:220,mnn:3.8,soils:[{sh:48,h:2.8,name:'Sét-d.cứng'},{sh:53,h:3.4,name:'Á sét-n.cứng'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  107:{N0tt:584,M0tt:79,Q0tt:15,N0tc:508,M0tc:69,Q0tc:13,bc:350,lc:250,mnn:7.8,soils:[{sh:5,h:1.3,name:'Á sét-nhão'},{sh:26,h:2.5,name:'Á cát-d.mềm'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  108:{N0tt:774,M0tt:116,Q0tt:20,N0tc:673,M0tc:101,Q0tc:17,bc:400,lc:300,mnn:5,soils:[{sh:88,h:3.2,name:'C.nhỏ-ch.vừa'},{sh:37,h:3.7,name:'Á cát-d.cứng'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  109:{N0tt:682,M0tt:102,Q0tt:18,N0tc:593,M0tc:89,Q0tc:16,bc:350,lc:300,mnn:4.6,soils:[{sh:78,h:3.6,name:'C.bụi-ch.vừa'},{sh:45,h:3.1,name:'Sét-d.cứng'},{sh:97,h:0,name:'C.vừa-chặt'}]},
+  110:{N0tt:562,M0tt:65,Q0tt:16,N0tc:489,M0tc:57,Q0tc:14,bc:350,lc:250,mnn:6,soils:[{sh:58,h:4,name:'Sét-n.cứng'},{sh:29,h:2.9,name:'Á sét-d.mềm'},{sh:105,h:0,name:'C.thô-chặt'}]},
+  111:{N0tt:730,M0tt:106,Q0tt:19,N0tc:635,M0tc:92,Q0tc:17,bc:400,lc:300,mnn:4.7,soils:[{sh:77,h:3.4,name:'C.bụi-ch.vừa'},{sh:46,h:3.5,name:'Sét-d.cứng'},{sh:68,h:0,name:'Á sét-cứng'}]},
+  112:{N0tt:725,M0tt:105,Q0tt:21,N0tc:630,M0tc:91,Q0tc:18,bc:400,lc:300,mnn:7.2,soils:[{sh:31,h:3.7,name:'Á sét-d.mềm'},{sh:87,h:3.5,name:'C.nhỏ-ch.vừa'},{sh:70,h:0,name:'Sét-cứng'}]},
+  113:{N0tt:462,M0tt:62,Q0tt:11,N0tc:402,M0tc:54,Q0tc:10,bc:250,lc:220,mnn:4.9,soils:[{sh:41,h:3.8,name:'Á sét-d.cứng'},{sh:94,h:3.2,name:'C.vừa-ch.vừa'},{sh:72,h:0,name:'Sét-cứng'}]},
+  114:{N0tt:695,M0tt:108,Q0tt:19,N0tc:604,M0tc:94,Q0tc:17,bc:350,lc:300,mnn:4.4,soils:[{sh:87,h:3,name:'C.nhỏ-ch.vừa'},{sh:38,h:3.3,name:'Á cát-d.cứng'},{sh:69,h:0,name:'Sét-cứng'}]},
+  115:{N0tt:534,M0tt:67,Q0tt:12,N0tc:464,M0tc:58,Q0tc:10,bc:300,lc:250,mnn:4.2,soils:[{sh:8,h:1,name:'Á sét-nhão'},{sh:37,h:3.8,name:'Á cát-d.cứng'},{sh:106,h:0,name:'C.thô-chặt'}]},
+  116:{N0tt:770,M0tt:96,Q0tt:18,N0tc:670,M0tc:83,Q0tc:16,bc:400,lc:300,mnn:6.6,soils:[{sh:34,h:2.4,name:'Sét-d.mềm'},{sh:50,h:3,name:'Á cát-n.cứng'},{sh:97,h:0,name:'C.vừa-chặt'}]},
+  117:{N0tt:665,M0tt:96,Q0tt:18,N0tc:578,M0tc:83,Q0tc:16,bc:350,lc:300,mnn:6,soils:[{sh:4,h:2.5,name:'Á cát-nhão'},{sh:44,h:3,name:'Á sét-d.cứng'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  118:{N0tt:501,M0tt:50,Q0tt:13,N0tc:436,M0tc:43,Q0tc:11,bc:300,lc:250,mnn:5.8,soils:[{sh:42,h:4.1,name:'Á sét-d.cứng'},{sh:34,h:2.2,name:'Sét-d.mềm'},{sh:107,h:0,name:'C.thô-chặt'}]},
+  119:{N0tt:646,M0tt:78,Q0tt:19,N0tc:562,M0tc:68,Q0tc:17,bc:350,lc:300,mnn:6.1,soils:[{sh:50,h:3.5,name:'Á cát-n.cứng'},{sh:29,h:3,name:'Á sét-d.mềm'},{sh:93,h:0,name:'C.vừa-ch.vừa'}]},
+  120:{N0tt:620,M0tt:90,Q0tt:17,N0tc:539,M0tc:78,Q0tc:15,bc:350,lc:250,mnn:6.5,soils:[{sh:21,h:1.5,name:'Sét-d.nhão'},{sh:32,h:2.5,name:'Á sét-d.mềm'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  121:{N0tt:425,M0tt:49,Q0tt:8,N0tc:370,M0tc:43,Q0tc:7,bc:250,lc:220,mnn:4.6,soils:[{sh:7,h:0.9,name:'Á sét-nhão'},{sh:46,h:4.4,name:'Sét-d.cứng'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  122:{N0tt:717,M0tt:97,Q0tt:18,N0tc:623,M0tc:84,Q0tc:16,bc:350,lc:300,mnn:6.1,soils:[{sh:2,h:2.9,name:'Á cát-nhão'},{sh:41,h:3.1,name:'Á sét-d.cứng'},{sh:107,h:0,name:'C.thô-chặt'}]},
+  123:{N0tt:756,M0tt:102,Q0tt:17,N0tc:657,M0tc:89,Q0tc:15,bc:400,lc:300,mnn:7,soils:[{sh:23,h:2.2,name:'Sét-d.nhão'},{sh:42,h:3.3,name:'Á sét-d.cứng'},{sh:107,h:0,name:'C.thô-chặt'}]},
+  124:{N0tt:483,M0tt:58,Q0tt:12,N0tc:420,M0tc:50,Q0tc:10,bc:300,lc:250,mnn:7,soils:[{sh:13,h:3.6,name:'Á cát-d.nhão'},{sh:58,h:2.9,name:'Sét-n.cứng'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  125:{N0tt:741,M0tt:100,Q0tt:17,N0tc:644,M0tc:87,Q0tc:15,bc:400,lc:300,mnn:5.6,soils:[{sh:94,h:4,name:'C.vừa-ch.vừa'},{sh:31,h:2.4,name:'Á sét-d.mềm'},{sh:56,h:0,name:'Á sét-n.cứng'}]},
+  126:{N0tt:684,M0tt:96,Q0tt:17,N0tc:595,M0tc:83,Q0tc:15,bc:350,lc:300,mnn:5.7,soils:[{sh:6,h:2.7,name:'Á sét-nhão'},{sh:60,h:3.3,name:'Sét-n.cứng'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  127:{N0tt:654,M0tt:98,Q0tt:17,N0tc:569,M0tc:85,Q0tc:15,bc:350,lc:300,mnn:6,soils:[{sh:78,h:4,name:'C.bụi-ch.vừa'},{sh:29,h:3.5,name:'Á sét-d.mềm'},{sh:49,h:0,name:'Á cát-n.cứng'}]},
+  128:{N0tt:715,M0tt:97,Q0tt:18,N0tc:622,M0tc:84,Q0tc:16,bc:350,lc:300,mnn:6.5,soils:[{sh:8,h:2.6,name:'Á sét-nhão'},{sh:46,h:3.6,name:'Sét-d.cứng'},{sh:100,h:0,name:'C.vừa-chặt'}]},
+  129:{N0tt:753,M0tt:105,Q0tt:17,N0tc:655,M0tc:91,Q0tc:15,bc:400,lc:300,mnn:4.6,soils:[{sh:29,h:1.7,name:'Á sét-d.mềm'},{sh:95,h:3.4,name:'C.vừa-ch.vừa'},{sh:62,h:0,name:'Á cát-cứng'}]},
+  130:{N0tt:765,M0tt:107,Q0tt:19,N0tc:665,M0tc:93,Q0tc:17,bc:400,lc:300,mnn:5.6,soils:[{sh:6,h:2.3,name:'Á sét-nhão'},{sh:77,h:2.9,name:'C.bụi-ch.vừa'},{sh:69,h:0,name:'Sét-cứng'}]},
+  131:{N0tt:622,M0tt:81,Q0tt:13,N0tc:541,M0tc:70,Q0tc:11,bc:350,lc:250,mnn:4.8,soils:[{sh:23,h:1.9,name:'Sét-d.nhão'},{sh:54,h:3.8,name:'Á sét-n.cứng'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  132:{N0tt:682,M0tt:102,Q0tt:21,N0tc:593,M0tc:89,Q0tc:18,bc:350,lc:300,mnn:5.2,soils:[{sh:30,h:4,name:'Á sét-d.mềm'},{sh:95,h:3.2,name:'C.vừa-ch.vừa'},{sh:71,h:0,name:'Sét-cứng'}]},
+  133:{N0tt:705,M0tt:85,Q0tt:17,N0tc:613,M0tc:74,Q0tc:15,bc:350,lc:300,mnn:7.3,soils:[{sh:34,h:3.6,name:'Sét-d.mềm'},{sh:41,h:4.2,name:'Á sét-d.cứng'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  134:{N0tt:738,M0tt:96,Q0tt:20,N0tc:642,M0tc:83,Q0tc:17,bc:400,lc:300,mnn:5.7,soils:[{sh:26,h:3.5,name:'Á cát-d.mềm'},{sh:42,h:3.5,name:'Á sét-d.cứng'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  135:{N0tt:656,M0tt:98,Q0tt:17,N0tc:570,M0tc:85,Q0tc:15,bc:350,lc:300,mnn:4.8,soils:[{sh:80,h:4.1,name:'C.bụi-ch.vừa'},{sh:41,h:2.6,name:'Á sét-d.cứng'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  136:{N0tt:458,M0tt:57,Q0tt:10,N0tc:398,M0tc:50,Q0tc:9,bc:250,lc:220,mnn:5.2,soils:[{sh:39,h:3.5,name:'Á cát-d.cứng'},{sh:78,h:4.5,name:'C.bụi-ch.vừa'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  137:{N0tt:736,M0tt:103,Q0tt:18,N0tc:640,M0tc:90,Q0tc:16,bc:400,lc:300,mnn:5.6,soils:[{sh:10,h:2.4,name:'Sét-nhão'},{sh:42,h:3.5,name:'Á sét-d.cứng'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  138:{N0tt:733,M0tt:103,Q0tt:21,N0tc:637,M0tc:90,Q0tc:18,bc:400,lc:300,mnn:6,soils:[{sh:29,h:3.6,name:'Á sét-d.mềm'},{sh:47,h:3.9,name:'Sét-d.cứng'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  139:{N0tt:657,M0tt:82,Q0tt:14,N0tc:571,M0tc:71,Q0tc:12,bc:350,lc:300,mnn:6.1,soils:[{sh:15,h:2.4,name:'Á cát-d.nhão'},{sh:45,h:3.9,name:'Sét-d.cứng'},{sh:108,h:0,name:'C.thô-chặt'}]},
+  140:{N0tt:623,M0tt:62,Q0tt:15,N0tc:542,M0tc:54,Q0tc:13,bc:350,lc:250,mnn:6,soils:[{sh:59,h:4.5,name:'Sét-n.cứng'},{sh:31,h:2.6,name:'Á sét-d.mềm'},{sh:107,h:0,name:'C.thô-chặt'}]},
+  141:{N0tt:654,M0tt:85,Q0tt:16,N0tc:569,M0tc:74,Q0tc:14,bc:350,lc:300,mnn:6.8,soils:[{sh:14,h:1.7,name:'Á cát-d.nhão'},{sh:33,h:2.1,name:'Sét-d.mềm'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  142:{N0tt:709,M0tt:99,Q0tt:17,N0tc:617,M0tc:86,Q0tc:15,bc:350,lc:300,mnn:6.8,soils:[{sh:20,h:2.7,name:'Á sét-d.nhão'},{sh:37,h:3.4,name:'Á cát-d.cứng'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  143:{N0tt:452,M0tt:54,Q0tt:9,N0tc:393,M0tc:47,Q0tc:8,bc:250,lc:220,mnn:4.1,soils:[{sh:11,h:1.1,name:'Sét-nhão'},{sh:42,h:3.9,name:'Á sét-d.cứng'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  144:{N0tt:671,M0tt:74,Q0tt:18,N0tc:583,M0tc:64,Q0tc:16,bc:350,lc:300,mnn:5.8,soils:[{sh:53,h:4.8,name:'Á sét-n.cứng'},{sh:34,h:2.5,name:'Sét-d.mềm'},{sh:94,h:0,name:'C.vừa-ch.vừa'}]},
+  145:{N0tt:513,M0tt:67,Q0tt:11,N0tc:446,M0tc:58,Q0tc:10,bc:300,lc:250,mnn:4.4,soils:[{sh:12,h:1.4,name:'Sét-nhão'},{sh:38,h:3.6,name:'Á cát-d.cứng'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  146:{N0tt:595,M0tt:77,Q0tt:13,N0tc:517,M0tc:67,Q0tc:11,bc:350,lc:250,mnn:5.4,soils:[{sh:30,h:1.4,name:'Á sét-d.mềm'},{sh:60,h:4.1,name:'Sét-n.cứng'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  147:{N0tt:650,M0tt:85,Q0tt:17,N0tc:565,M0tc:74,Q0tc:15,bc:350,lc:300,mnn:5.6,soils:[{sh:27,h:4.1,name:'Á cát-d.mềm'},{sh:57,h:3.7,name:'Sét-n.cứng'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  148:{N0tt:585,M0tt:76,Q0tt:15,N0tc:509,M0tc:66,Q0tc:13,bc:350,lc:250,mnn:7.1,soils:[{sh:9,h:1.6,name:'Sét-nhão'},{sh:30,h:2.5,name:'Á sét-d.mềm'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  149:{N0tt:748,M0tt:101,Q0tt:21,N0tc:650,M0tc:88,Q0tc:18,bc:400,lc:300,mnn:8,soils:[{sh:36,h:3.9,name:'Sét-d.mềm'},{sh:37,h:3.8,name:'Á cát-d.cứng'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  150:{N0tt:623,M0tt:84,Q0tt:15,N0tc:542,M0tc:73,Q0tc:13,bc:350,lc:250,mnn:5.2,soils:[{sh:6,h:1.7,name:'Á sét-nhão'},{sh:78,h:3.2,name:'C.bụi-ch.vừa'},{sh:49,h:0,name:'Á cát-n.cứng'}]},
+  151:{N0tt:688,M0tt:89,Q0tt:16,N0tc:598,M0tc:77,Q0tc:14,bc:350,lc:300,mnn:6.1,soils:[{sh:27,h:2.3,name:'Á cát-d.mềm'},{sh:53,h:3.5,name:'Á sét-n.cứng'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  152:{N0tt:428,M0tt:47,Q0tt:12,N0tc:372,M0tc:41,Q0tc:10,bc:250,lc:220,mnn:5.3,soils:[{sh:42,h:4,name:'Á sét-d.cứng'},{sh:35,h:2.4,name:'Sét-d.mềm'},{sh:95,h:0,name:'C.vừa-ch.vừa'}]},
+  153:{N0tt:408,M0tt:51,Q0tt:8,N0tc:355,M0tc:44,Q0tc:7,bc:250,lc:220,mnn:5.5,soils:[{sh:47,h:4.5,name:'Sét-d.cứng'},{sh:96,h:3.6,name:'C.vừa-ch.vừa'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  154:{N0tt:824,M0tt:107,Q0tt:19,N0tc:717,M0tc:93,Q0tc:17,bc:400,lc:300,mnn:5.3,soils:[{sh:31,h:2.3,name:'Á sét-d.mềm'},{sh:49,h:3.9,name:'Á cát-n.cứng'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  155:{N0tt:772,M0tt:96,Q0tt:20,N0tc:671,M0tc:83,Q0tc:17,bc:400,lc:300,mnn:6.5,soils:[{sh:28,h:3.8,name:'Á cát-d.mềm'},{sh:46,h:3.8,name:'Sét-d.cứng'},{sh:97,h:0,name:'C.vừa-chặt'}]},
+  156:{N0tt:715,M0tt:89,Q0tt:16,N0tc:622,M0tc:77,Q0tc:14,bc:350,lc:300,mnn:6.7,soils:[{sh:29,h:2.5,name:'Á sét-d.mềm'},{sh:88,h:3,name:'C.nhỏ-ch.vừa'},{sh:61,h:0,name:'Á cát-cứng'}]},
+  157:{N0tt:570,M0tt:62,Q0tt:20,N0tc:496,M0tc:54,Q0tc:17,bc:350,lc:250,mnn:6,soils:[{sh:33,h:1.8,name:'Sét-d.mềm'},{sh:48,h:2.6,name:'Sét-d.cứng'},{sh:88,h:0,name:'C.nhỏ-ch.vừa'}]},
+  158:{N0tt:627,M0tt:85,Q0tt:17,N0tc:545,M0tc:74,Q0tc:15,bc:350,lc:250,mnn:6.2,soils:[{sh:25,h:3.7,name:'Á cát-d.mềm'},{sh:96,h:3.1,name:'C.vừa-ch.vừa'},{sh:62,h:0,name:'Á cát-cứng'}]},
+  159:{N0tt:802,M0tt:96,Q0tt:17,N0tc:697,M0tc:83,Q0tc:15,bc:400,lc:300,mnn:6.5,soils:[{sh:33,h:2.8,name:'Sét-d.mềm'},{sh:93,h:3.5,name:'C.vừa-ch.vừa'},{sh:68,h:0,name:'Á sét-cứng'}]},
+  160:{N0tt:648,M0tt:91,Q0tt:17,N0tc:563,M0tc:79,Q0tc:15,bc:350,lc:300,mnn:5,soils:[{sh:16,h:1.2,name:'Á cát-d.nhão'},{sh:29,h:2.7,name:'Á sét-d.mềm'},{sh:93,h:0,name:'C.vừa-ch.vừa'}]},
+  161:{N0tt:629,M0tt:79,Q0tt:13,N0tc:547,M0tc:69,Q0tc:11,bc:350,lc:250,mnn:4.4,soils:[{sh:27,h:1.1,name:'Á cát-d.mềm'},{sh:55,h:4.3,name:'Á sét-n.cứng'},{sh:97,h:0,name:'C.vừa-chặt'}]},
+  162:{N0tt:724,M0tt:94,Q0tt:16,N0tc:630,M0tc:82,Q0tc:14,bc:400,lc:300,mnn:6.7,soils:[{sh:13,h:2.8,name:'Á cát-d.nhão'},{sh:85,h:3.6,name:'C.nhỏ-ch.vừa'},{sh:52,h:0,name:'Á cát-n.cứng'}]},
+  163:{N0tt:697,M0tt:91,Q0tt:15,N0tc:606,M0tc:79,Q0tc:13,bc:350,lc:300,mnn:5.2,soils:[{sh:21,h:2.4,name:'Sét-d.nhão'},{sh:87,h:3,name:'C.nhỏ-ch.vừa'},{sh:58,h:0,name:'Sét-n.cứng'}]},
+  164:{N0tt:468,M0tt:63,Q0tt:13,N0tc:407,M0tc:55,Q0tc:11,bc:250,lc:220,mnn:6.8,soils:[{sh:14,h:3.9,name:'Á cát-d.nhão'},{sh:60,h:3.9,name:'Sét-n.cứng'},{sh:105,h:0,name:'C.thô-chặt'}]},
+  165:{N0tt:605,M0tt:85,Q0tt:14,N0tc:526,M0tc:74,Q0tc:12,bc:350,lc:250,mnn:5.2,soils:[{sh:34,h:1.3,name:'Sét-d.mềm'},{sh:56,h:3.2,name:'Á sét-n.cứng'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  166:{N0tt:649,M0tt:84,Q0tt:16,N0tc:564,M0tc:73,Q0tc:14,bc:350,lc:300,mnn:6.1,soils:[{sh:18,h:1.4,name:'Á sét-d.nhão'},{sh:35,h:2.8,name:'Sét-d.mềm'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  167:{N0tt:647,M0tt:78,Q0tt:19,N0tc:563,M0tc:68,Q0tc:17,bc:350,lc:300,mnn:5.8,soils:[{sh:50,h:3.4,name:'Á cát-n.cứng'},{sh:21,h:2.5,name:'Sét-d.nhão'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  168:{N0tt:503,M0tt:68,Q0tt:12,N0tc:437,M0tc:59,Q0tc:10,bc:300,lc:250,mnn:5.4,soils:[{sh:38,h:3.7,name:'Á cát-d.cứng'},{sh:85,h:2.4,name:'C.nhỏ-ch.vừa'},{sh:71,h:0,name:'Sét-cứng'}]},
+  169:{N0tt:745,M0tt:104,Q0tt:18,N0tc:648,M0tc:90,Q0tc:16,bc:400,lc:300,mnn:6,soils:[{sh:85,h:4.2,name:'C.nhỏ-ch.vừa'},{sh:34,h:2.7,name:'Sét-d.mềm'},{sh:51,h:0,name:'Á cát-n.cứng'}]},
+  170:{N0tt:672,M0tt:87,Q0tt:17,N0tc:584,M0tc:76,Q0tc:15,bc:350,lc:300,mnn:6.4,soils:[{sh:22,h:1.3,name:'Sét-d.nhão'},{sh:31,h:2.4,name:'Á sét-d.mềm'},{sh:105,h:0,name:'C.thô-chặt'}]},
+  171:{N0tt:676,M0tt:91,Q0tt:17,N0tc:588,M0tc:79,Q0tc:15,bc:350,lc:300,mnn:5.2,soils:[{sh:4,h:2.8,name:'Á cát-nhão'},{sh:88,h:2.9,name:'C.nhỏ-ch.vừa'},{sh:65,h:0,name:'Á sét-cứng'}]},
+  172:{N0tt:682,M0tt:95,Q0tt:19,N0tc:593,M0tc:83,Q0tc:17,bc:350,lc:300,mnn:5.8,soils:[{sh:36,h:3.5,name:'Sét-d.mềm'},{sh:52,h:3.9,name:'Á cát-n.cứng'},{sh:107,h:0,name:'C.thô-chặt'}]},
+  173:{N0tt:570,M0tt:83,Q0tt:16,N0tc:496,M0tc:72,Q0tc:14,bc:350,lc:250,mnn:6.9,soils:[{sh:2,h:1.6,name:'Á cát-nhão'},{sh:29,h:2.3,name:'Á sét-d.mềm'},{sh:105,h:0,name:'C.thô-chặt'}]},
+  174:{N0tt:573,M0tt:74,Q0tt:12,N0tc:498,M0tc:64,Q0tc:10,bc:350,lc:250,mnn:4.6,soils:[{sh:18,h:1,name:'Á sét-d.nhão'},{sh:58,h:3.9,name:'Sét-n.cứng'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  175:{N0tt:576,M0tt:75,Q0tt:14,N0tc:501,M0tc:65,Q0tc:12,bc:350,lc:250,mnn:6.6,soils:[{sh:8,h:1.7,name:'Á sét-nhão'},{sh:28,h:2.4,name:'Á cát-d.mềm'},{sh:105,h:0,name:'C.thô-chặt'}]},
+  176:{N0tt:801,M0tt:112,Q0tt:18,N0tc:697,M0tc:97,Q0tc:16,bc:400,lc:300,mnn:4.9,soils:[{sh:25,h:1.8,name:'Á cát-d.mềm'},{sh:94,h:2.6,name:'C.vừa-ch.vừa'},{sh:70,h:0,name:'Sét-cứng'}]},
+  177:{N0tt:549,M0tt:77,Q0tt:15,N0tc:477,M0tc:67,Q0tc:13,bc:300,lc:250,mnn:6.2,soils:[{sh:6,h:1.4,name:'Á sét-nhão'},{sh:35,h:2.4,name:'Sét-d.mềm'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  178:{N0tt:635,M0tt:95,Q0tt:18,N0tc:552,M0tc:83,Q0tc:16,bc:350,lc:250,mnn:6,soils:[{sh:12,h:1.8,name:'Sét-nhão'},{sh:32,h:2.3,name:'Á sét-d.mềm'},{sh:99,h:0,name:'C.vừa-chặt'}]},
+  179:{N0tt:552,M0tt:77,Q0tt:15,N0tc:480,M0tc:67,Q0tc:13,bc:300,lc:250,mnn:6.2,soils:[{sh:16,h:3.7,name:'Á cát-d.nhão'},{sh:54,h:3.5,name:'Á sét-n.cứng'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  180:{N0tt:708,M0tt:106,Q0tt:19,N0tc:616,M0tc:92,Q0tc:17,bc:350,lc:300,mnn:4.6,soils:[{sh:86,h:2.8,name:'C.nhỏ-ch.vừa'},{sh:58,h:4,name:'Sét-n.cứng'},{sh:50,h:0,name:'Á cát-n.cứng'}]},
+  181:{N0tt:636,M0tt:70,Q0tt:17,N0tc:553,M0tc:61,Q0tc:15,bc:350,lc:250,mnn:5.7,soils:[{sh:59,h:4.2,name:'Sét-n.cứng'},{sh:26,h:2.7,name:'Á cát-d.mềm'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  182:{N0tt:537,M0tt:64,Q0tt:13,N0tc:467,M0tc:56,Q0tc:11,bc:300,lc:250,mnn:7.1,soils:[{sh:16,h:4,name:'Á cát-d.nhão'},{sh:77,h:3.1,name:'C.bụi-ch.vừa'},{sh:71,h:0,name:'Sét-cứng'}]},
+  183:{N0tt:429,M0tt:49,Q0tt:9,N0tc:373,M0tc:43,Q0tc:8,bc:250,lc:220,mnn:5,soils:[{sh:46,h:4.3,name:'Sét-d.cứng'},{sh:87,h:3.3,name:'C.nhỏ-ch.vừa'},{sh:95,h:0,name:'C.vừa-ch.vừa'}]},
+  184:{N0tt:782,M0tt:106,Q0tt:18,N0tc:680,M0tc:92,Q0tc:16,bc:400,lc:300,mnn:7,soils:[{sh:18,h:2.3,name:'Á sét-d.nhão'},{sh:78,h:2.6,name:'C.bụi-ch.vừa'},{sh:53,h:0,name:'Á sét-n.cứng'}]},
+  185:{N0tt:756,M0tt:102,Q0tt:21,N0tc:657,M0tc:89,Q0tc:18,bc:400,lc:300,mnn:6.2,soils:[{sh:27,h:4,name:'Á cát-d.mềm'},{sh:78,h:3,name:'C.bụi-ch.vừa'},{sh:65,h:0,name:'Á sét-cứng'}]},
+  186:{N0tt:728,M0tt:91,Q0tt:17,N0tc:633,M0tc:79,Q0tc:15,bc:400,lc:300,mnn:6.4,soils:[{sh:3,h:2.6,name:'Á cát-nhão'},{sh:45,h:3.2,name:'Sét-d.cứng'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  187:{N0tt:572,M0tt:74,Q0tt:18,N0tc:497,M0tc:64,Q0tc:16,bc:350,lc:250,mnn:6,soils:[{sh:56,h:4.7,name:'Á sét-n.cứng'},{sh:13,h:2.2,name:'Á cát-d.nhão'},{sh:100,h:0,name:'C.vừa-chặt'}]},
+  188:{N0tt:698,M0tt:87,Q0tt:18,N0tc:607,M0tc:76,Q0tc:16,bc:350,lc:300,mnn:5.6,soils:[{sh:28,h:3.6,name:'Á cát-d.mềm'},{sh:53,h:3.4,name:'Á sét-n.cứng'},{sh:105,h:0,name:'C.thô-chặt'}]},
+  189:{N0tt:495,M0tt:64,Q0tt:11,N0tc:430,M0tc:56,Q0tc:10,bc:300,lc:250,mnn:4.5,soils:[{sh:41,h:3.2,name:'Á sét-d.cứng'},{sh:57,h:2.1,name:'Sét-n.cứng'},{sh:93,h:0,name:'C.vừa-ch.vừa'}]},
+  190:{N0tt:642,M0tt:87,Q0tt:17,N0tc:558,M0tc:76,Q0tc:15,bc:350,lc:300,mnn:6.3,soils:[{sh:4,h:1.3,name:'Á cát-nhão'},{sh:36,h:2.6,name:'Sét-d.mềm'},{sh:94,h:0,name:'C.vừa-ch.vừa'}]},
+  191:{N0tt:789,M0tt:107,Q0tt:19,N0tc:686,M0tc:93,Q0tc:17,bc:400,lc:300,mnn:5.5,soils:[{sh:32,h:2.9,name:'Á sét-d.mềm'},{sh:39,h:3.6,name:'Á cát-d.cứng'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  192:{N0tt:784,M0tt:98,Q0tt:20,N0tc:682,M0tc:85,Q0tc:17,bc:400,lc:300,mnn:6.7,soils:[{sh:32,h:3.8,name:'Á sét-d.mềm'},{sh:38,h:3.8,name:'Á cát-d.cứng'},{sh:98,h:0,name:'C.vừa-chặt'}]},
+  193:{N0tt:668,M0tt:94,Q0tt:16,N0tc:581,M0tc:82,Q0tc:14,bc:350,lc:300,mnn:5.5,soils:[{sh:16,h:2.5,name:'Á cát-d.nhão'},{sh:41,h:3.2,name:'Á sét-d.cứng'},{sh:96,h:0,name:'C.vừa-ch.vừa'}]},
+  194:{N0tt:436,M0tt:52,Q0tt:9,N0tc:379,M0tc:45,Q0tc:8,bc:250,lc:220,mnn:4.2,soils:[{sh:42,h:2.9,name:'Á sét-d.cứng'},{sh:93,h:3.6,name:'C.vừa-ch.vừa'},{sh:63,h:0,name:'Á cát-cứng'}]},
+  195:{N0tt:812,M0tt:110,Q0tt:20,N0tc:706,M0tc:96,Q0tc:17,bc:400,lc:300,mnn:5.8,soils:[{sh:7,h:2.5,name:'Á sét-nhão'},{sh:51,h:3.7,name:'Á cát-n.cứng'},{sh:104,h:0,name:'C.thô-ch.vừa'}]},
+  196:{N0tt:462,M0tt:55,Q0tt:14,N0tc:402,M0tc:48,Q0tc:12,bc:250,lc:220,mnn:5.5,soils:[{sh:43,h:4.2,name:'Á sét-d.cứng'},{sh:26,h:2.3,name:'Á cát-d.mềm'},{sh:106,h:0,name:'C.thô-chặt'}]},
+  197:{N0tt:642,M0tt:87,Q0tt:18,N0tc:558,M0tc:76,Q0tc:16,bc:350,lc:300,mnn:6.1,soils:[{sh:29,h:3.5,name:'Á sét-d.mềm'},{sh:58,h:4.1,name:'Sét-n.cứng'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  198:{N0tt:607,M0tt:79,Q0tt:16,N0tc:528,M0tc:69,Q0tc:14,bc:350,lc:250,mnn:6.6,soils:[{sh:14,h:3.6,name:'Á cát-d.nhão'},{sh:59,h:3.3,name:'Sét-n.cứng'},{sh:97,h:0,name:'C.vừa-chặt'}]},
+  199:{N0tt:642,M0tt:80,Q0tt:16,N0tc:558,M0tc:70,Q0tc:14,bc:350,lc:300,mnn:7,soils:[{sh:30,h:3.5,name:'Á sét-d.mềm'},{sh:95,h:2.3,name:'C.vừa-ch.vừa'},{sh:70,h:0,name:'Sét-cứng'}]},
+  200:{N0tt:504,M0tt:63,Q0tt:10,N0tc:438,M0tc:55,Q0tc:9,bc:300,lc:250,mnn:5,soils:[{sh:36,h:1.9,name:'Sét-d.mềm'},{sh:39,h:4.3,name:'Á cát-d.cứng'},{sh:102,h:0,name:'C.thô-ch.vừa'}]},
+  201:{N0tt:633,M0tt:85,Q0tt:16,N0tc:550,M0tc:74,Q0tc:14,bc:350,lc:250,mnn:7.1,soils:[{sh:23,h:1.2,name:'Sét-d.nhão'},{sh:28,h:2.5,name:'Á cát-d.mềm'},{sh:108,h:0,name:'C.thô-chặt'}]},
+  202:{N0tt:607,M0tt:79,Q0tt:15,N0tc:528,M0tc:69,Q0tc:13,bc:350,lc:250,mnn:7,soils:[{sh:11,h:1.5,name:'Sét-nhão'},{sh:31,h:2.8,name:'Á sét-d.mềm'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  203:{N0tt:668,M0tt:87,Q0tt:15,N0tc:581,M0tc:76,Q0tc:13,bc:350,lc:300,mnn:4,soils:[{sh:2,h:1.7,name:'Á cát-nhão'},{sh:77,h:3.5,name:'C.bụi-ch.vừa'},{sh:53,h:0,name:'Á sét-n.cứng'}]},
+  204:{N0tt:698,M0tt:105,Q0tt:21,N0tc:607,M0tc:91,Q0tc:18,bc:350,lc:300,mnn:5.8,soils:[{sh:33,h:3.8,name:'Sét-d.mềm'},{sh:88,h:3.5,name:'C.nhỏ-ch.vừa'},{sh:56,h:0,name:'Á sét-n.cứng'}]},
+  205:{N0tt:812,M0tt:114,Q0tt:19,N0tc:706,M0tc:99,Q0tc:17,bc:400,lc:300,mnn:5.7,soils:[{sh:24,h:2.5,name:'Sét-d.nhão'},{sh:38,h:3.7,name:'Á cát-d.cứng'},{sh:97,h:0,name:'C.vừa-chặt'}]},
+  206:{N0tt:599,M0tt:78,Q0tt:13,N0tc:521,M0tc:68,Q0tc:11,bc:350,lc:250,mnn:4.8,soils:[{sh:14,h:1.6,name:'Á cát-d.nhão'},{sh:57,h:3.4,name:'Sét-n.cứng'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  207:{N0tt:728,M0tt:84,Q0tt:15,N0tc:633,M0tc:73,Q0tc:13,bc:400,lc:300,mnn:6,soils:[{sh:36,h:2.6,name:'Sét-d.mềm'},{sh:43,h:3.7,name:'Á sét-d.cứng'},{sh:107,h:0,name:'C.thô-chặt'}]},
+  208:{N0tt:704,M0tt:92,Q0tt:16,N0tc:612,M0tc:80,Q0tc:14,bc:350,lc:300,mnn:5.7,soils:[{sh:12,h:2.5,name:'Sét-nhão'},{sh:39,h:3.2,name:'Á cát-d.cứng'},{sh:103,h:0,name:'C.thô-ch.vừa'}]},
+  209:{N0tt:501,M0tt:60,Q0tt:15,N0tc:436,M0tc:52,Q0tc:13,bc:300,lc:250,mnn:5.3,soils:[{sh:38,h:3.4,name:'Á cát-d.cứng'},{sh:33,h:2.7,name:'Sét-d.mềm'},{sh:101,h:0,name:'C.thô-ch.vừa'}]},
+  210:{N0tt:647,M0tt:84,Q0tt:17,N0tc:563,M0tc:73,Q0tc:15,bc:350,lc:300,mnn:6.8,soils:[{sh:35,h:3.7,name:'Sét-d.mềm'},{sh:37,h:3.6,name:'Á cát-d.cứng'},{sh:100,h:0,name:'C.vừa-chặt'}]}
+};
+
+
+// ═══ TẢI SỐ LIỆU THEO ĐỀ ═══
+function loadDe(){
+  var deEl=document.getElementById('de-so');
+  var stEl=document.getElementById('de-status');
+  var de=parseInt(deEl?deEl.value:'');
+  if(!de||de<1||de>210){
+    if(stEl)stEl.innerHTML='<span style="color:#dc3545"><i class="ti ti-alert-circle"></i> Nhập số đề hợp lệ (1–210).</span>';
+    return;
+  }
+  var d=DB_DE[de];
+  if(!d){
+    if(stEl)stEl.innerHTML='<span style="color:#856404"><i class="ti ti-alert-triangle"></i> Đề '+de+' chưa có trong DB — vui lòng nhập thủ công bên dưới.</span>';
+    return;
+  }
+  // Điền tải trọng + kích thước cột
+  ['N0tt','M0tt','Q0tt','N0tc','M0tc','Q0tc','bc','lc'].forEach(function(k){
+    var el=document.getElementById(k); if(el&&d[k]!==undefined)el.value=d[k];
+  });
+  var mnnEl=document.getElementById('mnn'); if(mnnEl&&d.mnn!==undefined)mnnEl.value=d.mnn;
+  autoN();
+  // Điền 3 lớp đất và tra DB
+  d.soils.forEach(function(s,i){
+    var shEl=document.getElementById('sh'+i),hEl=document.getElementById('h'+i),nmEl=document.getElementById('nm'+i);
+    if(shEl)shEl.value=s.sh;
+    if(hEl)hEl.value=s.h;
+    if(nmEl)nmEl.value=s.name||'';
+    traLop(i);
+  });
+  // Lưu de_so vào localStorage
+  try{var raw=localStorage.getItem('nmong_p1');var obj=raw?JSON.parse(raw):{};obj.de_so=de;localStorage.setItem('nmong_p1',JSON.stringify(obj));}catch(e){}
+  if(stEl)stEl.innerHTML='<span style="color:#155724"><i class="ti ti-circle-check"></i> Đã tải số liệu đề <b>'+de+'</b> — N₀tc = '+d.N0tc+' kN. Kiểm tra lại trước khi tiếp tục.</span>';
+  toast('Đã tải đề '+de+' · N₀tc='+d.N0tc+'kN');
+}
+
 // ═══ TẢI VÍ DỤ: điền sẵn đề số 176 (N0tc=697kN, 3 lớp: #25 #94 #70) ═══
 function loadDemo(){
   document.getElementById('N0tt').value=801; document.getElementById('M0tt').value=112; document.getElementById('Q0tt').value=18;
@@ -1032,6 +1312,12 @@ window.onload=function(){
   try{
     var raw=localStorage.getItem('nmong_p1'); if(!raw)return;
     var d=JSON.parse(raw);
+    // Khôi phục số đề
+    if(d.de_so){
+      var deEl=document.getElementById('de-so'); if(deEl)deEl.value=d.de_so;
+      var stEl=document.getElementById('de-status');
+      if(stEl)stEl.innerHTML='<span style="color:#0d6efd"><i class="ti ti-refresh"></i> Đã khôi phục đề <b>'+d.de_so+'</b> từ phiên trước.</span>';
+    }
     ['N0tt','M0tt','Q0tt','N0tc','M0tc','Q0tc','bc','lc'].forEach(function(k){if(d[k])document.getElementById(k).value=d[k];});
     if(d.mnn)document.getElementById('mnn').value=d.mnn;
     autoN();
