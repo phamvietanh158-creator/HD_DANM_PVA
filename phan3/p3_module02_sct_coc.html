@@ -953,13 +953,13 @@ function calcSumTau(){
 function updTBHint(){
   var uc=gv('uc'),Fc=gv('Fc'),Rn=gv('Rn-tb'),sumTau=CACHE['ans_sum-tau']||gv('sum-tau');
   if(!uc||!Fc)return;
-  var Pgh=+(uc*sumTau*1+Rn*1000*Fc*1).toFixed(0);
+  var Pgh=+(uc*sumTau+Rn*Fc).toFixed(0);
   var P=+(Pgh/1.4).toFixed(0);
   CACHE['ans_Pgh-tb']=Pgh;CACHE['ans_P-tb']=P;
   var h=document.getElementById('tb-formula-hint');
   if(h)h.innerHTML=
     '<div class="ftitle">Công thức thay số</div>'+
-    '<div class="frow">P<sub>GH</sub> = '+uc+' × '+sumTau.toFixed(2)+' × 1 + '+Rn+' × 1000 × '+Fc+' × 1 = <em>'+Pgh+' kN</em></div>'+
+    '<div class="frow">P<sub>GH</sub> = '+uc+' × '+sumTau.toFixed(2)+' + '+Rn+' × '+Fc+' = <em>'+Pgh+' kN</em></div>'+
     '<div class="frow">[P]<sub>đn_TB</sub> = '+Pgh+' / 1.4 = <em>'+P+' kN</em></div>';
   var el=document.getElementById('z-mui-rn');if(el&&gv('z-mui'))el.value=gv('z-mui');
 }
@@ -967,7 +967,7 @@ function calcTB(){
   var uc=gv('uc')||1,Fc=gv('Fc')||0.0625,Rn=gv('Rn-tb');
   var sumTau=CACHE['ans_sum-tau']||gv('sum-tau');
   if(!Rn){toast('Điền R_n tại mũi cọc!');return;}
-  var Pgh=+(uc*sumTau+Rn*1000*Fc).toFixed(0);
+  var Pgh=+(uc*sumTau+Rn*Fc).toFixed(0);
   var P=+(Pgh/1.4).toFixed(0);
   CACHE['ans_Pgh-tb']=Pgh;CACHE['ans_P-tb']=P;
   updTBHint();
@@ -1374,6 +1374,17 @@ window.onload=function(){
     CACHE['ans_Fbt']=d.Fc?d.Fc*10000-thepData.Fct:0;
     // Địa chất
     if(d.soils)SOILS=d.soils;
+    // Auto-fill mũi cọc từ pa_lop_mui
+    if(d.pa_lop_mui&&SOILS.length>0){
+      var muiIdx=parseInt(d.pa_lop_mui)-1;
+      var muiSoil=SOILS[muiIdx];
+      if(muiSoil){
+        var nnEl=document.getElementById('Nn-spt');
+        if(nnEl&&!nnEl.value&&muiSoil.spt)nnEl.value=muiSoil.spt;
+        var loaiEl=document.getElementById('loai-dat-mui');
+        if(loaiEl&&!loaiEl.value&&muiSoil.name)loaiEl.value=muiSoil.name;
+      }
+    }
     // Tải trọng
     if(d.N0tt){document.getElementById('N0tt-bt').value=d.N0tt;document.getElementById('N0tt-sd').value=d.N0tt;}
     if(d.M0tt){document.getElementById('Mx-sd').value=d.M0tt;}
