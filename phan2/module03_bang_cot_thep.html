@@ -914,6 +914,7 @@ function saveB03(){
     d.m03_QCD=CACHE.QCD||gv('QCD_b');
     d.m03_thep_ngang=document.getElementById('kl-thep-ngang').value;
     d.m03_thep_doc=document.getElementById('kl-thep-doc').value;
+    d.ht_b=gv('ht_b3');
     localStorage.setItem('nmong_p2',JSON.stringify(d));
     toast('✓ Đã lưu tiến độ P2·M03');
   }catch(e){toast('Lỗi lưu: '+e);}

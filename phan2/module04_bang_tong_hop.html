@@ -642,9 +642,10 @@ window.onload=function(){
     if(d.m03_h0) document.getElementById('r-h0').value=d.m03_h0;
     if(d.m03_abv) document.getElementById('r-a').value=d.m03_abv;
     if(d.bt_b) document.getElementById('r-bt').value=d.bt_b;
+    if(d.mnn_b) document.getElementById('r-mnn').value=d.mnn_b;
     if(d.m02_saved){
-      if(d.ptx_b) document.getElementById('r-ptx').value=(d.ptx_b*10).toFixed(1); // T→kPa nếu cần
-      if(d.P_b) document.getElementById('r-P').value=(d.P_b*10).toFixed(1);
+      if(d.ptx_b) document.getElementById('r-ptx').value=parseFloat(d.ptx_b).toFixed(2);
+      if(d.P_b) document.getElementById('r-P').value=parseFloat(d.P_b).toFixed(2);
     }
     if(d.m03_Q0) document.getElementById('r-Q0').value=d.m03_Q0;
     if(d.m03_QCD) document.getElementById('r-QCD').value=d.m03_QCD;

@@ -206,6 +206,16 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
 
 <main>
 <!-- SAVE/RESTORE BANNER -->
+<!-- BANNER: Phương án đã chọn từ Module 01 -->
+<div id="pa-banner" hidden style="background:linear-gradient(90deg,var(--Plt),#fff);border:2px solid var(--Pmd);border-radius:10px;padding:10px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px">
+  <i class="ti ti-check-circle" style="font-size:20px;color:var(--P);flex-shrink:0"></i>
+  <div style="flex:1;font-size:.85rem">
+    <div style="font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--Pmd);margin-bottom:2px">Phương án từ Module 01</div>
+    <span id="pa-banner-text" style="font-weight:600;color:var(--Pdk)"></span>
+  </div>
+  <a href="module01_phuong_an.html" class="btn btn-ghost btn-sm"><i class="ti ti-arrow-left"></i> Sửa ở M01</a>
+</div>
+
 <div class="save-banner" id="save-banner" style="display:none">
   <i class="ti ti-device-floppy" style="font-size:18px;color:var(--G)"></i>
   <div class="save-banner-txt">
@@ -262,9 +272,27 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
     <div class="divider"></div>
     <div class="sec-lbl"><i class="ti ti-layout" style="font-size:14px"></i> C. Nhập kích thước đáy móng cần kiểm tra</div>
     <div class="info-box"><i class="ti ti-bulb" style="font-size:13px;vertical-align:-2px"></i>
-      Chọn <b>b × l</b> dựa trên ước tính sơ bộ: <b>F ≈ N₀<sup>tc</sup> / [P]<sub>sơ bộ</sub></b> (với [P] ≈ 100–200 kPa tùy đất). Nhập b và l → bấm <b>"Kiểm tra TTGH1"</b> để xem kết quả. Nếu không thỏa → chỉnh b, l rồi bấm lại.
+      Chọn <b>b × l</b> dựa trên ước tính sơ bộ: <b>F ≈ N₀<sup>tc</sup> / ([P]<sub>sb</sub> – γ̄·h<sub>m</sub>)</b>. Nhập R₀ ước tính và tỉ lệ l/b, hệ thống gợi ý b, l. Nhập b và l → bấm <b>"Kiểm tra TTGH1"</b>.
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:end">
+    <div class="g4" style="margin-bottom:10px;align-items:end">
+      <div class="fg">
+        <div class="fl">R₀ ước tính [P] sơ bộ</div>
+        <div class="fi"><input type="number" id="R0_est" placeholder="VD: 150" value="150" oninput="calcFsb()"><span class="ut">kPa</span></div>
+      </div>
+      <div class="fg">
+        <div class="fl">Tỉ lệ l/b chọn trước</div>
+        <div class="fi"><input type="number" id="lb_ratio" placeholder="VD: 1.5" value="1.5" step="0.1" oninput="calcFsb()"><span class="ut">–</span></div>
+      </div>
+      <div class="fg">
+        <div class="fl">F<sub>sb</sub> ≈ N₀<sup>tc</sup> / (R₀–γ̄·h<sub>m</sub>)</div>
+        <div class="fi"><input type="number" id="Fsb" readonly style="background:var(--Plt);font-family:var(--mono);color:var(--Pdk);font-weight:700"><span class="ut">m²</span></div>
+      </div>
+      <div class="fg">
+        <div class="fl">Tỉ lệ l/b (tự tính)</div>
+        <div class="fi"><input type="number" id="lb-display" placeholder="–" readonly style="background:var(--Plt);font-family:var(--mono);color:var(--Pdk);font-weight:700"><span class="ut">–</span></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;align-items:end">
       <div class="fg">
         <div class="fl">Chọn b — bề rộng đáy móng</div>
         <div class="fi"><input type="number" id="b1" placeholder="VD: 1.0" step="0.1" oninput="updateSizes()"><span class="ut">m</span></div>
@@ -272,10 +300,6 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
       <div class="fg">
         <div class="fl">Chọn l — chiều dài đáy móng</div>
         <div class="fi"><input type="number" id="l1" placeholder="VD: 1.4" step="0.1" oninput="updateSizes()"><span class="ut">m</span></div>
-      </div>
-      <div class="fg">
-        <div class="fl">Tỉ lệ l/b (tự tính)</div>
-        <div class="fi"><input type="number" id="lb-display" placeholder="–" readonly style="background:var(--Plt);font-family:var(--mono);color:var(--Pdk);font-weight:700"><span class="ut">–</span></div>
       </div>
     </div>
     <div class="info-box" style="margin-bottom:4px"><i class="ti ti-refresh" style="font-size:13px;vertical-align:-2px"></i>
@@ -366,7 +390,7 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
     </div>
 
     <!-- KIỂM TRA ỨNG SUẤT LỚP 2 -->
-    <div class="step" id="lop2-check-wrap" style="display:none">
+    <div class="step" id="lop2-check-wrap">
       <div class="step-hd" onclick="togS(this)">
         <div class="snb" style="background:#7B1FA2">2</div>
         <h3>Kiểm tra ứng suất tại đỉnh lớp đất thứ 2 (nếu cần)</h3>
@@ -424,7 +448,7 @@ input[readonly]{background:var(--Plt);color:var(--Pdk);font-weight:700;font-fami
     </div>
 
     <!-- BẢNG TỔNG HỢP TTGH1 -->
-    <div class="step" id="ttgh1-summary-wrap" style="display:none">
+    <div class="step" id="ttgh1-summary-wrap">
       <div class="step-hd" onclick="togS(this)">
         <div class="snb" style="background:var(--G)">✓</div>
         <h3>Bảng tổng hợp TTGH1 — Chọn kích thước đáy móng</h3>
@@ -1055,10 +1079,10 @@ function buildPA(b,l,pD,sD,idx){
   '</div>'+
   '<div class="ans-row"><span class="ans-label">📌 Điền p<sub>tb</sub> = ?</span>'+
     '<input class="ans-inp" id="ptb-'+idx+'" type="number" step="0.1" placeholder="?" oninput="chkFill(\'ptb-'+idx+'\','+ans_ptb+',1)">'+
-    '<span class="ans-unit">kPa</span><span class="chip" id="ck-ptb-'+idx+'"></span></div>'+
+    '<span class="ans-unit">kPa</span><span class="chip" id="chip-ptb-'+idx+'"></span></div>'+
   '<div class="ans-row"><span class="ans-label">📌 Điền p<sub>max</sub> = ?</span>'+
     '<input class="ans-inp" id="pmax-'+idx+'" type="number" step="0.1" placeholder="?" oninput="chkFill(\'pmax-'+idx+'\','+ans_pmax+',1)">'+
-    '<span class="ans-unit">kPa</span><span class="chip" id="ck-pmax-'+idx+'"></span></div>'+
+    '<span class="ans-unit">kPa</span><span class="chip" id="chip-pmax-'+idx+'"></span></div>'+
   // sct
   '<div class="fml-box" style="margin-top:10px"><div class="ftitle">Bước 2: Tính sức chịu tải Terzaghi — φ = '+gv('phi1')+'°</div>'+
   '<div class="frow">Tra bảng: N<sub>γ</sub> = <em>'+sD.Ng.toFixed(2)+'</em> · N<sub>q</sub> = <em>'+sD.Nq.toFixed(2)+'</em> · N<sub>c</sub> = <em>'+sD.Nc.toFixed(2)+'</em></div>'+
@@ -1069,7 +1093,7 @@ function buildPA(b,l,pD,sD,idx){
   '</div>'+
   '<div class="ans-row"><span class="ans-label">📌 Điền [P] sức chịu tải cho phép (Fs=2)</span>'+
     '<input class="ans-inp" id="P-'+idx+'" type="number" step="0.1" placeholder="?" oninput="chkFill(\'P-'+idx+'\','+ans_P+',1)">'+
-    '<span class="ans-unit">kPa</span><span class="chip" id="ck-P-'+idx+'"></span></div>'+
+    '<span class="ans-unit">kPa</span><span class="chip" id="chip-P-'+idx+'"></span></div>'+
   // MCQ kiểm tra điều kiện
   '<div class="mcq-wrap" style="margin-top:10px">'+
   '<div class="mcq-q">📌 Kiểm tra: p<sub>tb</sub>='+pD.ptb.toFixed(1)+'kPa vs [P]='+sD.P.toFixed(1)+'kPa và p<sub>max</sub>='+pD.pmax.toFixed(1)+'kPa vs 1.2[P]='+(1.2*sD.P).toFixed(1)+'kPa</div>'+
@@ -1298,8 +1322,10 @@ function updKetLuan(){
   var ok=found>=0&&RESULTS[found].ok_tech&&RESULTS[found].econ_pct<=10;
   if(chip_b){chip_b.className='chip '+(ok?'ok':'no');chip_b.textContent=ok?'✓':'?';}
   if(chip_l){chip_l.className='chip '+(ok?'ok':'no');chip_l.textContent=ok?'✓':'?';}
-  // sync to lun inputs
+  // sync to lun + demcat inputs
   document.getElementById('b-lun').value=b;document.getElementById('l-lun').value=l;
+  var bdem=document.getElementById('b-dem');if(bdem&&!bdem.value)bdem.value=b;
+  var ldem=document.getElementById('l-dem');if(ldem&&!ldem.value)ldem.value=l;
   ANS['b-chon']=ok;updateProg();
 }
 function updFinal(){
@@ -1505,6 +1531,25 @@ window.onload=function(){
     }
     buildLunLayers(); // called after M02_SOILS is set
     calcFsb();
+    // Banner phương án đã chọn
+    if(d.pa_chon){
+      var paBann=document.getElementById('pa-banner');
+      var paTxt=document.getElementById('pa-banner-text');
+      if(paBann&&paTxt){
+        var paLabel=d.pa_chon==2
+          ?'<b>PA2 – Móng nông trên nền đệm cát</b>'+(d.hdc?' (h<sub>đ</sub> = '+d.hdc+' m)':'')
+          :'<b>PA1 – Móng nông trực tiếp</b>';
+        paTxt.innerHTML=paLabel+' · Đề <b>'+(d.de_so||'?')+'</b>';
+        paBann.hidden=false;
+        if(d.pa_chon==2){
+          var demCard=document.getElementById('s-demcat');
+          if(demCard)demCard.style.borderColor='var(--A)';
+        }
+      }
+    }
+    // Khôi phục b/l đã kiểm tra TTGH1 (nếu đã lưu)
+    if(d.m02_b){var blun=document.getElementById('b-lun');if(blun)blun.value=d.m02_b;var bdem=document.getElementById('b-dem');if(bdem&&!bdem.value)bdem.value=d.m02_b;}
+    if(d.m02_l){var llun=document.getElementById('l-lun');if(llun)llun.value=d.m02_l;var ldem=document.getElementById('l-dem');if(ldem&&!ldem.value)ldem.value=d.m02_l;}
     toast('Đã tải số liệu từ Module 01');
   }catch(e){buildLunLayers();}
 };

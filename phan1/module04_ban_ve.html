@@ -433,10 +433,21 @@ window.onload=function(){
   checkTotal=document.querySelectorAll('#checklist input').length;
   document.getElementById('check-progress').textContent='Tích vào từng mục khi hoàn thành — 0/'+checkTotal+' mục';
   try{
-    var raw=localStorage.getItem('nmong');if(!raw)return;
+    var raw=localStorage.getItem('nmong_p1');if(!raw)return;
     var d=JSON.parse(raw);
-    if(d.hm_sb){document.getElementById('r-hm').value=d.hm_sb;}
-    if(d.bc)document.getElementById('r-a');
+    function sv4(id,val){var el=document.getElementById(id);if(el&&val!==undefined&&val!=='')el.value=val;}
+    sv4('r-hm',d.hm_sb||d.hm);
+    sv4('r-b',d.m02_b);
+    sv4('r-l',d.m02_l);
+    sv4('r-h',d.m03_h);
+    sv4('r-h0',d.m03_h0);
+    sv4('r-a',d.m03_abv);
+    sv4('r-macbt',d.m03_mac_bt);
+    sv4('r-macthep',d.m03_mac_thep);
+    sv4('r-thep-l',d.m03_thep_l);
+    sv4('r-thep-b',d.m03_thep_b);
+    sv4('r-Pdt',d.m03_Pdt);
+    sv4('r-Pcdt',d.m03_Pcdt);
   }catch(e){}
   drawFoundation();
 };

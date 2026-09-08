@@ -482,6 +482,7 @@ function saveB01(){
     d.N0tc_b=gv('N0tc_b');d.M0tc_b=gv('M0tc_b');d.Q0tc_b=gv('Q0tc_b');
     d.bt_b=gv('bt_b');d.mnn_b=gv('mnn_b');d.hm_b=gv('hm_b');
     d.soils=SD_B;
+    var lopTot=document.getElementById('lop-tot');if(lopTot)d.lop_tot_b=lopTot.value;
     localStorage.setItem('nmong_p2',JSON.stringify(d));
     var ok=document.getElementById('saveok_b');if(ok){ok.textContent='✓ Đã lưu';setTimeout(function(){ok.textContent='';},2000);}
     toast('✓ Đã lưu tiến độ P2·M01');

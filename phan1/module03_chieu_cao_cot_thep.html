@@ -151,6 +151,12 @@ textarea.conc-inp:focus{border-color:var(--P)}
 </div></div>
 
 <main>
+<!-- BANNER: thông tin tổng hợp từ Module 01-02 -->
+<div id="ctx-banner" hidden style="background:linear-gradient(90deg,var(--Plt),#fff);border:2px solid var(--Pmd);border-radius:10px;padding:10px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px">
+  <i class="ti ti-circle-check" style="font-size:20px;color:var(--P);flex-shrink:0"></i>
+  <div style="flex:1;font-size:.84rem;color:var(--Pdk)" id="ctx-banner-text"></div>
+  <a href="module02_kiem_tra_nen.html" class="btn btn-ghost btn-sm"><i class="ti ti-arrow-left"></i> Sửa ở M02</a>
+</div>
 <div class="prog-wrap">
   <div class="prog-top"><span>Tiến độ Module 03</span><span id="prog-text">0 / 0</span></div>
   <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
@@ -971,6 +977,16 @@ window.onload=function(){
     if(d.m03_h){document.getElementById('h-mob').value=d.m03_h;updH0();}
     if(d.m03_mac_bt){document.getElementById('mac-bt').value=d.m03_mac_bt;updVL();}
     if(d.m03_mac_thep){document.getElementById('mac-thep').value=d.m03_mac_thep;updVL();}
+    // Hiển thị context banner
+    var parts=[];
+    if(d.pa_chon) parts.push('<b>PA'+(d.pa_chon==2?'2 – Đệm cát':'1 – Móng nông trực tiếp')+'</b>');
+    if(d.m02_b&&d.m02_l) parts.push('b×l = <b>'+d.m02_b+'×'+d.m02_l+' m</b>');
+    if(d.hm_sb||d.hm) parts.push('h<sub>m</sub> = <b>'+(d.hm_sb||d.hm)+' m</b>');
+    if(d.de_so) parts.push('Đề <b>'+d.de_so+'</b>');
+    if(parts.length){
+      var cb=document.getElementById('ctx-banner'),ct=document.getElementById('ctx-banner-text');
+      if(cb&&ct){ct.innerHTML=parts.join(' · ');cb.hidden=false;}
+    }
     toast('Đã tải số liệu từ Module 01–02');
   }catch(e){}
   // init ANS keys for progress
