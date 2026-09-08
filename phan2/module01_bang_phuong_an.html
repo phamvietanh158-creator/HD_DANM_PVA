@@ -416,7 +416,7 @@ function updStats(){
   // Update load viz
   var lv=document.getElementById('load-viz');
   if(lv) lv.innerHTML=
-    '<b>N₀<sup>tt</sup></b> = '+（gv('N0tt_b')||'–')+' T/m<br>'+
+    '<b>N₀<sup>tt</sup></b> = '+(gv('N0tt_b')||'–')+' T/m<br>'+
     '<b>M₀<sup>tt</sup></b> = '+(gv('M0tt_b')||'–')+' Tm/m<br>'+
     '<b>Q₀<sup>tt</sup></b> = '+(gv('Q0tt_b')||'–')+' T/m<br>'+
     '<b>N₀<sup>tc</sup></b> = '+(gv('N0tc_b')||'–')+' T/m<br>'+
@@ -440,7 +440,7 @@ function upVizB(){
     if(mnn*SCALE>0&&mnn*SCALE<svgH){svgHTML+='<line x1="0" y1="'+(mnn*SCALE)+'" x2="72" y2="'+(mnn*SCALE)+'" stroke="#1565C0" stroke-width="1.5" stroke-dasharray="3,2"/>';}
     var isDinh=s.WL!==''&&!isNaN(parseFloat(s.WL));
     var tt=isDinh?getTTDinh(s):getTTRoi(s);
-    infoHTML+='<div class="trl"><span class="trl-b" style="background:'+col+';color:#fff">'+（h>0?h+'m':'∞')+'</span><div><div class="trl-n">'+s.name+'</div><div class="trl-s">'+(tt||'Chưa xác định')+'</div></div></div>';
+    infoHTML+='<div class="trl"><span class="trl-b" style="background:'+col+';color:#fff">'+(h>0?h+'m':'∞')+'</span><div><div class="trl-n">'+s.name+'</div><div class="trl-s">'+(tt||'Chưa xác định')+'</div></div></div>';
     acc+=h;
   });
   svg.innerHTML=svgHTML;info.innerHTML=infoHTML;
